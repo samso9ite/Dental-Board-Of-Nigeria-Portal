@@ -1,0 +1,135 @@
+{% extends 'adminPortal/base.html' %}
+{% load static %}
+{% block body %}      
+    <section class="content">
+        <div class="container-fluid">
+            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                              Tickets
+                            </h2>
+                    </div>
+                </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                               All Tickets
+                            </h2>
+                         
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            
+                            
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                            
+                                    <tr>
+                                      <th>School Name</th>
+                                        <th>School Reply</th>
+                                        <th>Answered </th>
+                                        <th>Opened</th>
+                                        <th>Closed</th>
+                                    </tr>
+                            
+                                </thead>
+                                <tfoot>
+                                        <tr>
+                                            <th>School Name</th>
+                                            <th>School Reply</th>
+                                            <th>Answered </th>
+                                            <th>Opened</th>
+                                            <th>Closed</th>
+                                        </tr>
+                                    
+                                </tfoot>
+                                <tbody>
+                                    {% for each_sch in schools %}
+
+                                  <tr>
+                                   
+                                        
+                                        <td>{{each_sch.sch_details.username}}</td>
+                                         <td>
+                                             <a href="{% url 'adminPortal:sch_reply_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" style="background-color: #ccbd0d; color:white" class="btn  btn-block waves-effect" >{{each_sch.sch_replies}} </button>    </a>                    
+                                        </td> 
+                                            
+                                        <td>
+                                            <a href="{% url 'adminPortal:answered_ticket_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-green btn-block waves-effect" >{{each_sch.answered_ticket}} </button></a>                    
+                                        </td> 
+                                               
+                                        <td>
+                                            <a href="{% url 'adminPortal:opened_ticket_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-black btn-block waves-effect" > {{each_sch.open_ticket}}  </button>    </a>  
+ 
+                                       </td> 
+                                           
+                                        <td>
+                                            <a href="{% url 'adminPortal:closed_ticket_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-red btn-block waves-effect" >{{each_sch.closed_ticket}} </button>    </a>                    
+                                        </td>                          
+                                                              
+                                 </tr>
+                                                                      
+                                 {% endfor %}  
+
+                        </tbody>
+                    </table>
+                    
+                
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+</div>
+</div>
+</div> 
+
+                                
+                            <!-- #END# Exportable Table -->
+                </section>
+
+    <!-- Demo Js -->
+    <script src="js/demo.js"></script>
+        <script>
+        function display(){
+            document.getElementById('pic').style.display='block';
+        }
+        function reset(){
+            
+            var checkbox = $('.update_checkbox:checked');
+  if(checkbox.length > 0)
+  {
+   var checkbox_value = [];
+   $(checkbox).each(function(){
+    checkbox_value.push($(this).val());
+   });
+ 
+ var value = document.getElementById('num').value;
+ 
+ window.location.href='<?php echo base_url(); ?>admin/indexing?checkbox_value='+checkbox_value+'&reset='+value+'&len='+checkbox_value.length;
+  }
+  else
+  {
+   alert('Select atleast one records');
+  }
+        }
+        
+    </script>
+    
+   <!-- Select all JS --> 
+    <script>
+        $("#selectAll").click(function () {
+        $(".update_checkbox").prop('checked', $(this).prop('checked'));
+        });
+    </script>
+    
+  {% endblock %}
+

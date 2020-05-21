@@ -1,0 +1,145 @@
+{% extends "school/base.html" %}
+{% load static %}
+{% block body %}
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-xs-12 col-sm-3">
+                    <div class="card profile-card">
+                       
+                        <div class="profile-body">
+                          
+                        </div>
+                        <div class="profile-footer">
+                            <ul>
+                                <li>
+                                    <h5><i class="material-icons">forum</i> Your Recent Tickets</h5>
+                                </li>
+                                <li>
+                                    <span style="color: red; padding-right: 5px;"> #9568 -</span>  <a href="" style="color:black">Please we made a mistake when registering student for exam, please....</a>
+                                </li>
+                                <li>
+                                    <span style="color: red; padding-right: 5px;"> #9568 -</span>  <a href="" style="color:black">Please we made a mistake when registering student for exam, please....</a>
+                                </li>
+                                <li>
+                                    <span style="color: red; padding-right: 5px;"> #9568 -</span>  <a href="" style="color:black">Please we made a mistake when registering student for exam, please....</a>
+                                </li>
+                                <li>
+                                    <span>Answered</span>
+                                    <span>1.234</span>
+                                </li>
+                                <li>
+                                    <span>Open</span>
+                                    <span>1.201</span>
+                                </li>
+                                <li>
+                                    <span>Closed</span>
+                                    <span>14.252</span>
+                                </li>
+                            </ul>
+                         </div>
+                    </div>
+
+                </div>
+                <div class="col-xs-12 col-sm-9">
+                    <div class="card">
+                        <div class="header">
+                            <h4 style="margin:0px;"> Open Ticket </h4>
+                         </div>
+                    </div>
+                    <div class="card">
+                        
+                        <div class="body">
+                            <div>
+                                <div class="tab-content">
+                                
+                                    <div role="tabpanel" class="tab-pane fade in active" id="open_ticket">
+                                        <form class="form-horizontal" method="POST", action="">
+                                            {% csrf_token %}
+                                            <div class="">
+                                                <br>
+                                                <label for="NameSurname" class="col-sm-2 control-label">Name</label>
+                                                <div class="col-sm-10">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" id="NameSurname" name="name" placeholder="Name Surname" value="" required>
+                                                    </div>
+                                                </div>
+                                            </div><br>
+
+                                            <label for="" class="col-sm-2 control-label">Subject</label>
+                                            <div class="col-sm-10">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" id="" name="subject" placeholder="Subject" value="" required>
+                                                </div>
+                                            </div>
+                                        <br>
+
+                                            <div class="">
+                                                <label for="Email" class="col-sm-2 control-label">Department</label>
+                                                <div class="col-sm-4">
+                                                    <div class="form-line">
+                                                         <select class="form-control form-line show-tick" name="department">
+                                                                <option value="">-- Please select --</option>
+                                                                <option value="Examination" name="department">Examination Department</option>
+                                                                <option value="Indexing" name="department">Indexing Department</option>
+                                                                <option value="Technical" name="department">Technical Department</option>
+                                                        </select>
+                                                   </div>
+                                                </div>
+                                                <label for="Email" class="col-sm-2 control-label">Priority</label>
+                                                <div class="col-sm-4">
+                                                    <div class="form-line">
+                                                        <select class="form-control form-line show-tick" name="priority">
+                                                            <option value="">-- Please select --</option>
+                                                            <option value="High" name="priority">High</option>
+                                                            <option value="Medium" name="priority">Medium</option>
+                                                            <option value="Low" name="priority">Low</option>
+                                                    </select>                                                    </div>
+                                                </div>
+                                            </div><br>
+                                            <div class="">
+                                                <label for="InputExperience" class="col-sm-2 control-label">Message</label>
+
+                                                <div class="col-sm-10">
+                                                    <div class="form-line">
+                                                        <textarea class="form-control" id="InputExperience" name="message" rows="8" placeholder="Please Type Your Message"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div><br>
+                                            <div class="form-group">
+                                                <label for="InputSkills" class="col-sm-3 control-label">Attachements <i class="material-icons">attach_file</i></label>
+
+                                                <div class="col-sm-9">
+                                                    
+                                                        <input type="file" class="form-control" name="attachments"> <input type="file" class="form-control" name="attachments" >
+                                                    
+                                                  
+                                                </div>
+                                            </div>
+                                            <script src='https://www.google.com/recaptcha/api.js'></script>
+                                            <div class="g-recaptcha" data-sitekey="6LfRdPcUAAAAAOFQ78wyMKhoMsnXJGH9aotfJe_p"></div>
+                                         
+                                            <div class="form-group">
+                                                <br>
+                                                <div class="col-sm-offset-1 col-sm-11">
+                                                    <h4><button type="submit" class="btn btn-block btn-lg btn-success waves-effect"> <b> SUBMIT </b> </button></h4>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                          
+                              
+                                   
+                                                                    </div>
+                                                  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

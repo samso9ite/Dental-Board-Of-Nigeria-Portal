@@ -1,0 +1,427 @@
+{% extends "school/base.html" %}
+{% load static %}
+{% block body %}    
+{% if user.is_authenticated %}   
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                EXAM RECORDS
+
+                            </h2>
+                        </div>
+
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="card">
+                                <div class="header">
+                                    {% if request.path == '/school/current_exam_record/' %}
+                                        <h2>
+                                           CURRENT EXAM RECORD
+                                           <span style="float: right;">
+                                           <a href="{% url 'schoolPortal:export_current_exam_record' %}"> 
+                                            <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
+                                         name="export">Export All Indexed Record</button></a></span>
+                                
+                                        </h2>
+                                    {% elif request.path == '/school/submitted_exam_record/' %}
+                                        <h2> SUBMITTED EXAM RECORD
+                                            <span style="float: right;">
+                                            <a href="{% url 'schoolPortal:export_submitted_exam_record' %}"> 
+                                                <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
+                                            name="export">Export All Indexed Record</button></a></span>
+                                        </h2>
+
+                                    {% elif request.path == '/school/approved_exam_record/' %}
+                                    <h2> APPROVED EXAM RECORD
+                                        <span style="float: right;">
+                                        <a href="{% url 'schoolPortal:export_submitted_exam_record' %}"> 
+                                            <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
+                                        name="export">Export All Indexed Record</button></a></span>
+                                    </h2>
+
+                                    {% elif request.path == '/school/declined_exam_record/' %}
+                                    <h2> DECLINED EXAM RECORD
+                                        <span style="float: right;">
+                                        <a href="{% url 'schoolPortal:export_submitted_exam_record' %}"> 
+                                            <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
+                                        name="export">Export All Indexed Record</button></a></span>
+                                    </h2>
+                                    {% endif %}
+                                </div>
+                                <div class="body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Cadre</th>
+                                                <th>Address</th>
+                                                <th>Contact</th>
+                                                <th>Email</th>
+                                                <th>View</th>
+                                                {% if request.path == '/school/current_exam_record/' %}
+                                                <th>Action</th>
+                                                {% endif %}
+                                            </tr>
+                                            </thead>
+                                            <tfoot>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Cadre</th>
+                                                <th>Address</th>
+                                                <th>Contact</th>
+                                                <th>Email</th>
+                                                <th>View</th>
+                                                {% if request.path == '/school/current_exam_record/' %}
+                                                <th>Action</th>
+                                                {% endif %}
+                                            </tr>
+                                            </tfoot>
+                                            <tbody>
+                                        {% if exam_records %}
+                                         {% for exam_record in exam_records %}
+                                            <tr>
+                                                <td>{{exam_record.surname}} {{exam_record.first_name|title}} </td>
+                                                <td>{{exam_record.institute_id|title}} </td>
+                                                <td>{{exam_record.residential_address|title}}</td>
+                                                <td> {{exam_record.telephone|title}} </td>
+                                                <td> {{exam_record.email|title}} </td>
+                                                <td><a href="#"><i class="material-icons" data-toggle="modal" data-target="#StudentDetails">visibility</i></a>
+
+
+                                                    <div class="modal fade" id="StudentDetails{{exam_records.id}}" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <div class="image" style="text-align: center">
+                                                                        <img src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>';
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row clearfix">
+                                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                            <div class="card">
+                                                                                <div class="header">
+                                                                                    <h4 style="align:center;">
+                                                                                        <b> STUDENT DETAILS </b>
+                                                                                    </h4>
+
+                                                                                    <ul class="header-dropdown m-r--5">
+                                                                                        <li class="dropdown" style="list-style:none;">
+                                                                                            <a href="javascript:void(0);" class="dropdown-toggle"data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                                                <i class="material-icons">more_vert</i>
+                                                                                            </a>
+                                                                                            <ul class="dropdown-menu pull-right">
+                                                                                                <li><a href="{% url 'schoolPortal:update_exam_record' exam_record.id %}">Edit</a></li>
+                                                                                                <li><a href="{% url 'schoolPortal:delete_record' exam_record.id %}">Delete</a></li>    
+                                                                                            </ul>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </div>
+
+                                                                                <div class="body table-responsive">
+                                                                                    <table class="table table-striped">
+                                                                                        <tbody>
+                                                                                        <tr>
+                                                                                            <td><b>First Name: </b> {{exam_record.first_name|title}} </td>
+                                                                                            <td><b>Middle Name: </b> {{exam_record.middle_name|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Surname: </b>{{exam_record.surname|title}} </td>
+                                                                                            <td><b>Gender: </b>{{exam_record.gender|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>State Of Birth: </b> {{exam_record.state_of_birth|title}}</td>
+                                                                                            <td><b>Age: </b>{{exam_record.date_of_birth|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Telephone: </b>{{exam_record.telephone|title}} </td>
+                                                                                            <td><b>Email: </b> {{exam_record.email|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Title: </b> {{exam_record.title|title}}</td>
+                                                                                            <td><b>Postal Address: </b> {{exam_record.postal_address|title}}</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Marital Status: </b> {{exam_record.marital_status|title}}</td>
+                                                                                            <td><b>Residential Country: </b>{{exam_record.residential_country|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Residential State: </b>{{exam_record.residential_state|title}} </td>
+                                                                                            <td><b>Residential Address: </b> {{exam_record.residential_address|title}}</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Residential LGA: </b> {{exam_record.residential_lga|title}}</td>
+                                                                                            <td><b>State Of Origin: </b> {{exam_record.state_of_origin|title}}</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>LGA: </b> {{exam_record.lga_of_birth|title}}</td>
+                                                                                            <td><b>Senatorial District: </b> {{exam_record.senatorial_district|title}}</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>School Attended with Date (1): </b> {{exam_record.institution_attended1|title}}  </td>
+                                                                                            <td><b>School Attended with Date (2): </b> {{exam_record.institution_attended2|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>School Attended with Date (3): </b> {{exam_record.institution_attended3|title}}</td>
+                                                                                            <td><b>School Attended with Date (4): </b> {{exam_record.institution_attended4|title}}</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Educational Qualification (1): </b>{{exam_record.qualification1|title}} </td>
+                                                                                            <td><b>Educational Qualification (2): </b>{{exam_record.qualification2|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Educational Qualification (3): </b>{{exam_record.qualification3|title}} </td>
+                                                                                            <td><b>Educational Qualification (4): </b>{{exam_record.qualification4|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Professional Qualification (1): </b>{{exam_record.prof_qualification1|title}} </td>
+                                                                                            <td><b>Professional Qualification (2): </b>{{exam_record.prof_qualification2|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Professional Qualification (3): </b>{{exam_record.prof_qualification3|title}} </td>
+                                                                                            <td><b>Professional Qualification (4): </b>{{exam_record.prof_qualification4|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                        <tr>
+                                                                                            <td><b>Employment Status: </b> {{exam_record.employment_status|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Present Position: </b> {{exam_record.present_position|title}}</td>
+                                                                                            <td><b>Department: </b> </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Office Name: </b>{{exam_record.office_name|title}}  </td>
+                                                                                            <td><b>Office Address: </b>{{exam_record.office_address|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Sector: </b>  {{exam_record.sector|title}}</td>
+                                                                                            <td><b>Office Country: </b> {{exam_record..office_country|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Office State: </b> {{exam_record.office_state|title}} </td>
+                                                                                            <td><b>Office LGA: </b>{{exam_record.office_lga|title}}</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Office Phone Number:</b> {{exam_record.Office_phone}}   </td>
+                                                                                            <td><b>Office Email:</b> {{exam_record.office_email|title}}</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Referee (1): </b>{{exam_record.referee_name1|title}} </td>
+                                                                                            <td><b>Email: </b> {{exam_record.referee_email1|title}}</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Referee (2): </b> {{exam_record.referee_name2|title}} </td>
+                                                                                            <td><b>Email: </b> {{exam_record.referee_email2|title}} </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><b>Referee Phone Number (1): </b>{{exam_record.referee_phone1|title}}  </td>
+                                                                                            <td><b>Referee Phone Number (2): </b> </td>
+                                                                                        </tr>
+                                                                                      
+                                                                                        <tr>
+                                                                                            <td><b>Mode Of Payment: </b>{{exam_record.mode_of_payment|title}}  </td>
+                                                                                            <td> 
+                                                                                                <h4 style="font-size: 15px;">Waec Certificate(1)</h4>
+                                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal1" onclick="document.getElementById('pic1<?php echo $student->id; ?>').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                                <div id="imgModal1" class="modal" role="dialog">
+                                                                                                    <div class="modal-dialog modal-md">
+
+                                                                                                        <!-- Modal content-->
+                                                                                                        <div class="modal-content">
+                                                                                                          <div class="modal-header">
+                                                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                                            <h4 class="modal-title">School Result</h4>
+                                                                                                          </div>
+                                                                                                          <div class="modal-body">
+                                                                                                            <img style="display:none;" class="img img-responsive" id="pic1" src=" "  />
+                                                                                                          </div>
+                                                                                                          <div class="modal-footer">
+                                                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                          </div>
+                                                                                                        </div>
+                                                                                                      </div>
+                                                                                                    </div>
+                                                                                               </td>
+                                                                                        </tr>
+                                                                                         <tr>
+                                                                                        
+                                                                                            <td> 
+                                                                                                <h4 style="font-size: 15px;">Waec Certificate(2)</h4>
+                                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal2" onclick="document.getElementById('pic2<?php echo $student->id; ?>').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                                <div id="imgModal2" class="modal" role="dialog">
+                                                                                                    <div class="modal-dialog modal-md">
+
+                                                                                                        <!-- Modal content-->
+                                                                                                        <div class="modal-content">
+                                                                                                          <div class="modal-header">
+                                                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                                            <h4 class="modal-title">Testimonial </h4>
+                                                                                                          </div>
+                                                                                                          <div class="modal-body">
+                                                                                                            <img style="display:none;" class="img img-responsive" id="pic2" src=" "  />
+                                                                                                          </div>
+                                                                                                          <div class="modal-footer">
+                                                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                          </div>
+                                                                                                        </div>
+
+                                                                                                      </div>
+                                                                                                    </div>
+                                                                                               </td>
+                                                                                               <td>
+                                                                                                <h4 style="font-size: 15px;">Testimonial From Dental School</h4>
+                                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal3" onclick="document.getElementById('pic3<?php echo $student->id; ?>').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                                <div id="imgModal3" class="modal" role="dialog">
+                                                                                                    <div class="modal-dialog modal-md">
+
+                                                                                                        <!-- Modal content-->
+                                                                                                        <div class="modal-content">
+                                                                                                          <div class="modal-header">
+                                                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                                            <h4 class="modal-title">Testimonial </h4>
+                                                                                                          </div>
+                                                                                                          <div class="modal-body">
+                                                                                                              <img style="display:none;" class="img img-responsive" id="pic3" src=" "  />
+                                                                                                          </div>
+                                                                                                          <div class="modal-footer">
+                                                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                          </div>
+                                                                                                        </div>
+
+                                                                                                      </div>
+                                                                                                    </div>
+                                                                                               </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                           <td> 
+                                                                                            
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                    </div>
+                                    </td>
+                                    {% if request.path == '/school/current_exam_record/' %}
+                                        <td>
+                                            <ul>
+                                                <li class="dropdown" style="list-style:none;">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle"style="padding-left:-10px" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="material-icons">more_vert</i>
+                                                    </a>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li><a href="{% url 'schoolPortal:update_exam_record' exam_record.id %}">Edit</a></li>
+                                                        <li><a href="{% url 'schoolPortal:delete_record' exam_record.id %}">Delete</a></li>     
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    {% endif %}
+                                    </tr>
+                                    {% endfor %}
+
+                                    {% else %}
+                                        <h4> No Record Found</h4>
+                                {% endif %}
+                                    </tbody>
+                                    </table>
+                                    
+                                    <!-- Paginator Rendering -->
+                                    {% if exam_records.has_other_pages %}
+                                        <nav aria-label="Exam Record Pagination">
+                                            <ul class="pagination">
+                                                {% if exam_records.has_previous %}
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page={{exam_records.previous_page_num }}">Previous</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="page-item disabled">
+                                                        <span class="page-link">Previous</span>
+                                                    </li>
+                                                {% endif %}
+
+                                                {% for page_num in exam_records.paginator.page_range %}
+                                                    {% if exam_records.page_num == page_num %}
+                                                        <li class="page-item active">
+                                                            <span class="page-link">
+                                                                {{page_num}}
+                                                                 <span class="sr-only">(current)</span>
+                                                            </span>
+                                                        </li>
+                                                    {% else %}
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="?page={{page_num}}">{{page_num}}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                                {% if exam_records.has_next %}
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page{{exam_records.next_page_number}}">Next</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="page-item disabled">
+                                                        <span class="page-link">Next</span>
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
+                                        </nav>
+                                        {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- #END# Exportable Table -->
+    </section>
+    {% if request.path == '/school/current_exam_record/' %}
+    <form method="POST" action="{% url 'schoolPortal:submit_all_exam_record' %}">
+        {% csrf_token %}
+        <section class="content">
+                    <div class="container-fluid">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: -12%">
+                                    <div class="button-demo">
+                                            <a type="button" href=" " class="btn btn-block btn-lg btn-success waves-effect"><h5>SUBMIT</h5></a>
+                                    </div>
+                            </div>
+                    </div>
+        </section>
+    </form>
+
+    {% else %}
+         pass
+    {% endif %}
+
+    <script>
+        function display(){
+            document.getElementById('pic1').style.display='block';
+        }
+           function display2(){
+            document.getElementById('pic2').style.display='block';
+        }
+            function display3(){
+            document.getElementById('pic3').style.display='block';
+        }
+    </script>
+
+    {% endif %}
+
+        {% endblock %}

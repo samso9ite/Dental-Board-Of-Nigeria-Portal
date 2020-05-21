@@ -1,0 +1,264 @@
+{% extends "school/base.html" %}
+{% load static %}
+{% block body %}
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+
+           <form action="#"  method="post" id="schProfileForm"  onkeydown="return event.key != 'Enter';" enctype="multipart/form-data" data-lga-url="{% url 'schoolPortal:ajax_load_lga' %}" novalidate>
+            {% csrf_token %}
+            <section class="content">
+                   <div class="container-fluid">
+                       <div class="row clearfix">
+                        <div class="card" >
+                            <div class="header">
+                                    <h4> SCHOOL DETAILS</h4>
+                            </div>
+                                <div class="body">
+                                       <div class="row clearfix">
+                                            <div class="image col-sm-6" style="margin-left: 2%;">
+                                                <p><b>SCHOOL LOGO</b></p>
+                                                <img src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                <input type="file" name="file" onchange="readFIle(this);"  />
+                                            </div>
+
+                                            {{form}}
+                                            <!-- <div class="col-sm-4">
+                                                        <p><b>SCHOOL CODE</b></p><br><br><br><br><br>
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="text" class="form-control" name="reg_number" value="" readonly>
+                                                                <label class="form-label">School Code</label>
+                                                            </div>
+                                                        </div>
+                                             </div>
+                                        
+
+                                <div class="col-sm-4" style="margin-top:5%">
+                                    <div class="form-group">
+                                            <p><b>SCHOOL NAME</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input  type="text" name="name" class="form-control" value="" readonly>
+                                                    <label class="form-label">School Name</label>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+
+                            <div class="col-sm-4" style="margin-top:5%">
+                                <div class="form-group">
+                                    <p><b>SCHOOL ADDRESS</b></p>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" name="address" class="form-control" value="">
+                                            <label class="form-label">School Address</label>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-sm-4" style="margin-top:5%">
+                                <p><b>SPECIALTY</b>(Uncheck where needed)</p>
+                                    <div class="demo-checkbox">
+                                            <input type="checkbox" id="dental_therapist" name="specialty" value="Dental Therapist" class="filled-in" checked style="float:right"/>
+                                            <label for="dental_therapist">Dental Therapist</label>
+                                            <input type="checkbox" name="specialty" value="Dental Nurse"  id="dental_nurse" class="filled-in"  style="float:right"/>
+                                            <label for="dental_nurse">Dental Nurse</label>
+                                            <input type="checkbox" name="specialty" value="Dental Surgery Technician"  id="Surgery_technician" class="filled-in"  />
+                                            <label for="Surgery_technician">Dental Surgery Technician</label>
+                                            <input type="checkbox" name="specialty" value="Dental Surgery Assistant"  id="Surgery_assistant" class="filled-in"  />
+                                            <label for="Surgery_assistant">Dental Surgery Assistant</label>
+                                   </div>
+                          </div></div>
+
+                                                   
+                            <div class="col-sm-4">
+                                    <!--<div class="form-group">-->
+                                            <p><b>STATE</b></p>
+                                           <!--<div class="col-sm-6">-->
+                                                <!-- <select class="form-control form-line show-tick" name="state">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Abia" name="state">Abia</option>
+                                                    <option value="Adamawa" name="state">Adamawa</option>
+                                                    <option value="Akwa Ibom" name="state">Akwa Ibom</option>
+                                                    <option value="Anambra" name="state">Anambra</option></option>
+                                                    <option value="Bauchi" name="state">Bauchi</option>   
+                                                    <option value="Bayelsa" name="state">Bayelsa</option>
+                                                    <option value="Benue" name="state">Benue</option>
+                                                    <option value="Borno" name="state">Borno</option>
+                                                    <option value="Cross River" name="state">Cross River</option>
+                                                    <option value="Delta" name="state">Delta</option>
+                                                    <option value="Ebonyi" name="state">Ebonyi</option>
+                                                    <option value="Edo" name="state">Edo</option>
+                                                    <option value="Ekiti" name="state">Ekiti</option>
+                                                    <option value="Enugu" name="state">Enugu</option></option>
+                                                    <option value="Gombe" name="state">Gombe</option>
+                                                    <option value="Delta" name="state">Imo</option>
+                                                    <option value="Jigawa" name="state">Jigawa</option>
+                                                    <option value="Kaduna" name="state">Kaduna</option>
+                                                    <option value="Kano" name="state">Kano</option>
+                                                    <option value="Katsina" name="state">Katsina</option></option>
+                                                    <option value="Kebbi" name="state">Kebbi</option>
+                                                    <option value="Kogi" name="state">Kogi</option>
+                                                    <option value="Kwara" name="state">Kwara</option></option>
+                                                    <option value="Lagos" name="state">Lagos</option>
+                                                    <option value="Nasarawa" name="state">Nasarawa</option>
+                                                    <option value="Niger" name="state">Niger</option>
+                                                    <option value="Ogun" name="state">Ogun</option>
+                                                    <option value="Ondo" name="state">Ondo</option>
+                                                    <option value="Osun" name="state">Osun</option></option>
+                                                    <option value="Oyo" name="state">Oyo</option>
+                                                    <option value="Plateau" name="state">Plateau</option>
+                                                    <option value="Rivers" name="state">Rivers</option>
+                                                    <option value="Sokoto" name="state">Sokoto</option></option>
+                                                    <option value="Taraba" name="state">Taraba</option>
+                                                    <option value="Yobe" name="state">Yobe</option>
+                                                    <option value="Kwara" name="state">Kwara</option></option>
+                                                    <option value="Zamfara" name="state">Zamfara</option>
+                                                </select>  -->
+                                                        <!--<input type="text" name="state" class="form-control"  value="<?php echo ($user->state)?$user->state:''; ?>">-->
+                                                        <!--<label class="form-label">State</label>-->
+                                                    </div>
+                                       
+                          
+
+                            <!-- <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p><b>LOCAL GOVERMENT AREA</b></p>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            
+                                            <input type="text" name="lga" class="form-control"  value="">
+                                            <label class="form-label">LGA</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="col-sm-4">
+                                    <div class="form-group">
+                                            <p><b>POSTAL ADDRESS</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    
+                                                    <input type="text" name="postal" class="form-control"  value="">
+                                                    <label class="form-label">Ex: P.O BOX 1990</label>
+                                                </div>
+                                            </div>
+                                    </div>
+                            </div>
+                    
+                    <div class="row clearfix">
+                                                    
+                            <div class="col-sm-4">
+                                    <div class="form-group">
+                                            <p><b>HOTLINE</b></p>
+                                            <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                        
+                                                        <input type="text" name="phone" class="form-control"  value="">
+                                                        <label class="form-label">+2348124451038</label>
+                                                    </div>
+                                            </div>
+                                    </div>
+                                </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p><b>EMAIL</b></p>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            
+                                            <input type="text" name="email" class="form-control"  value="" readonly>
+                                            <label class="form-label">info@dentaltherapist.com</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p><b>HOD'S NAME</b></p>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            
+                                            <input type="text" name="hod_name" class="form-control"  value="">
+                                            <label class="form-label">Mr. Ajanaku Ajibade</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>                 
+                    
+                    <div class="row clearfix">
+                             <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p><b>HOD'S Email</b></p>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            
+                                            <input type="text"name="hod_email" class="form-control"  value="">
+                                            <label class="form-label">HOD@dentaltherapist.com</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p><b>HOD'S Phone Number</b></p>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" name="hod_phone" class="form-control"  value="">
+                                            <label class="form-label">+234 87979368791</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             
+                    </div> -->
+                        <!-- <div class="col-sm-6">
+                                    <div class="form-group">
+                                            <p><b>CATEGORIES</b></p>
+                                            <input type="radio" name="categories" id="dental_therapist" class="with-gap">
+                                            <label for="dental_therapist">Dental Therapist</label>
+
+                                            <input type="radio" name="categories" id="dental_nurse" class="with-gap">
+                                            <label for="dental_nurse" class="m-l-20">Dental Nurse</label>
+                                            <input type="radio" name="categories" id="dental_third" class="with-gap">
+                                            <label for="dental_third" class="m-l-20">Surgery Technician</label>
+                                    </div>
+                                    
+                            </div>  -->
+                        </div>
+                        </section>
+                    <!--End of Office Details-->
+
+        <section class="content">
+                <div class="container-fluid">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: -10%">
+                                <div class="button-demo">
+                                        <button type="submit" name="submit" class="btn btn-block btn-lg btn-success waves-effect"><h5>SUBMIT</h5></button>
+                                </div>
+                        </div>
+                </div>
+        </section>
+      </form>
+
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      <script>
+          $("#id_lga").change(function (){
+            var url = $("#schProfileForm").attr("data-lga-url");
+            var regionId = $(this).val();
+
+            $.ajax({
+                url: url,
+                data: {
+                    'region': regionId
+                },
+                success: function (data) {
+                    $("#id_lga").html(data);
+                }
+            });
+          });
+      </script>
+{% endblock %}
+
+

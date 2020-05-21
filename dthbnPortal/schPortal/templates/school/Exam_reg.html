@@ -1,0 +1,856 @@
+{% extends "school/base.html" %}
+{% load static %}
+{% block body %}
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+      
+     <!--Personal Details-->
+     {% if user.is_authenticated %}
+
+     
+      <form action="#"  method="post"   onkeydown="return event.key != 'Enter';" enctype="multipart/form-data">
+        {% csrf_token %}
+        <section class="content">
+             <div class="container-fluid">
+
+                {% if form.errors %}
+                <div id='errors'>
+                    <div class="inner">
+                        <ul>
+                            {% for field in form %}
+                               {% if field.errors %}
+                               <li><div class="alert alert-danger"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> <strong>{{ field.label }}</strong>  {{ field.errors|striptags }}</div></li>{% endif %}</li>
+                           {% endfor %}
+                       </ul>
+                    </div>
+                </div>
+               {% endif %}
+
+                <div class="row clearfix">
+                        <div class="card" >
+                                <div class="header">
+                                      <h4> PERSONAL DETAILS</h4>
+                                </div>
+                               <div class="body">
+                                     <div class="row clearfix">
+                                        <div class="col-sm-3">
+                                                <div class="image" style="margin-left: 2%;">
+                                                    <p><b>PROFILE IMAGE</b></p>
+                                                    <img id="ShowImage" src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                    <input name="profile_image" type="file" onchange="readFIle(this);" multiple />
+                                                </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                                <div class="form-group">
+                                                        <p><b>GENDER</b></p>
+                                                        <input type="radio" value="male" name="gender" id="male" class="with-gap" required>
+                                                        <label for="male">Male</label>
+                    
+                                                        <input type="radio" value="female" name="gender" id="female" class="with-gap" required>
+                                                        <label for="female" class="m-l-20">Female</label>
+                                                </div>
+                                                <p>First Name</p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                     
+                                                        <input type="text" name="first_name" class="form-control">
+                                                        <label class="form-label">First Name</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                        <div class="col-sm-3">
+                                                <div class="form-group">
+                                                        <p><b>TITLE</b></p>
+                                                        <input type="radio" value="mr" name="title" id="mr" class="with-gap" required>
+                                                        <label for="mr">Mr.</label>
+                                                        <input type="radio" value="mrs" name="title" id="mrs" class="with-gap" required>
+                                                        <label for="mrs" class="m-l-20">Mrs.</label>
+                                                         <input type="radio" value="miss" name="title" id="miss" class="with-gap" required> 
+                                                        <label for="miss" class="m-l-20">Miss</label> 
+                                                    </div>
+                
+                                                    <p>Middle Name</p>
+                                                    <div class="form-group form-float">
+                                                        <div class="form-line">
+                                                         
+                                                            <input type="text"name="middle_name"  class="form-control">
+                                                            <label class="form-label">Middle Name</label>
+                                                        </div>
+                                                    </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                                <div class="form-group">
+                                                        <p><b>MARITAL STATUS</b></p>
+                                                        <input type="radio" name="marital_status" value="married" id="married" class="with-gap" required>
+                                                        <label for="married">Married</label>
+                                                        <input type="radio" name="marital_status" value="single" id="single" class="with-gap" required>
+                                                        <label for="single" class="m-l-20">Single</label>
+                                                </div>
+                                            <p>Surname</p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" name="surname"  class="form-control">
+                                                            <label class="form-label">Surname</label>
+                                                        </div>
+                                                    </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="demo-masked-input">
+                                            <div class="row clearfix">
+                                                    <div class="demo-masked-input">
+                                                            <div class="row clearfix">
+                                                                <div class="col-sm-3">
+                                                                    <b>MAIDEN NAME</b>
+                                                                    <div class="form-group form-float">
+                                                                            <div class="form-line">
+                                                                             
+                                                                                <input type="text" name="maiden_name"  class="form-control">
+                                                                                <label class="form-label">Ex: Mother's Name</label>
+                                                                            </div>
+                                                                    </div>
+                                                                    </div>
+                                                                <div class="col-md-3">
+                                                                    <b>PHONE NO</b>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">
+                                                                            <i class="material-icons">call</i>
+                                                                        </span>
+                                                                        <div class="form-line">
+                                                                            <input type="text"  name="phone" class="form-control date" placeholder="+2348124451038">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <b>EMAIL</b>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">
+                                                                            <i class="material-icons">email</i>
+                                                                        </span>
+                                                                        <div class="form-line">
+                                                                            <input type="text" name="email"  class="form-control time24" placeholder="samso9ite@gmail.com">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <b>POSTAL ADDRESS</b>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">
+                                                                            <i class="material-icons">message</i>
+                                                                        </span>
+                                                                        <div class="form-line">
+                                                                            <input type="text" name="postal_address"  class="form-control time12" placeholder="P.O. Box 59">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                        </div>
+                                      
+                                    <div class="demo-masked-input">
+                                        <div class="row clearfix">
+                                                <div class="col-md-3">
+                                                    <p><b>RESIDENTIAL COUNTRY</b></p>
+                                                    <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                             {{form.residential_country}}
+                                                                <!-- <input type="text" name="residential_country"  class="form-control"> -->
+                                                                <label class="form-label">Ex: Nigeria</label>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                        <p><b>RESIDENTIAL STATE</b></p>
+                                                        <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                 {{form.residential_state}}
+                                                                    <!-- <input type="text" name="residential_state" class="form-control"> -->
+                                                                    <label class="form-label">Ex: Lagos</label>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                <div class="col-md-3">
+                                                        <p><b>RESIDENTIAL ADDRESS</b></p>
+                                                        <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                  
+                                                                    <input type="text" name="residential_address" class="form-control">
+                                                                    <label class="form-label">Ex: 10,Kunle street ojuelegba  lagos </label>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                        <p><b>RESIDENTIAL LGA</b></p>
+                                                        <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                    {{form.residential_lga}}
+                                                                    <!-- <input type="text" name="residential_lga" class="form-control"> -->
+                                                                    <label class="form-label">Ex: Surulere</label>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                    </div>
+
+                                    <div class="demo-masked-input">
+                                            <div class="row clearfix">
+                                                    <div class="col-md-4">
+                                                        <p><b>STATE OF ORIGIN</b></p>
+                                                        {{form.state_of_origin}}
+                                                <!-- <select class="form-control form-line show-tick" name="state_of_origin">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Abia" name="state">Abia</option>
+                                                    <option value="Adamawa" name="state">Adamawa</option>
+                                                    <option value="Akwa Ibom" name="state">Akwa Ibom</option>
+                                                    <option value="Anambra" name="state">Anambra</option></option>
+                                                    <option value="Bauchi" name="state">Bauchi</option>   
+                                                    <option value="Bayelsa" name="state">Bayelsa</option>
+                                                    <option value="Benue" name="state">Benue</option>
+                                                    <option value="Borno" name="state">Borno</option>
+                                                    <option value="Cross River" name="state">Cross River</option>
+                                                    <option value="Delta" name="state">Delta</option>
+                                                    <option value="Ebonyi" name="state">Ebonyi</option>
+                                                    <option value="Edo" name="state">Edo</option>
+                                                    <option value="Ekiti" name="state">Ekiti</option>
+                                                    <option value="Enugu" name="state">Enugu</option></option>
+                                                    <option value="Gombe" name="state">Gombe</option>
+                                                    <option value="Delta" name="state">Imo</option>
+                                                    <option value="Jigawa" name="state">Jigawa</option>
+                                                    <option value="Kaduna" name="state">Kaduna</option>
+                                                    <option value="Kano" name="state">Kano</option>
+                                                    <option value="Katsina" name="state">Katsina</option></option>
+                                                    <option value="Kebbi" name="state">Kebbi</option>
+                                                    <option value="Kogi" name="state">Kogi</option>
+                                                    <option value="Kwara" name="state">Kwara</option></option>
+                                                    <option value="Lagos" name="state">Lagos</option>
+                                                    <option value="Nasarawa" name="state">Nasarawa</option>
+                                                    <option value="Niger" name="state">Niger</option>
+                                                    <option value="Ogun" name="state">Ogun</option>
+                                                    <option value="Ondo" name="state">Ondo</option>
+                                                    <option value="Osun" name="state">Osun</option></option>
+                                                    <option value="Oyo" name="state">Oyo</option>
+                                                    <option value="Plateau" name="state">Plateau</option>
+                                                    <option value="Rivers" name="state">Rivers</option>
+                                                    <option value="Sokoto" name="state">Sokoto</option></option>
+                                                    <option value="Taraba" name="state">Taraba</option>
+                                                    <option value="Yobe" name="state">Yobe</option>
+                                                    <option value="Kwara" name="state">Kwara</option></option>
+                                                    <option value="Zamfara" name="state">Zamfara</option>
+                                                <select> -->
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <p><b>LGA</b></p>
+                                                            <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                     {{form.lga_state}}
+                                                                        <!-- <input type="text"  name="lga" class="form-control"> -->
+                                                                        <label class="form-label">Ex: Anambra </label>
+                                                                    </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <p><b>SENATORIAL DISTRICT</b></p>
+                                                            <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                     
+                                                                        <input type="text" name="senatorial_district" class="form-control">
+                                                                        <label class="form-label">Ex: Afigio</label>
+                                                                    </div>
+                                                            </div>
+                                                    </div>
+                                        </div>
+                                    <div class="demo-masked-input">
+                                            <div class="row clearfix">
+                                                    <div class="col-md-4">
+                                                        <p><b>DATE OF BIRTH</b></p>
+                                                        <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                    <!-- <input type="text" name="date_of_birth"class="form-control"> -->
+                                                                    <label class="form-label">Ex: 30/07/1990</label>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <p><b>STATE OF BIRTH</b></p>
+                                                            {{form.state_of_birth}}
+                                                             <!-- <select class="form-control form-line show-tick" name="state_of_birth">
+                                                                    <option value="">-- Please select --</option>
+                                                                    <option value="Abia" name="state">Abia</option>
+                                                                    <option value="Adamawa" name="state">Adamawa</option>
+                                                                    <option value="Akwa Ibom" name="state">Akwa Ibom</option>
+                                                                    <option value="Anambra" name="state">Anambra</option></option>
+                                                                    <option value="Bauchi" name="state">Bauchi</option>
+                                                                    <option value="Bayelsa" name="state">Bayelsa</option>
+                                                                    <option value="Benue" name="state">Benue</option>
+                                                                    <option value="Borno" name="state">Borno</option>
+                                                                    <option value="Cross River" name="state">Cross River</option>
+                                                                    <option value="Delta" name="state">Delta</option>
+                                                                    <option value="Ebonyi" name="state">Ebonyi</option>
+                                                                    <option value="Edo" name="state">Edo</option>
+                                                                    <option value="Ekiti" name="state">Ekiti</option>
+                                                                    <option value="Enugu" name="state">Enugu</option></option>
+                                                                    <option value="Gombe" name="state">Gombe</option>
+                                                                    <option value="Delta" name="state">Imo</option>
+                                                                    <option value="Jigawa" name="state">Jigawa</option>
+                                                                    <option value="Kaduna" name="state">Kaduna</option>
+                                                                    <option value="Kano" name="state">Kano</option>
+                                                                    <option value="Katsina" name="state">Katsina</option></option>
+                                                                    <option value="Kebbi" name="state">Kebbi</option>
+                                                                    <option value="Kogi" name="state">Kogi</option>
+                                                                    <option value="Kwara" name="state">Kwara</option></option>
+                                                                    <option value="Lagos" name="state">Lagos</option>
+                                                                    <option value="Nasarawa" name="state">Nasarawa</option>
+                                                                    <option value="Niger" name="state">Niger</option>
+                                                                    <option value="Ogun" name="state">Ogun</option>
+                                                                    <option value="Ondo" name="state">Ondo</option>
+                                                                    <option value="Osun" name="state">Osun</option></option>
+                                                                    <option value="Oyo" name="state">Oyo</option>
+                                                                    <option value="Plateau" name="state">Plateau</option>
+                                                                    <option value="Rivers" name="state">Rivers</option>
+                                                                    <option value="Sokoto" name="state">Sokoto</option></option>
+                                                                    <option value="Taraba" name="state">Taraba</option>
+                                                                    <option value="Yobe" name="state">Yobe</option>
+                                                                    <option value="Kwara" name="state">Kwara</option></option>
+                                                                    <option value="Zamfara" name="state">Zamfara</option>
+                                                                </select> -->
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <p><b>LGA OF BIRTH</b></p>
+                                                            <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                        {{form.lga_of_birth}}
+                                                                        <!-- <input type="text" name="lga_of_birth" class="form-control"> -->
+                                                                        <label class="form-label">Ex: Surulere</label>
+                                                                    </div>
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                    </div>
+          </section>
+    <!--End of Personal Details-->
+
+    <!--Education Qualifications -->
+          <section class="content">
+            <div class="container-fluid" style="margin-top: -10%">
+                <div class="row clearfix">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>
+                                   <b>EDUCATION QUALIFICATIONS WITH DATES</b>
+                                </h2>
+                            
+                            </div>
+                            <div class="body">
+                               
+                                <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="qualification1" class="form-control" placeholder="Ex: SSCE (1990-1993)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <input type="text" name="qualification2" class="form-control" placeholder="Ex: OND/HND/BSC (1995-1998)" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <input type="text" name="qualification3" class="form-control" placeholder="Ex: MSC (1995-1998)" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <input type="text" name="qualification4" class="form-control" placeholder="Ex: OTHERS (1995-1998)" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>
+                                       <b>PROFESSIONAL QUALIFICATIONS WITH DATES</b>
+                                    </h2>
+                                
+                                </div>
+                                <div class="body">
+                                
+                                    <div class="row clearfix">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <input type="text" name="prof_qualification1" class="form-control" placeholder="Ex: SSCE (1990-1993)" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <input type="text" name="prof_qualification2" class="form-control" placeholder="Ex: OND/HND/BSC (1995-1998)" />
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <input type="text" name="prof_qualification3" class="form-control" placeholder="Ex: MSC (1995-1998)" />
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <input type="text" name="prof_qualification4" class="form-control" placeholder="Ex: OTHERS (1995-1998)" />
+                                                    </div>
+                                                </div>
+                                        </div>
+                            </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+    </section>
+    <!--End Of Education Qualifications-->  
+
+    <!--Institutions Attended With Dates-->
+    <section class="content">
+            <div class="container-fluid" style="margin-top: -10%">
+    
+                <div class="row clearfix">
+    
+                            <div class="card" >
+                                    <div class="header">
+                                          <h4> Institutions Attended With Dates</h4>
+                                    </div>
+                                    <div class="body">
+                                
+                                        <div class="row clearfix">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <input type="text" name="institution_attended1" class="form-control" placeholder="Ex: Name Of Institution Attended (1990-1993)" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <div class="form-line">
+                                                            <input type="text" name="institution_attended2" class="form-control" placeholder="Ex:  Name Of Institution Attended  (1995-1998)" />
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <div class="form-line">
+                                                            <input type="text" name="institution_attended3"class="form-control" placeholder="Ex: Name Of Institution Attended  (1995-1998)" />
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <div class="form-line">
+                                                            <input type="text" name="institution_attended4" class="form-control" placeholder="Ex:  Name Of Institution Attended (1995-1998)" />
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="row clearfix">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <p><b>HOD's Name</b></p>
+                                                    <div class="form-group form-float">
+                                                        <div class="form-line">
+                                                            <input type="text" name="hod_name" class="form-control">
+                                                            <label class="form-label">Mr.Charles Okorocha</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <p><b>HOD's Phone Number</b></p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+
+                                                        <input type="text" name="hod_phone" class="form-control">
+                                                        <label class="form-label">+234812345678</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                        <p><b>HOD's Email</b></p>
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="text" name="hod_email" class="form-control">
+                                                                <label class="form-label">HOD's@gmail.com</label>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                             <!--End of Institutions Attended with Dates-->
+                                    </div>
+                            </div>
+                </div>
+            </div>
+    </section>
+
+  <!--Office Details-->
+    <section class="content">
+            <div class="container-fluid" style="margin-top: -10%">
+                <div class="row clearfix">
+                    <div class="card" >
+                        <div class="header">
+                              <h4> OFFICE DETAILS</h4>
+                        </div>
+                        <div class="body">
+                             <div class="row clearfix">
+                                 <div class="col-sm-12">
+                                     <div class="form-group">
+                                         <p><b>EMPLOYMENT STATUS</b></p>
+                                         <label  class="m-l-20"> <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#unemployment_info"><h5>Click if Unemployed</h5></button></label>
+                                         <label  class="m-l-20"> <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#office_details"><h5>Click if Employed</h5></button></label>
+                                         <div id="unemployment_info" class="collapse">
+                                             <div class="row clearfix" style="margin-top:10px ">
+                                                 <div class="col-sm-6">
+                                                     <div class="form-group">
+                                                         <input type="radio" name="employment_status" value="unemployed" id="unemployed" class="with-gap">
+                                                         <label for="unemployed">Unemployed</label>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <div id="office_details" class="collapse">
+                                                     <!--Office Details-->
+                                             <div class="row clearfix">
+                                                 <div class="header">
+                                                     <h4> OFFICE DETAILS</h4>
+                                                 </div>
+                                                 <div class="body">
+                                                     <div class="row clearfix">
+                                                         <div class="col-sm-12">
+                                                            <div class="form-group">
+                                                                    <p><b>EMPLOYMENT STATUS</b></p>
+                                                                    <input type="radio" name="employment_status" value="employed"  id="employed" class="with-gap">
+                                                                    <label for="employed">Employed</label>
+                                                            </div>
+                                                     </div>
+
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <p><b>PRESENT POSITION</b></p>
+                                                                <div class="form-group form-float">
+                                                                    <div class="form-line">
+
+                                                                        <input type="text" class="form-control" name="present_position">
+                                                                        <label class="form-label">Present Position</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                         <div class="col-sm-4">
+                                                             <div class="form-group">
+                                                                 <p><b>DEPARTMENT</b></p>
+                                                                 <div class="form-group form-float">
+                                                                     <div class="form-line">
+                                                                         <input type="text" class="form-control" name="department">
+                                                                         <label class="form-label">Department</label>
+                                                                     </div>
+                                                                 </div>
+                                                             </div>
+                                                         </div>
+                                                     </div>
+                                                     <div class="row clearfix">
+                                                         <div class="col-sm-4">
+                                                             <div class="form-group">
+                                                                 <p><b>OFFICE NAME</b></p>
+                                                                 <div class="form-group form-float">
+                                                                    <div class="form-line">
+
+                                                                        <input type="text" name="office_name" class="form-control">
+                                                                        <label class="form-label">Office Name</label>
+                                                                    </div>
+                                                                </div>
+                                                             </div>
+                                                         </div>
+
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <p><b>OFFICE ADDRESS</b></p>
+                                                                <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                        <input type="text" name="office_address" class="form-control">
+                                                                        <label class="form-label">Office Address</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <p><b>SECTOR</b></p>
+                                                                <input type="radio" name="sector" id="private" class="with-gap">
+                                                                <label for="private">Private</label>
+
+                                                                <input type="radio" name="sector" id="public" class="with-gap">
+                                                                <label for="public" class="m-l-20">Public</label>
+                                                            </div>
+                                                        </div>
+                                                     </div>
+
+                                                     <div class="row clearfix">
+
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <p><b>OFFICE COUNTRY</b></p>
+                                                                <div class="form-group form-float">
+                                                                        <div class="form-line">
+                                                                            {{form.office_country}}
+                                                                            <!-- <input type="text" name="office_country" class="form-control"> -->
+                                                                            <label class="form-label">Office Country</label>
+                                                                        </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <p><b>OFFICE STATE</b></p>
+                                                                <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                        {{office_state}}
+                                                                        <!-- <input type="text" name="office_state" class="form-control"> -->
+                                                                        <label class="form-label">Office State</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <p><b>OFFICE LGA</b></p>
+                                                                <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                       {{office_lga}}
+                                                                        <label class="form-label">Local Government Area</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                     </div>
+                                                     <div class="row clearfix">
+                                                         <div class="col-sm-3">
+                                                             <div class="form-group">
+                                                                <p><b>OFFICE PHONE NO</b></p>
+                                                                <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                        <input type="text" name="office_phone" class="form-control">
+                                                                        <label class="form-label">+2348124451038</label>
+                                                                    </div>
+                                                                </div>
+                                                             </div>
+                                                         </div>
+                                                         <div class="col-sm-3 ">
+                                                             <div class="form-group">
+                                                                 <p><b>OFFICE EMAIL</b></p>
+                                                                 <div class="form-group form-float">
+                                                                     <div class="form-line">
+                                                                         <input type="text" name="office_email" class="form-control">
+                                                                         <label class="form-label">info@dentaltherapist.com</label>
+                                                                     </div>
+                                                                 </div>
+                                                             </div>
+                                                         </div>
+                                                     </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>               
+                                    </div>
+                                </div> 
+                            </div>
+                    </section>
+    <!-- Referee's Details -->
+          <section class="content" style="margin-top: -5px" >
+              <div class="container-fluid">
+                  <div class="row clearfix">
+                      <div class="card" >
+                            <div class="header">
+                                <h4> REFREES (One must be a dental professional) </h4>
+                            </div>
+                                <div class="body">
+                                <div class="row clearfix">
+                                    <div class="col-sm-4">
+                                        <p><b>REFEREE'S NAME</b></p>
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+
+                                                <input type="text"name="referee_name1" class="form-control">
+                                                <label class="form-label">Referees Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                            <p><b>REFEREE'S PHONE NUMBER</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+
+                                                    <input type="text" name="referee_phone1" class="form-control">
+                                                    <label class="form-label">Referee's phone number</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                                <p><b>REFEREE'S EMAIL</b></p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+
+                                                        <input type="text"name="referee_email1" class="form-control">
+                                                        <label class="form-label">Referee's email</label>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-4">
+                                        <p><b>REFEREE'S NAME</b></p>
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+
+                                                <input type="text" name="referee_name2"class="form-control">
+                                                <label class="form-label">Referee's name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                            <p><b>REFEREE'S PHONE NUMBER</b></p>
+                                            <!-- <div class="form-group form-float">
+                                                <div class="form-line">
+
+                                                    <input type="text" name="referee_phone2" class="form-control">
+                                                    <label class="form-label">Referee's phone number</label>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                        <div class="col-sm-4">
+                                                <p><b>REFEREE'S EMAIL</b></p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+
+                                                        <input type="text" name="referee_email2" class="form-control">
+                                                        <label class="form-label">Referee's email</label>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>    
+
+<!-- Referees Details -->
+
+<!-- Other Details -->
+    <section class="content" style="margin-top: -5px" >
+            <div class="container-fluid">
+    
+                <div class="row clearfix">
+    
+                            <div class="card" >
+                                <div class="header">
+                                        <h4> OTHER DETAILS </h4>
+                                </div>
+                                    <div class="body">
+                                            <div class="form-group">
+                                                <p><b>MODE OF PAYMENT</b></p>
+                                                <input type="radio" value="Cheque" name="mode_of_payment" id="cheque" class="with-gap">
+                                                <label for="cheque">Cheque</label>
+                                                <input type="radio" value="Online payment" name="mode_of_payment" id="online" class="with-gap">
+                                                    <label for="online" class="m-l-20">Online Payment</label>
+                                                   <label class="m-l-20">Others (Please specify below)</label>
+                                                   <div class="form-group form-float">
+                                                        <div class="form-line">
+                                                            <input type="text" name="mode_of_payment" class="form-control">
+                                                            <label class="form-label">Please specify other mode of payment</label>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                                
+                                                <p><b> SELECT AREA OF SPECIALIZATION</b></p>
+                                                        <input type="radio" name="cadre" value="RDTh" id="dental_therapist" class="with-gap">
+                                                        <label for="dental_therapist">Dental Therapist</label>
+                                                        <input type="radio" name="cadre"  value="RDSN" id="dental_nurse" class="with-gap">
+                                                        <label for="dental_nurse" class="m-l-20">Dental Nurse</label>
+                                                        <input type="radio" name="cadre" value="RDST"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Surgery Technician</label>
+                                        <div class="row clearfix" style="margin-left: 1%">
+                                            <div class="col-sm-4">
+                                                <div class="dz-message">
+                                                    <h5>Upload WAEC/NECO/GCE/NABTEB:</h5>
+                                                    <div class="drag-icon-cph">
+                                                        <i class="material-icons">touch_app</i>
+                                                    </div>
+                                                </div>
+                                                <div class="fallback">
+                                                    <input name="waec_result" type="file" multiple />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                    <div class="dz-message">
+                                                    <h5>Upload Final Year Dental School Result:</h5>
+                                                    <div class="drag-icon-cph">
+                                                        <i class="material-icons">touch_app</i>
+                                                    </div>
+                                                </div>
+                                                <div class="fallback">
+                                                    <input name="dental_school_result" type="file" multiple />
+                                                </div>
+                                             </div>
+                                             <div class="col-sm-4">
+                                                    <div class="dz-message">
+                                                    <h5>Testimonial From Dental School Attended:</h5>
+                                                    <div class="drag-icon-cph">
+                                                        <i class="material-icons">touch_app</i>
+                                                    </div>
+                                                </div>
+                                                <div class="fallback">
+                                                    <input name="dental_school_testimonial" type="file" multiple />
+                                                </div>
+                                             </div>
+                                        </div>
+                                    </div>
+                            </div>
+                </div>
+        </section>    
+    
+    <!-- Other Details -->
+
+        <section class="content">
+                <div class="container-fluid">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: -10%">
+                                <div class="button-demo">
+                                        <button type="submit" class="btn btn-block btn-lg btn-success waves-effect"><h5>SAVE EXAMINATION RECORD</h5></button>
+                                </div>
+                        </div>
+                </div>
+        </section>
+     
+     </form>
+     {% endif %}
+   {% endblock %}
+
+

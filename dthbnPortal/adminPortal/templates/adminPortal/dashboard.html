@@ -1,0 +1,152 @@
+{% extends 'adminPortal/base.html' %}
+{% load static %} 
+
+{% block body %}
+
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>DASHBOARD</h2>
+            </div>
+
+            <!-- Widgets -->
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-pink hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">playlist_add_check</i>
+                        </div>
+                        <div class="content">
+                            <div class="text"> <b>SCHOOLS</b></div>
+                            <div class="number count-to" data-from="0" data-to="{{total_sch_num}}" data-speed="1900" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-cyan hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">person_add</i>
+                        </div>
+                        <div class="content">
+                            <div class="text"><b>PROFESSIONALS</b></div>
+                            <div class="number count-to" data-from="0" data-to="" data-speed="1500" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-light-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">create_new_folder</i>
+                        </div>
+                        <div class="content">
+                            <div class="text"><b>INDEXED</b></div>
+                            <div class="number count-to" data-from="0" data-to="{{total_submited_index}}" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-orange hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">forum</i>
+                        </div>
+                        <div class="content">
+                            <div class="text"><b>NOTIFICATIONS</b></div>
+                            <div class="number count-to" data-from="0" data-to="0" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Widgets -->
+            <div class="row clearfix">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="card">
+           
+                        <div class="row clearfix">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="header">             
+                                        <h2>
+                                            ACCREDITED SCHOOLS RECORD
+                                            <span style="float: right;"><a href="{% url 'adminPortal:export_school_xls' %}">
+                                                <button type="submit" class="btn bg-red waves-effect" value="Export All School Details"
+                                                 name="export">Export All Accredited Schools</button></a></span>
+                                      </h2>
+                                    </li>
+                                        </ul>
+                                    </div>
+                                    <div class="body">
+                                        <div class="table-responsive">
+                                            <table id="dashboard" class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Reg Number</th>
+                                                        <th>Phone Number</th>
+                                                        <th>Email</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Reg Number</th>
+                                                        <th>Phone Number</th>
+                                                        <th>Email</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                   
+                                                    <tr>
+                                                        {% if all_school %}
+                                                        
+                                                        {% for school in all_school %}
+                                                            <td> {{school.username|title}}</td>
+                                                            <td> {{school.code|title}}</td>
+                                                            <td>{{school.phone_number}}</td>
+                                                            <td>{{school.email|lower}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    {% endif %} 
+                                                
+                                                </tbody>
+                                            </table>
+                
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div id='wrap'>
+
+                                <div id='calendar'></div>
+                                
+                                <div style='clear:both'></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                        <iframe src="https://calendar.google.com/calendar/embed?src=dthrbn.events%40gmail.com&ctz=Africa%2FLagos" style="border: 0" width="1010" height="600" frameborder="0" scrolling="no"></iframe>   
+                        
+                   </div>
+           
+          
+             
+            </div>
+                    </div>
+                </div>
+                <!-- #END# Browser Usage -->
+            </div>
+        </div>
+    </section>
+    <script>
+    $(document).ready( function () {
+        $('#dashboard').DataTable();
+    } );
+  </script>
+
+{% endblock %}
+   

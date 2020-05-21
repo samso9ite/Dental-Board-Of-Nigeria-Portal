@@ -1,0 +1,225 @@
+{% extends 'auth/base.html' %}
+{% load static %}
+{% block title %} School Registration {% endblock %}
+{% block body %}
+{% load sweetify %}
+{% sweetify %}
+<div class="section-full content-inner-1">
+        <div class="login-form style-2">
+            	<div class="tab-content bg-gray nav">
+
+                    <div id="login" class="tab-pane active text-center">
+                        {% if form.errors %}
+                                <!-- Error messaging -->
+                                <div id="errors">
+                                    <div class="inner">
+                                        <ul>
+                                            {% for field in form %}
+                                                {% if field.errors %}<li><div class="alert alert-danger"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> <strong>{{ field.label }}</strong>  {{ field.errors|striptags }}</div></li>{% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- /Error messaging -->
+
+                          {% elif prof_form.errors %}
+                            <!-- Error messaging -->
+                            <div id="errors">
+                                <div class="inner">
+                                    <ul>
+                                        {% for field in prof_form %}
+                                            {% if field.errors %}<li><div class="alert alert-danger"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> <strong>{{ field.label }}</strong>  {{ field.errors|striptags }}</div></li>{% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /Error messaging -->
+
+                        {% elif login_form.errors %}
+                            <!-- Error messaging -->
+                            <div id="errors">
+                                <div class="inner">
+                                    <ul>
+                                        {% for field in login_form %}
+                                            {% if field.errors %}<li><div class="alert alert-danger"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> <strong>{{ field.label }}</strong>  {{ field.errors|striptags }}</div></li>{% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /Error messaging -->
+                        {% endif %}
+
+                        <!-- {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li {% if message.tags %}  class="{{message.tags}}"{% endif %}>
+                                    {{message}}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %} -->
+
+                        <!-- {% if messages %}
+                            <ul>
+                                {% for message in messages %}
+                                <li>
+                                    <div class="alert alert-success">
+                                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                          <strong>{{ message.tags }}</strong>  {{message}}</div>
+                                <li>
+                                 {% endfor %}
+                            </ul>
+                        {% endif %} -->
+
+                         <form class="p-a30 dez-form" action=" " method="post">
+                             {% csrf_token %}
+                                <h3 class="form-title m-t0">Sign In</h3>
+                                <div class="dez-separator-outer m-b5">
+                                    <div class="dez-separator bg-primary style-liner"></div>
+                                    <div id="infoMessage" style="color:red;font-style:bold;"></div>
+                                </div>
+                                <p>Enter your Email and Password. </p>
+                                <div class="form-group">
+                                    <!--{{login_form.email}}-->
+                                    <input name="email" required="" class="form-control" placeholder="Email Id" type="email"/>
+                                </div>
+                                <div class="form-group">
+                                    <input name="password" required="" class="form-control" placeholder="Password" type="password"/>
+                                </div>
+                                <div class="form-group text-left">
+                                    <button class="site-button dz-xs-flex m-r5" type="submit">login</button>
+                                    <label>
+                                        <label for="check1"> <a href="{% url 'Auth:password_reset' %}"><i class="fa fa-unlock"></i>Forgot Password</a></label>
+                                    </label>
+                                    <a data-toggle="tab" href="#" class="m-l5"><i class="fa fa-arrow-left"></i> Back to website</a>
+                                </div>
+                         </form>
+                            <div class="bg-primary p-a15 bottom">
+                                <a data-toggle="tab" class="m-l10" href="#developement-1">Sign up(Schools)</a>
+                            </div>
+                            <div class="bg-primary p-a15 bottom">
+                               <a data-toggle="tab" class="m-l10 " href="#developement-3">Sign up(Professional)</a>
+                            </div>
+                        </div>
+
+
+                <div id="developement-1" class="tab-pane text-center">
+                    <form class="p-a30 dez-form" method="POST">
+                        {% csrf_token %}
+                        <h3 class="form-title m-t0" style="color:black">Sign Up</h3>
+                        <div class="dez-separator-outer m-b5">
+                            <div class="dez-separator bg-primary style-liner"></div>
+                        </div>
+                        <h5>Enter school details below: </h5>
+                        <div class="form-group">
+                            {{form.code}}
+                        </div>
+						<div class="form-group">
+                            {{form.username}}
+                        </div>
+                        <div class="form-group">
+                            {{form.email}}
+                        </div>
+                         <div class="form-group">
+                             {{form.phone_number}}
+                        </div>
+                         <div class="m-b30" style="text-align:left">
+                             <label>Programme</label>
+                             <span>
+                                <!--<ul id="id_programme">-->
+                                    <!--<li><label for="id_programme_0"><input type="checkbox" name="programme" value="Dental Therapist" id="id_programme_0">-->
+                                     <!--Dental Therapist</label>-->
+                                    <!----> 
+                                    <!--</li>-->
+                                        <!--<li><label for="id_programme_1"><input type="checkbox" name="programme" value="Dental Surgery Technician" id="id_programme_1">-->
+                                     <!--Dental Surgery Technician</label>-->
+                                    <!---->
+                                    <!--</li>-->
+                                        <!--<li><label for="id_programme_2"><input type="checkbox" name="programme" value="Dental Surgery Assistant" id="id_programme_2">-->
+                                     <!--Dental Surgery Assistant</label>-->
+                                    <!---->
+                                    <!--</li>-->
+                                        <!--<li><label for="id_programme_3"><input type="checkbox" name="programme" value="Dental Nurses" id="id_programme_3">-->
+                                     <!--Dental Nurses</label>-->
+                                    <!---->
+                                    <!--</li>-->
+                                <!--</ul>-->
+
+                                <input name="programme" id="id_programme_0" value="Dental Therapist" type="checkbox"/>
+                                <label for="id_programme_0">Dental Therapists </label>
+                                <input name="programme" id="id_programme_1" value="Dental Nurses" type="checkbox" />
+                                <label for="id_programme_1">Dental Nurses </label>
+                                <input name="programme" id="id_programme_2" value="Dental Surgery Technician" type="checkbox" />
+                                <label for="id_programme_2">Dental Surgery Technician </label>
+                                <input name="programme" id="id_programme_3" value="Dental Surgery Assistant" type="checkbox" />
+                                <label for="id_programme_3">Dental Surgery Assistant </label>
+        					</span>
+                        </div>
+                        <div class="form-group">
+                             {{form.password}}
+                        </div>
+
+                        <div class="">
+                           {{form.confirm_password}}
+                        </div>
+
+                        <div class="m-b30">
+                            <!--<input name="is_school" required="" class="form-control" id="id_is_school" checked type="checkbox" />-->
+                            <input type="checkbox" checked name="is_school" id="id_is_school">
+                        </div>
+
+                        <div style="margin-top:-20px">
+							<input id="check2" type="checkbox" required=""/>
+							<label for="check2">I agree to the <a href="#">Terms of Service </a>& <a href="#">Privacy Policy</a> </label>
+                        </div>
+                        <div class="form-group text-left ">
+							<a data-toggle="tab"  class="site-button outline gray" href="#login">Back</a>
+                            <button type="submit" name=""class="site-button pull-right">Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+             <div id="developement-3" class="tab-pane">
+                <form class="p-a30 dez-form text-center"  action="" method="post">
+                    {% csrf_token %}
+
+                    <h3 class="form-title m-t0" style="color:black">Sign Up</h3>
+                    <div class="dez-separator-outer m-b5">
+                        <div class="dez-separator bg-primary style-liner"></div>
+                    </div>
+                    <h5>Enter your details below: </h5>
+
+                    <div class="form-group">
+                        {{prof_form.username}}
+                    </div>
+                    <div class="form-group">
+                        {{prof_form.email}}
+                    </div>
+                     <div class="form-group">
+                         {{prof_form.phone_number}}
+                    </div>
+                    <div class=" widget bg-white monster-widget-placeholder-5 ">
+                       {{prof_form.programme}}
+                    </div>
+                    <div class="form-group">
+                      {{prof_form.password}}
+                    </div>
+                    <div class="">
+                        {{prof_form.confirm_password}}
+                    </div>
+                    <div class="m-b30">
+                            <input name="is_professional" required="" class="form-control" id="id_is_school" checked type="checkbox" style="display:none"/>
+                        </div>
+                    <div class="form-group text-left ">
+                        <a data-toggle="tab"  class="site-button outline gray" href="#login">Back</a>
+                        <button type="submit" name="{{prof_form.is_professional}}" class="site-button pull-right">Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+</div>
+</div>
+</div>
+{% endblock %}

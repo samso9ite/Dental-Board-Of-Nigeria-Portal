@@ -1,0 +1,5 @@
+#!/home/samso9ite/PycharmProjects/Dthbn/venv/bin/python
+import sys
+from conda_env.cli.main import main
+
+sys.exit(main())

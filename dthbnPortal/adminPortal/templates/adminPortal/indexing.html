@@ -1,0 +1,273 @@
+{% extends 'adminPortal/base.html' %}
+{% load static %}
+{% block body %}      
+    <section class="content">
+        <div class="container-fluid">
+            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                              INDEXING
+                            </h2>
+                    </div>
+                </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                INDEXING RECORD
+                                
+                            </h2>
+                         
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            
+                            
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                            
+                                    <tr>
+                                      <th>School Name</th>
+                                        <th>Limit</th>
+                                        <th>Indexed</th>
+                                        <th>Approved</th>
+                                        <th>Declined</th>
+                                        <th>Reset Limit</th>
+                                        <th>Reverse</th>
+                                   
+                                    </tr>
+                            
+                                </thead>
+                                <tfoot>
+                                        <tr>
+                                            
+                                            <th>School Name</th>
+                                            <th>Limit</th>
+                                            <th>Indexed</th>
+                                            <th>Approved</th>
+                                            <th>Declined</th>
+                                            <th>Reset Limit</th>
+                                            <th>Reverse</th>
+                                         
+                                        </tr>
+                                </tfoot>
+                                <tbody>
+                                      {% for index_record in indexed_stu_list %}
+
+                                  <tr>
+                                        
+                                        <td>{{index_record.User|title}}</td>
+                                        <td>{{index_record.index_quota_limit}}</td>
+                                        
+                                        <td>
+                                             <a href="{% url 'adminPortal:sch_indexed_rec' id=index_record.User_id %}" target="_blank"> <button type="button" style="background-color: #ccbd0d; color:white" class="btn  btn-block waves-effect" >{{all_schools|get_item:index_record.id}}</button>    </a>                    
+                                        </td> 
+                                                      
+                                        <td>
+                                            <a href="{% url 'adminPortal:approved_indexed_list' id=index_record.User_id %}" target="_blank"> <button type="button" class="btn bg-green btn-block waves-effect" >{{approved_index|get_item:index_record.id}}</button>    </a>                    
+                                       </td> 
+                                               
+                                       <td>
+                                        <a href="{% url 'adminPortal:declined_indexed_list' id=index_record.User_id %}" target="_blank"> <button type="button" class="btn bg-red btn-block waves-effect" >{{declined_index|get_item:index_record.id}}</button>    </a>                    
+                                   </td> 
+                                           
+                                                                        <td>
+                                                                            <a href="#"><i class="material-icons" data-toggle="modal" data-target="#resetLimit">autorenew</i>                                      
+                                                                                <div class="modal fade" id="resetLimit" tabindex="-1" role="dialog">
+                                                                                    <div class="modal-dialog" role="document">
+                                                                                        <div class="modal-content">
+                                                                                                <div class="modal-header">
+                                                                                                    <div class="image" style="text-align: center">
+                                                                                                    <img src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                                                                            
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="modal-body"> 
+                                                                                                        <div class="row clearfix">
+                                                                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                                <div class="card">
+                                                                                                                    <div class="header">
+                                                                                                                        <h5 style="align:center;">
+                                                                                                                        <b> School Name: </b>
+                                                                                                                        </h5>
+                                                                                                                    </div>
+                                                                                                    
+                                                                                                            <div class="body table-responsive">
+                                                                                                                <table class="table table-striped">
+                                                                                                                    <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Set Limit</b>
+                                                                                                                                <div class="form-group form-float" style="margin-top:5%">
+                                                                                                                                    <div class="form-line" style="text-align:center;" >
+                                                                                                                                        <form action="{% url 'adminPortal:set_limit' id=index_record.id  %}" method="post">
+                                                                                                                                            {% csrf_token %}
+                                                                                                                                            <input type="number" name="index_quota_limit" class="form-control">
+                                                                                                                                            <input type="number" name="id" style="display:none;" value="" />
+                                                                                                                                            <label class="form-label">Click to enter limit for school</label>
+                                                                                                                                            
+                                                                                                                                            <button class="btn btn-primary btn-lg" style="margin-top:20px;margin-bottom:20px;"  name="reset" type="submit">RESET</button>
+                                                                                                                                        </form>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </td>
+                                                                                                                        </tr>
+                                                                                                                    </tbody>
+                                                                                                                </table>
+                                                                                                                
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                         </td>
+                                                                         <td>
+                                                                            <a href="{% url 'adminPortal:reverse_index_record' id=index_record.User_id %}"><i class="material-icons"> reply_all </i> </a>
+                                                                         </td>
+                                                                      </tr>
+                                                                      
+                                                                       {% endfor %}
+
+                                                                    </tbody>
+                                                                </table>
+                                                                {% if indexed_stu_list.has_other_pages %}
+                                                                <nav aria-label="indexed_stu_list Pagination" class="mb-4">
+                                                                    <ul class="pagination">
+                                                                        {% if indexed_stu_list.has_previous %}
+                                                                            <li class="page-item">
+                                                                                <a class="page-link" href="?page={{ indexed_stu_list.previous_page_number }}">Previous</a>
+                                                                            </li>
+                                                                        {% else %}
+                                                                        <li class="page-item disabled">
+                                                                            <span class="page-link">Previous</span>
+                                                                        </li>
+                                                                        {% endif %}
+
+                                                                        {% for page_num in indexed_stu_list.paginator.page_range %}
+                                                                            {% if indexed_stu_list.number == page_num %}
+                                                                                <li class="page-item active">
+                                                                                    <span class="page-link">
+                                                                                        {{page_num}}
+                                                                                        <span class="sr-only">(current)</span>
+                                                                                    </span>
+                                                                                </li>
+                                                                            {% else %}
+                                                                                <li class="page-item">
+                                                                                    <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                                                                                </li>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+
+                                                                        {% if indexed_stu_list.has_next %}
+                                                                                <li class="page-item">
+                                                                                    <a class="page-link" href="?page={{indexed_stu_list.next_page_number}}">Next</a>
+                                                                                </li>
+                                                                        {% else %}
+                                                                            <li class="page-item disabled">
+                                                                                <span class="page-link">Next</span>
+                                                                            </li>
+                                                                        {% endif %}
+                                                                    </ul>
+                                                                </nav>
+                                                            {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+            
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="modal fade" id="all_resetLimit" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4>Reset Indexing Limit for Schools</h4>
+                                                 </div> 
+                                                <div class="modal-body"> 
+                                                        <div class="row clearfix">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="card">
+                                                                <div class="body table-responsive">
+                                                                <table class="table table-striped">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td><b>Set Limit</b>
+                                                                            <div class="form-group form-float" style="margin-top:5% text-align:center;">
+                                                                                <div class="form-line">
+                                                                                
+                                                                                    <input type="number" name="reset_number"id="num" class="form-control">
+                                                                                    <label class="form-label">Click to enter limit for school</label>
+                                                                                </div>
+                                                                                <button type="button" class="btn btn-primary" onClick="reset()"value="Reset" id="update_all">Update all</button>
+                                                                            </div></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                               
+                                                             
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    
+                                                    </div>
+                                                    
+                                                </div>
+                                            
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                            <!-- #END# Exportable Table -->
+                </section>
+
+    <!-- Demo Js -->
+    <script src="js/demo.js"></script>
+        <script>
+        function display(){
+            document.getElementById('pic').style.display='block';
+        }
+        function reset(){
+            
+            var checkbox = $('.update_checkbox:checked');
+  if(checkbox.length > 0)
+  {
+   var checkbox_value = [];
+   $(checkbox).each(function(){
+    checkbox_value.push($(this).val());
+   });
+ 
+ var value = document.getElementById('num').value;
+ 
+ window.location.href='<?php echo base_url(); ?>admin/indexing?checkbox_value='+checkbox_value+'&reset='+value+'&len='+checkbox_value.length;
+  }
+  else
+  {
+   alert('Select atleast one records');
+  }
+        }
+        
+    </script>
+    
+   <!-- Select all JS --> 
+    <script>
+        $("#selectAll").click(function () {
+        $(".update_checkbox").prop('checked', $(this).prop('checked'));
+        });
+    </script>
+    
+  {% endblock %}
+

@@ -1,0 +1,1168 @@
+{% extends "school/base.html" %}
+{% load static %}
+{% block body %}
+<!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+        
+        
+ <!--Personal Details-->
+   <form action="#"  method="post"  onkeydown="return event.key != 'Enter';" enctype="multipart/form-data">
+    {% csrf_token %}
+    <section class="content">
+        <div class="container-fluid">
+            {% if form.errors %}
+            <!-- Error messaging -->
+            <div id="errors">
+                <div class="inner">
+                    <ul>
+                        {% for field in form %}
+                            {% if field.errors %}<li><div class="alert alert-danger"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> <strong>{{ field.label }}</strong>  {{ field.errors|striptags }}</div></li>{% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+{% endif %}
+            <div class="row clearfix">
+                       <div class="card" >
+                            <div class="header">
+                                    <h4> STUDENT DETAILS</h4>
+                            </div>
+                                <div class="body">
+                                       <div class="row clearfix">
+                                           <!--<div class="col-sm-6">-->
+                                                <div class="image" style="margin-left: 2%;">
+                                                    <img id="ShowImage"  src="admin/images/default_avtar.jpg" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                    <input name="imgdata" type="file"  onchange="readFIle(this);"  multiple />
+                                                </div>
+                                        </div>
+
+                                <div class="row clearfix">
+                                <div class="col-sm-4" style="margin-top:5%">
+                                    <div class="form-group">
+                                            <p><b>NAME OF INSTITUTION</b></p>
+                                            <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                        <input type="text" value="{{user.username}} " readonly class="form-control" name="school">
+                                                        <label class="form-label">Name Of Institution</label>
+                                                    </div>
+                                                </div>
+                                    </div>
+                                </div>
+                            
+
+                        <div class="col-sm-4" style="margin-top:5%">
+                                <div class="form-group">
+                                    <p><b>CADRE</b></p>
+                                            <select class="form-control show-tick" name="cadre">
+                                                <option value="">-- Please select --</option>
+                                                <option value="Dental Therapist" name="category">Dental Therapist</option>
+                                                <option value="Dental Nurse" name="cadre">Dental Nurse</option>
+                                                <option value="Dental Surgery Technician" name="cadre">Dental Surgery Technician</option>
+                                                <option value="Dental Surgery Assistant" name="cadre">Dental Surgery Assistant</option>
+                                            </select>
+                                </div>
+                        </div>
+                            
+                            <div class="col-sm-4" style="margin-top:5%">
+                                    <!--<div class="form-line">-->
+                                        <label class="form-label">Select Year</label>
+                                            <select class="form-control show-tick" name="year">
+                                                <option value="">-- Please select --</option>
+                                                <option value="2018" name="school">2018</option>
+                                                <option value="2019" name="school">2019</option>
+                                                <option value="2020" name="school">2020</option>
+                                                <option value="2021" name="school">2021</option>
+                                                <option value="2022" name="school">2022</option>
+                                                <option value="2023" name="school">2023</option>
+                                                <option value="2024" name="school">2024</option>
+                                                <option value="2025" name="school">2025</option>
+                                                <option value="2026" name="school">2026</option>
+                                                <option value="2027" name="school">2027</option>
+                                                <option value="2028" name="school">2028</option>
+                                                <option value="2029" name="school">2029</option>
+                                                <option value="2030" name="school">2030</option>
+                                                <option value="2031" name="school">2031</option>
+                                                <option value="2032" name="school">2032</option>
+                                                <option value="2033" name="school">2033</option>
+                                                <option value="2034" name="school">2034</option>
+                                                <option value="2035" name="school">2035</option>
+                                                <option value="2036" name="school">2036</option>
+                                                <option value="2037" name="school">2037</option>
+                                            </select>
+                            </div>
+                    </div>
+                    </div>
+                    <div class="row clearfix" style="margin-left: 1%">
+                            <div class="col-sm-4">
+                                    <div class="form-group">
+                                            <p><b>FIRST NAME</b></p>
+                                            <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" name="first_name" id="first_name" onkeyup='saveValue(this);'>
+                                                        <label class="form-label">first name</label>
+                                                    </div>
+                                            </div>
+                                    </div>
+                                </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p><b>Middle name</b></p>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" name="middle_name" id="middle_name" onkeyup='saveValue(this);'>
+                                            <label class="form-label">Middle Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                    <div class="form-group">
+                                            <p><b>Surname</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="surname"  id="last_name" onkeyup='saveValue(this);'>
+                                                    <label class="form-label">Surname</label>
+                                                </div>
+                                            </div>
+                                    </div>
+                            </div>
+                    </div>
+
+                    <div class="row clearfix" style="margin-left: 1%">
+                                                    
+                            <div class="col-sm-4">
+                                    <div class="form-group">
+                                            <p><b>AGE</b></p>
+                                            <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" name="age"  id="age" onkeyup='saveValue(this);'>
+                                                        <label class="form-label">Ex: 35 years</label>
+                                                    </div>
+                                            </div>
+                                    </div>
+                                </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p><b>TELEPHONE</b></p>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" name="telephone"  id="phone" onkeyup='saveValue(this);'>
+                                            <label class="form-label">Ex: +234 8124456890</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <p><b>EMAIL</b></p>
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input type="text" class="form-control" name="email"  id="email" onkeyup='saveValue(this);'>
+                                                <label class="form-label">Ex: ayoola@gmail.com</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 
+                                </div>
+                                </div>
+
+                                <div class="row clearfix" style="margin-left: 1%">
+                                    <div class="col-sm-4">
+                                            <div class="form-group">
+                                                    <p><b>STATE OF ORIGIN</b></p>
+                                                    {{form.state}}
+                                                    <!-- <select class="form-control form-line show-tick" name="state">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Abia" name="state">Abia</option>
+                                                    <option value="Adamawa" name="state">Adamawa</option>
+                                                    <option value="Akwa Ibom" name="state">Akwa Ibom</option>
+                                                    <option value="Anambra" name="state">Anambra</option></option>
+                                                    <option value="Bauchi" name="state">Bauchi</option>   
+                                                    <option value="Bayelsa" name="state">Bayelsa</option>
+                                                    <option value="Benue" name="state">Benue</option>
+                                                    <option value="Borno" name="state">Borno</option>
+                                                    <option value="Cross River" name="state">Cross River</option>
+                                                    <option value="Delta" name="state">Delta</option>
+                                                    <option value="Ebonyi" name="state">Ebonyi</option>
+                                                    <option value="Edo" name="state">Edo</option>
+                                                    <option value="Ekiti" name="state">Ekiti</option>
+                                                    <option value="Enugu" name="state">Enugu</option></option>
+                                                    <option value="Gombe" name="state">Gombe</option>
+                                                    <option value="Delta" name="state">Imo</option>
+                                                    <option value="Jigawa" name="state">Jigawa</option>
+                                                    <option value="Kaduna" name="state">Kaduna</option>
+                                                    <option value="Kano" name="state">Kano</option>
+                                                    <option value="Katsina" name="state">Katsina</option></option>
+                                                    <option value="Kebbi" name="state">Kebbi</option>
+                                                    <option value="Kogi" name="state">Kogi</option>
+                                                    <option value="Kwara" name="state">Kwara</option></option>
+                                                    <option value="Lagos" name="state">Lagos</option>
+                                                    <option value="Nasarawa" name="state">Nasarawa</option>
+                                                    <option value="Niger" name="state">Niger</option>
+                                                    <option value="Ogun" name="state">Ogun</option>
+                                                    <option value="Ondo" name="state">Ondo</option>
+                                                    <option value="Osun" name="state">Osun</option></option>
+                                                    <option value="Oyo" name="state">Oyo</option>
+                                                    <option value="Plateau" name="state">Plateau</option>
+                                                    <option value="Rivers" name="state">Rivers</option>
+                                                    <option value="Sokoto" name="state">Sokoto</option></option>
+                                                    <option value="Taraba" name="state">Taraba</option>
+                                                    <option value="Yobe" name="state">Yobe</option>
+                                                    <option value="Kwara" name="state">Kwara</option></option>
+                                                    <option value="Zamfara" name="state">Zamfara</option>
+                                                </select>  -->
+                                                    </div>
+                                    </div>
+        
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>RELIGION</b></p>
+                                            <select class="form-control show-tick" name="religion">
+                                                <option value="">-- Please select --</option>
+                                                <option value="Christian">Christian</option>
+                                                <option value="Muslim">Muslim</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                        </div>
+                                    </div>
+        
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <p><b>NATIONALITY</b></p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" name="nationality"  id="nationality" onkeyup='saveValue(this);'>
+                                                        <label class="form-label">Ex: Nigerian</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+
+                                <div style="margin-left: 1%">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>MARITAL STATUS</b></p>
+                                            <select class="form-control show-tick" name="marital_status">
+                                                <option value="">-- Please select --</option>
+                                                <option value="Single" name="marital_status">Single</option>
+                                                <option value="Muslim" name="marital_status">Married</option>
+                                                <option value="Others" name="marital_status">Divorced</option>
+                                            </select>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>PERMANENT ADDRESS</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="permanent_address"  id="residential_address" onkeyup='saveValue(this);'>
+                                                    <label class="form-label">Ex: 10, Ojuelgba road Surulere Lagos.</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>PLACE OF WORK</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="place_of_work"  id="office_name" onkeyup='saveValue(this);'>
+                                                    <label class="form-label">Ex: Divine Therapist Clinic</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+
+                                <div class="row clearfix" style="margin-left: 1%">
+                                    <div class="col-sm-4">
+                                            <div class="form-group">
+                                                    <p><b>SCHOOL ATTENDED WITH DATE</b></p>
+                                                    <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="text" class="form-control" name="school_attended1" id="ssce" onkeyup='saveValue(this);'>
+                                                                <label class="form-label">University  Of Lagos (1995- 2000)</label>
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+        
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>SCHOOL ATTENDED WITH DATE</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="school_attended2" id="degree" onkeyup='saveValue(this);'>
+                                                    <label class="form-label">His Grace Dental School (2000 - 2004) </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>SCHOOL ATTENDED WITH DATE</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="school_attended3" id="msc" onkeyup='saveValue(this);'>
+                                                    <label class="form-label">Divine Therapist School (2004 - 2007) </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="row clearfix" style="margin-left: 1%">
+                                    <div class="col-sm-4">
+                                            <div class="form-group">
+                                                    <p><b>QUALIFICATION WITH DATE</b></p>
+                                                    <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="text" class="form-control" name="qualification1" id="prof_q1" onkeyup='saveValue(this);'>
+                                                                <label class="form-label">Barchelor Of Science (1995- 2000)</label>
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+        
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>QUALIFICATION WITH DATE</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="qualification2" id="prof_q2" onkeyup='saveValue(this);'>
+                                                    <label class="form-label">DST CERTIFICATE (2000 - 2004) </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <p><b>QUALIFICATION WITH DATE</b></p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" name="qualification3" id="prof_q3" onkeyup='saveValue(this);'>
+                                                        <label class="form-label">DN (2004 - 2007) </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+
+                                <div class="row clearfix" style="margin-left: 1%">
+                                    <div class="col-sm-4">
+                                            <div class="form-group">
+                                                    <p><b>YEAR OF ADMISSION</b></p>
+                                                    <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="text" class="form-control" name="admission_year" id="year_of_admission" onkeyup='saveValue(this);'>
+                                                                <label class="form-label">2015</label>
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+        
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>YEAR OF GRADUATION</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="graduation_year" id="year_of_graduation" onkeyup='saveValue(this);'>
+                                                    <label class="form-label">2018</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <p><b>CONTACT ADDRESS</b></p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" name="contact_address" id="address" onkeyup='saveValue(this);'>
+                                                        <label class="form-label">10, Ogunbiyi Street Iwaya Yaba Lagos</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                </div>
+
+                                <div class="row clearfix" style="margin-left: 1%">
+                                    <div class="col-sm-4">
+                                            <div class="form-group">
+                                                    <p><b>NAME OF REFEREE</b></p>
+                                                    <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="text" class="form-control" name="referee_name1" id="referee1" onkeyup='saveValue(this);'>
+                                                                <label class="form-label">Ajayi Tolani Ogungbe</label>
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+        
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>ADDRESS OF REFEREE</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="referee_address1" id="referee_address1" onkeyup='saveValue(this);'>
+                                                    <label class="form-label">24 Abule-Egba Street Yaba Lagos</label> </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <p><b>PHONE NUMBER OF REFEREE</b></p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" name="referee_phone1" id="referee_phone1" onkeyup='saveValue(this);'>
+                                                        <label class="form-label">+234 87668892 </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+
+                                
+                                <div class="row clearfix" style="margin-left: 1%">
+                                    <div class="col-sm-4">
+                                            <div class="form-group">
+                                                    <p><b>NAME OF REFEREE</b></p>
+                                                    <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="text" class="form-control" name="referee_name2" id="referee2" onkeyup='saveValue(this);'>
+                                                                <label class="form-label">Seun Ayomide Olami</label>
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+        
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <p><b>ADDRESS OF REFEREE</b></p>
+                                            <div class="form-group form-float">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="referee_address2" id="referee_address2" onkeyup='saveValue(this);'>
+                                                    <label class="form-label">32 Mc-neil Street Yaba Lagos</label> </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <p><b>PHONE NUMBER OF REFEREE</b></p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control" name="referee_phone2" id="referee_phone2" onkeyup='saveValue(this);'>
+                                                        <label class="form-label">+234 786 868993 </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+
+                         
+                                <div class="row clearfix" style="margin-left: 1%">
+                                      <div class="col-sm-6">
+                                            <div class="dz-message">
+                                            <h5>Upload Marriage Certificate(optional):</h5>
+                                            <div class="drag-icon-cph">
+                                                <i class="material-icons">touch_app</i>
+                                            </div>
+                                        </div>
+                                        <div class="fallback">
+                                            <input name="marriage_cert" type="file" multiple />
+                                        </div>                                    </div>
+                                </div>
+                        </section>
+                          
+                    <!--End of Office Details-->
+                    
+                    
+        <section class="content">
+            <div class="container-fluid" style="margin-top: -10%">
+                <div class="row clearfix">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>
+                                   <b>O'LEVEL RESULT</b>
+                                </h2>
+                                
+                            </div>
+                            <div class="body">
+                               <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <p><b>EXAMINATION NUMBER</b></p>
+                                                <input type="text" name="examination_number1" class="form-control" placeholder="Ex: 4251509247" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <p><b>Number of Sittings</b></p>
+                                                <select class="form-control show-tick" name="exam_sitting">
+                                                    <option value="">1</option>
+                                                    <option value="GCE" name="o_level_1">2</option> 
+                                                </select>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <p><b>EXAMINATION TYPE</b></p>
+                                                <select class="form-control show-tick" name="examination_type1">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="GCE" name="o_level_1">GCE</option>
+                                                    <option value="WAEC" name="o_level_1">WAEC</option>
+                                                    <option value="NECO" name="o_level_1">NECO</option>
+                                                    <option value="NABTEB" name="o_level_1">NABTEB</option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <p><b>EXAMINATION YEAR</b></p>
+                                                    <input type="number" name="examination_year1" class="form-control" placeholder="Ex: 2012" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <p><b>SUBJECTS</b></p>
+                                                <select class="form-control disable" name="sub1">
+                                                    <option value="Mathematics" >Mathematics</option>
+                                                
+                                                </select>
+
+                                            </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <p><b>GRADES</b></p>
+                                                     <select class="form-control show-tick" name="grade1">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                   <div class="col-sm-6">
+                                            <div class="form-group">
+                                                    <select class="form-control disable"  name="sub2">
+                                                    <option value="English">English</option>
+                                                
+                                                </select>
+
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade2">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                  
+                                <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub3">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade3">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub4">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade4">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub5">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade5">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub6">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade6">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub7">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade7">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+              
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>
+                                   <b>O'LEVEL RESULT</b>
+                                </h2>
+                            
+                            </div>
+                            <div class="body">
+                               <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <p><b>EXAMINATION NUMBER</b></p>
+                                                <input type="text" name="examination_number2" class="form-control" placeholder="Ex: 4251509247" />
+                                                <!--<label class="form-label">Examination Number  </label>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <p><b>EXAMINATION TYPE</b></p>
+                                                <select class="form-control show-tick" name="examination_type2">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="GCE" name="o_level_1">GCE</option>
+                                                    <option value="WAEC" name="o_level_1">WAEC</option>
+                                                    <option value="NECO" name="o_level_1">NECO</option>
+                                                    <option value="NABTEB" name="o_level_1">NABTEB</option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <p><b>EXAMINATION YEAR</b></p>
+                                                    <input type="number" name="examination_year2" class="form-control" placeholder="Ex: 2012" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <p><b>SUBJECTS</b></p>
+                                                <select class="form-control disable" name="sub1_2">
+                                                    <option value="Mathematics" >Mathematics</option>
+                                                
+                                                </select>
+
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <p><b>GRADES</b></p>
+                                                     <select class="form-control show-tick" name="grade1_2">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                   <div class="col-sm-6">
+                                            <div class="form-group">
+                                                    <select class="form-control disable"  name="sub2_2">
+                                                    <option value="English">English</option>
+                                                
+                                                </select>
+
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade2_2">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                  
+                                <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub3_2">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade3_2">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub4_2">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade4_2">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub5_2">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade5_2">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub6_2">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade6_2">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select class="form-control show-tick" name="sub7_2">
+                                                    <option value="">-- Please select --</option>
+                                                    <option value="Further Mathematics" name="fmaths_1">Further Mathematics</option>
+                                                    <option value="Physics" name="phy_1">Physics</option>
+                                                    <option value="Chemistry" name="chem_1">Chemistry</option>
+                                                    <option value="Biology" name="bio_1">Biology</option>
+                                                    <option value="Agricultural Science" name="agric_1">Agricultural Science</option>
+                                                    <option value="Civic Education" name="civic_1">Civic Education</option>
+                                                    <option value="Economics" name="eco_1">Economics</option>
+                                                    <option value="C.R.K" name="crk_1">C.R.K</option></option>
+                                                    <option value="I.R.S" name="irs_1">I.R.S</option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick" name="grade7_2">
+                                                        <option value="">-- Please select --</option>
+                                                        <option value="A1" name="A1">A1</option>
+                                                        <option value="B2" name="B2">B2</option>
+                                                        <option value="B3" name="B3">B3</option>
+                                                        <option value="C4" name="C4">C4</option>
+                                                        <option value="C5" name="C5">C5</option>
+                                                        <option value="C6" name="C6">C6</option>
+                                                        <option value="D7" name="D7">D7</option>
+                                                        <option value="E8" name="E8">E8</option>
+                                                        <option value="F9" name="F9">F9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+    </section>
+    <!--End Of Education Qualifications-->  
+
+
+        <section class="content">
+                <div class="container-fluid">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: -10%">
+                                <div class="button-demo">
+                                        <button type="submit" class="btn btn-block btn-lg btn-success waves-effect"><h5>SAVE INDEX</h5></button>
+                                </div>
+                                </div>
+                                </div>
+                                </section>
+   </form>
+
+        <!-- <!-- <script src="https//code.jquery.com/jquery-3.3.1.min.js"></script> --> -->
+   <!-- <script>
+       $("id_country").change(function () {
+           var url = $(#)
+       }) -->
+
+        <script>
+             function readFIle(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            $('#ShowImage')
+                                .attr('src', e.target.result);
+                        };
+
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+        </script>
+
+        <script type="text/javascript">
+            document.getElementById("first_name").value = getSavedValue("first_name");
+            document.getElementById("last_name").value = getSavedValue("last_name");
+            document.getElementById("middle_name").value = getSavedValue("middle_name");
+            document.getElementById("phone").value = getSavedValue("phone");
+            document.getElementById("age").value = getSavedValue("age");
+            document.getElementById("email").value = getSavedValue("email");
+            document.getElementById("nationality").value = getSavedValue("nationality");
+            document.getElementById("residential_address").value = getSavedValue("residential_address");
+            document.getElementById("office_name").value = getSavedValue("office_name");
+            document.getElementById("email").value = getSavedValue("email");
+            document.getElementById("ssce").value = getSavedValue("ssce");
+            document.getElementById("degree").value = getSavedValue("degree");
+            document.getElementById("msc").value = getSavedValue("msc");
+            document.getElementById("prof_q1").value = getSavedValue("prof_q1");
+            document.getElementById("prof_q2").value = getSavedValue("prof_q2");
+            document.getElementById("prof_q3").value = getSavedValue("prof_q3");
+            document.getElementById("year_of_admission").value = getSavedValue("year_of_admission");
+            document.getElementById("year_of_graduation").value = getSavedValue("year_of_graduation");
+            document.getElementById("referee1").value = getSavedValue("referee1");
+            document.getElementById("address").value = getSavedValue("address");
+        
+          document.getElementById("referee2").value = getSavedValue("referee2");
+           
+          document.getElementById("referee_address1").value = getSavedValue("referee_address1");
+        
+          document.getElementById("referee_address2").value = getSavedValue("referee_address2");
+        
+         
+          document.getElementById("referee_phone1").value = getSavedValue("referee_phone1");
+        
+          document.getElementById("referee_phone2").value = getSavedValue("referee_phone2");
+          document.getElementById("exam_num_1").value = getSavedValue("exam_num_1");
+          document.getElementById("exam_num_2").value = getSavedValue("exam_num_2");
+        
+        
+        
+        // set the value to this input
+        /* Here you can add more inputs to set value. if it's saved */
+
+        //Save the value function - save it to localStorage as (ID, VALUE)
+        function saveValue(e){
+            var id = e.id;  // get the sender's id to save it . 
+            var val = e.value; // get the value. 
+            localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override . 
+        }
+
+        //get the saved value function - return the value of "v" from localStorage. 
+        function getSavedValue  (v){
+            if (!localStorage.getItem(v)) {
+                return "";// You can change this to your defualt value. 
+            }
+            return localStorage.getItem(v);
+        }
+</script>
+
+{% endblock %}

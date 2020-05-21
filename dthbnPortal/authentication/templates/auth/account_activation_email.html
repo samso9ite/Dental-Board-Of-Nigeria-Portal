@@ -1,0 +1,5 @@
+{% autoescape off %}
+    Hi {{user.sch_name}}
+    Please click the link below to confirm registration
+    http://{{domain}}{% url 'Auth:activate' uidb64=uid token=token %}
+{% endautoescape %}

@@ -1,0 +1,142 @@
+{% extends "school/base.html" %}
+{% load static %}
+{% block body %}
+{% load humanize %}
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-xs-12 col-sm-3">
+                    <div class="card profile-card">
+                       
+                        <div class="profile-body">
+                          
+                        </div>
+                        <div class="profile-footer">
+                            <ul>
+                                <li>
+                                    <h5><i class="material-icons">comment</i> Ticket Information </h5>
+                                </li>
+                                <li>
+                                    <span style="color: red; padding-right: 5px;"> #{{record.ticket_id}} - </span>  <a href="" style="color:black">{{record.message|truncatechars:70}}
+                                       <p></p> <span class="label bg-black">{{record.ticket_status}}</span></p>
+                                    </a>
+                                </li>
+                                <li>
+                                   <h5>Department</h5>
+                                   <p>{{record.department}} Department</p>
+                                </li>
+                                <li>
+                                    <h5>Submitted</h5>
+                                    <p>{{record.created_date}}</p>
+                                </li>
+                                <li>
+                                    <h5>Last Updated</h5>
+                                    <p>{{record.last_updated|naturaltime}}</p>
+                                </li>
+                                <li>
+                                    <h5>Priority</h5>
+                                    <p>{{record.priority}}</p>
+                                </li>
+                                <li style="">
+                                   <span > <a role="button" data-toggle="collapse" href="#reply_link" aria-expanded="true" aria-controls="reply_link">
+                                       <button class="btn-success btn" style="margin-right: 1.7em;"><i class="material-icons">create</i> REPLY</button> </a>
+                                        <a href="{% url 'schoolPortal:close_ticket' id=record.id %}"> 
+                                           <button class="btn btn-danger"><i class="material-icons">clear</i>CLOSE</button>
+                                        </a>
+                                    </span>
+                                </li>
+                            </ul>
+                            <!-- <button class="btn btn-primary btn-lg waves-effect btn-block">FOLLOW</button> -->
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-xs-12 col-sm-9">
+                    <div class="card">
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+                                    <div class="panel-group" id="accordion_19" role="tablist" aria-multiselectable="true">
+                                        <div class="panel panel-col-ash">
+                                            <div class="panel-heading" role="tab" id="headingOne_19">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" href="#reply_link" aria-expanded="true" aria-controls="reply_link">
+                                                        <i class="material-icons">create</i> REPLY
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="reply_link" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne_19">
+                                                <div class="panel-body">
+                                                    <form method="POST" action="{% url 'schoolPortal:update_ticket' id=record.id %}">
+                                                        {% csrf_token %}
+                                                        <div class="col-sm-12">
+                                                            <div class="form-line">
+                                                                <textarea class="form-control" id="InputExperience" name="message" rows="8" placeholder="Please Type Your Message" style="border: 0px;"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="InputSkills" class="col-sm-3 control-label">Attachements <i class="material-icons">attach_file</i></label>
+            
+                                                            <div class="col-sm-9">
+                                                                
+                                                                    <input type="file" name="attachment1" class="form-control" > <input type="file" class="form-control" name="attachment2" >
+                                                                
+                                                              
+                                                            </div>
+                                                        </div>
+            
+                                                     
+                                                        <div class="form-group">
+                                                            <br>
+                                                            <div class=" col-sm-12">
+                                                                <h4>
+                                                                    <a href="">
+                                                                        <button type="submit" class="btn btn-block btn-lg btn-success waves-effect"> <b> SUBMIT </b> </button>
+                                                                    </a>
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% for each_record in all_records %}
+                                    <div class="panel panel-default panel-post">
+                                        <div class="panel-heading">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img src="{% static 'general/images/user.png' %}" width="50" height="48" alt="User" style="border: 0px solid #efefef; border-radius: 100%"/>
+
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">
+                                                        <a href="#">{{each_record.name}}</a>
+                                                    </h4>
+                                                  
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="post">
+                                                <div class="post-heading">
+                                                    {{each_record.message}}
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                      
+                                    </div>
+                                {% endfor %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

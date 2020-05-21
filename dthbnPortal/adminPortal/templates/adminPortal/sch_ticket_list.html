@@ -1,0 +1,126 @@
+{% extends "adminPortal/base.html" %}
+{% load static %}
+{% block body %}
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row clearfix">
+             
+                <div class="col-xs-12 col-sm-12">
+                    <div class="card">
+                        <div class="header">
+                            {% if 'admin/sch_reply_list' in request.path %}
+                                <h4 style="margin:0px;"> School Replies </h4>
+                            {% elif 'admin/answered_ticket_list' in request.path %}
+                                <h4 style="margin:0px;"> Answered Ticket </h4>
+                            {% elif 'admin/opened_ticket_list' in request.path %}
+                                <h4 style="margin:0px;"> Open Ticket </h4>
+                            {% elif 'admin/closed_ticket_list' in request.path %}
+                                <h4 style="margin:0px;"> Closed Ticket </h4>
+                            {% endif %}
+                         </div>
+                    
+                        
+                        <div class="body">
+                           
+                              
+
+                <div class="table-responsive">
+                                    
+                    <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                        <thead>
+                    
+                            <tr>
+                                <th>Department</th>
+                                <th>Subject</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                            </tr>
+                    
+                        </thead>
+                        <tfoot>
+                                <tr>
+                                    <th>Department</th>
+                                    <th>Subject</th>
+                                    <th>Status</th>
+                                    <th>Last Updated</th>
+                                
+                                </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for ticket in query_list %}
+
+                        <tr>
+                            
+                                <td>{{ticket.department|title}}</td>
+                                <td><a href="{% url 'schoolPortal:view_a_ticket' id=ticket.id%} "  ><b>#{{ticket.ticket_id}} </b> - {{ticket.subject|title}}</a></td>
+                                
+                                <td>
+                                    {% if ticket.ticket_status == 'Open' %}
+                                        <a href="javascript:void(0);" > <button type="button" class="btn bg-black btn-block waves-effect" > {{last_updated_status|get_item:ticket.id}} </button>    </a>                    
+                                    {% elif ticket.ticket_status == 'Closed' %}
+                                        <a href="javascript:void(0);" > <button type="button" class="btn bg-grey btn-block waves-effect" > {{last_updated_status|get_item:ticket.id}} </button>    </a>                    
+                                    {% elif ticket.ticket_status == 'Customer Reply' %}
+                                        <a href="javascript:void(0);" > <button type="button" class="btn btn-block bg-default waves-effect" style="color:black"> {{last_updated_status|get_item:ticket.id}} </button>    </a>                    
+                                    {% endif %}
+                                </td> 
+                                            
+                                <td>
+                                    {{all_sch_ticket|get_item:ticket.id}}
+                                </td> 
+                                    
+                            
+                        </tr>
+                        
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+                                                        {% if query_list.has_other_pages %}
+                                                        <nav aria-label="query_list Pagination" class="mb-4">
+                                                            <ul class="pagination">
+                                                                {% if query_list.has_previous %}
+                                                                    <li class="page-item">
+                                                                        <a class="page-link" href="?page={{ query_list.previous_page_number }}">Previous</a>
+                                                                    </li>
+                                                                {% else %}
+                                                                <li class="page-item disabled">
+                                                                    <span class="page-link">Previous</span>
+                                                                </li>
+                                                                {% endif %}
+
+                                                                {% for page_num in query_list.paginator.page_range %}
+                                                                    {% if query_list.number == page_num %}
+                                                                        <li class="page-item active">
+                                                                            <span class="page-link">
+                                                                                {{page_num}}
+                                                                                <span class="sr-only">(current)</span>
+                                                                            </span>
+                                                                        </li>
+                                                                    {% else %}
+                                                                        <li class="page-item">
+                                                                            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                {% endfor %}
+
+                                                                {% if query_list.has_next %}
+                                                                        <li class="page-item">
+                                                                            <a class="page-link" href="?page={{ query_list.next_page_number }}">Next</a>
+                                                                        </li>
+                                                                {% else %}
+                                                                    <li class="page-item disabled">
+                                                                        <span class="page-link">Next</span>
+                                                                    </li>
+                                                                {% endif %}
+                                                            </ul>
+                                                        </nav>
+                                                    {% endif %}
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+</section>
+{% endblock %}

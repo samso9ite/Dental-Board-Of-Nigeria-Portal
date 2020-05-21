@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="keywords" content="" />
+	<meta name="author" content="" />
+	<meta name="robots" content="" />
+	<meta name="description" content="" />
+	<meta property="og:title" content="Dental Therapist Board Of Nigeria"/>
+	<meta property="og:description" content="" />
+	<meta property="og:image" content="" />
+	<meta name="format-detection" content="telephone=no">
+
+	<!-- FAVICONS ICON -->
+	<link rel="icon" href="{% static 'authentication/images/favicon.ico' %}" type="image/x-icon" />
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'authentication/images/logo.png' %}" />
+
+	<!-- PAGE TITLE HERE -->
+	<title>DTHBN {% block title %} {% endblock %}</title>
+
+	<!-- MOBILE SPECIFIC -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!--[if lt IE 9]>
+	<script src="{% static 'authentication/js/html5shiv.min.js' %}"></script>
+	<script src="{% static 'authentication/js/respond.min.js' %}"></script>
+	<![endif]-->
+
+	<!-- STYLESHEETS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'authentication/plugins.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'authentication/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'authentication/fontawesome/css/font-awesome.min.css' %}">
+	<!--<link rel="stylesheet" type="text/css" href="{% static 'authentication/plugins/bootstrap-select/bootstrap-select.min.css ' %}">-->
+	<link rel="stylesheet" type="text/css" href="{% static 'authentication/plugins/themify/themify-icons.css ' %}">
+	<!--<link rel="stylesheet" type="text/css" href="{% static 'authentication/plugins/bootstrap/css/bootstrap.min.css' %}">-->
+	<!--<link class="skin" rel="stylesheet" type="text/css" href="{% static 'authentication/skin/skin-1.css' %}">-->
+	<link rel="stylesheet" type="text/css" href="{% static 'authentication/templete.css' %}">
+	
+</head>
+<body id="bg" style="background-image: url({% static 'authentication/images/login_bg_img.png' %});">
+<div id="loading-area"></div>
+<div class="page-wrapers">
+    <!-- Content -->
+    <div id="particles-js" class="page-content dez-login bg-primary-dark">
+		<div class="relative z-index3">
+		<div class="top-head text-center p-a40 logo-header">
+			<a href="index.html">
+				<img src="{% static 'authentication/images/logo.png' %}" alt=""/>
+			</a>
+		</div>
+{% block body %}
+
+{% endblock %}
+
+
+		<div class="bottom-footer text-center text-white">
+			<p>2020 Dental Therapists' Registration Board Of Nigeria</p>
+		</div>
+		</div>
+	</div>
+	<!-- Content END-->
+</div>
+<!-- JavaScript  files ========================================= -->
+<script src="{% static 'authentication/js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+<!--<script src="{% static 'authentication/plugins/bootstrap/js/popper.min.js' %}"></script>&lt;!&ndash; BOOTSTRAP.MIN JS &ndash;&gt;-->
+<script src="{% static 'authentication/plugins/bootstrap/js/bootstrap.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<!--<script src="{% static 'authentication/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>&lt;!&ndash; FORM JS &ndash;&gt;-->
+<!--<script src="{% static 'authentication/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script>&lt;!&ndash; FORM JS &ndash;&gt;-->
+<!--<script src="{% static 'authentication/plugins/magnific-popup/magnific-popup.js' %}"></script>MAGNIFIC POPUP JS-->
+
+<script src="{% static 'authentication/js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'authentication/plugins/particles/particles.js' %}"></script><!-- PARTICLES  -->
+<script src="{% static 'authentication/plugins/particles/particles.app.js' %}"></script><!-- PARTICLES  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js" integrity="sha256-2RS1U6UNZdLS0Bc9z2vsvV4yLIbJNKxyA4mrx5uossk=" crossorigin="anonymous"></script>
+
+{% load sweetify %}
+{% sweetify %}
+</body>
+</html>

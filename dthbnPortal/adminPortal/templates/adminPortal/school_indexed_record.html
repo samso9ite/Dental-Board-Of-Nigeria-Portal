@@ -1,0 +1,575 @@
+{% extends 'adminPortal/base.html' %}
+{% load static %}
+{% block body %}      
+    <section class="content">
+        <div class="container-fluid">
+            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                 {{sch_name|upper}} 
+                                 
+                            </h2>
+                        </div>
+                  
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">             
+                        <h2>
+                        {% if 'admin/sch_indexed_rec/' in request.path %}
+                            INDEXED RECORD
+                            
+                        <span style="float: right;"><a href="{% url 'adminPortal:export_indexed_student' id=sch_id %}">
+                            <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
+                             name="export">Export All Accredited Schools</button></a></span>
+
+                        {% elif 'admin/approved_indexed_list/' in request.path %}
+                            APPROVED INDEXED RECORD
+                
+                            <span style="float: right;"><a href="{% url 'adminPortal:export_indexed_student' id=sch_id %}">
+                            <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
+                            name="export">Export All Accredited Schools</button></a></span>
+                        {% else %}
+                            DECLINED INDEXED RECORD
+                
+                            <span style="float: right;"><a href="{% url 'adminPortal:export_indexed_student' id=sch_id %}">
+                            <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
+                            name="export">Export All Accredited Schools</button></a></span>
+
+                        {% endif %}
+                      </h2>
+                    </li>
+                        </ul>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="card">
+                                       <div class="table-responsive">
+                                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Categories</th>
+                                                            <th>Address</th>
+                                                            <th>Contact</th>
+                                                            <th>Email</th>
+                                                            <th>Status</th>
+                                                            <th>View</th>
+                                                          
+                                                        </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Cadre</th>
+                                                            <th>Address</th>
+                                                            <th>Contact</th>
+                                                            <th>Email</th>
+                                                            <th>Status</th>
+                                                            <th>View</th>
+                                                            
+                                                        </tr>
+                                                    </tfoot>
+                                                    <tbody>   
+                                                        {% for student_record in all_sch_records %}                                                        
+                                                         <tr>
+                                                                <td>{{student_record.surname|title}} {{student_record.first_name|title}}  </td>
+                                                                    <td> {{student_record.cadre |title}} </td>
+                                                                    <td> {{student_record.permanent_address|title}}</td>
+                                                                    <td> {{student_record.telephone}}</td>
+                                                                    <td> {{student_record.email|lower}}</td>
+                                                                    <td>{% if student_record.approved is True and student_record.unapproved is False %}
+                                                                        <button type="button" class="btn btn-success waves-effect">
+                                                                        <i class="material-icons">verified_user</i>
+                                                                        <span>Approved</span>
+
+                                                                        {% elif student_record.approved is False and student_record.unapproved is True %}
+                                                                            <button type="button"  class="btn btn-danger waves-effect">
+                                                                            <i class="material-icons">clear</i>
+                                                                            <span>Declined</span>
+
+                                                                        {% elif student_record.approved == False and student_record.unapproved == False %}
+                                                                            <button type="button" style="background-color: #ccbd0d; color: white;" class="btn waves-effect">
+                                                                            <i class="material-icons">visibility</i>
+                                                                            <span>Uncheck</span>
+                                                                        {% endif %}
+                                                                    </button></td>
+                                                                    <td><a href="#"><i class="material-icons" data-toggle="modal" data-target="#StudentDetails{{student_record.id}}">visibility</i></a>
+                                                                              <div class="modal fade" id="StudentDetails{{student_record.id}}" tabstudent_record="-1" role="dialog">
+                                                                                    <div class="modal-dialog modal-lg" role="document">
+                                                                                        <div class="modal-content">
+                                                                                            <div class="modal-header">
+                                                                                                <div class="image" style="text-align: center">
+
+                                                                                                    {% if student_record.profile_image %}
+                                                                                                        <img src="{{student_record.profile_image.url}}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                                                                    {% else %}
+                                                                                                        <img src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                                                                    {% endif %}
+                                                                                                </div>
+                                                                                        </div>
+                                                                                        <div class="modal-body"> 
+                                                                                                <div class="row clearfix">
+                                                                                                    {% if "/admin/declined_indexed_list/" in request.path %}
+                                                                                                    <h5 style="margin-left: 30px;">
+                                                                                                        REMARK : {{student_record.comment|title}}
+                                                                                                    </h5><br>
+                                                                                                {% endif %}
+
+                                                                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                        <div class="card">
+                                                                                                            <div class="header">
+                                                                                                                <h4 style="align:center;">
+                                                                                                                <b> STUDENT DETAILS </b>
+                                                                                                                </h4>
+                                                                                                            </div>
+                                                                                            
+                                                                                                            <div class="body table-responsive">
+                                                                                                                <table class="table table-striped">
+                                                                                                                    <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Name Of Institution: </b> {{student_record.institution|title}}</td>
+                                                                                                                            <td><b>Cadre: </b> {{student_record.cadre|title}} </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Surname: </b>{{student_record.surname|title}} </td>
+                                                                                                                            <td><b>Other Names: </b> {{student_record.first_name|title}} </td>
+                                                                                                                        </tr>
+                                
+                                                                                                                        <tr>
+                                                                                                                            <td><b>State Of Origin:</b> {{student_record.state|title}} </td>
+                                                                                                                            <td><b>Age: </b> {{student_record.age|title}} </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Telephone:</b> {{student_record.telephone|title}}</td>
+                                                                                                                            <td><b>Email: </b> {{student_record.email|title}} </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Permanent Address: </b> {{student_record.permanent_address|title}} </td>
+                                                                                                                            <td><b>Religion: </b> {{student_record.religion|title}} </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Nationality: </b> {{student_record.nationality|title}} </td>
+                                                                                                                            <td><b>Marital Status: </b> {{student_record.marital_status|title}} </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>School Attended with Date (1): </b> {{student_record.school_attended1|title}} </td>
+                                                                                                                            <td><b>School Attended with Date (2): </b> {{student_record.school_attended2|title}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>School Attended with Date (3): </b> {{student_record.school_attended3|title}}</td>
+                                                                                                                            <td><b>School Attended with Date (4): </b> {{student_record.school_attended4|title}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Qualification with Date (1): </b> {{student_record.qualification1|title}} </td>
+                                                                                                                            <td><b>Qualification with Date (2): </b> {{student_record.qualification2|title}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Qualification with Date (3): </b> {{student_record.qualification3|title}}</td>
+                                                                                                                            <td><b>Qualification with Date (4): </b> {{student_record.qualification4|title}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Year Of Admission: </b> {{student_record.admission_year|title}}</td>
+                                                                                                                            <td><b>Year Of Graduation: </b> {{student_record.graduation_year|title}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Contact Adress: </b>  {{student_record.contact_address|title}}</td>
+                                                                                                                            <td><b>Place of Work: </b> {{student_record.place_of_work|title}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                              </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Referee Name(1): </b> {{student_record.referee_name1|title}}</td>
+                                                                                                                            <td><b>Referee Address(1): </b> {{student_record.referee_address1|title}} </td>
+                                                                                                                            
+                                                                                                                        </tr>
+                                
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Referee Mobile(1): </b> {{student_record.referee_phone1|title}}</td>
+                                                                                                                            <td><b>Referee Name(2): </b> {{student_record.referee_name2|title}}</td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td><b>Referee Address(2): </b> {{student_record.referee_address2|title}} </td>
+                                                                                                                            <td><b>Referee Mobile(2): </b> {{student_record.referee_phone2|title}}</td>
+                                                                                                                    
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td> 
+                                                                                                                                <b>O'Level Certificate (1)</b>
+                                                                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                                                                <div id="imgModal" class="modal" role="dialog">
+                                                                                                                                <div class="modal-dialog modal-md">
+                                
+                                                                                                                                    <!-- Modal content-->
+                                                                                                                                    <div class="modal-content">
+                                                                                                                                      <div class="modal-header">
+                                                                                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                                                                        <h4 class="modal-title">Marriage Certificate</h4>
+                                                                                                                                      </div>
+                                                                                                                                      <div class="modal-body">
+                                                                                                                                        <img style="display:none;" class="img img-responsive" id="pic" src=" "  />
+                                                                                                                                      </div>
+                                                                                                                                      <div class="modal-footer">
+                                                                                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                                                      </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                                </div>
+                                                                                                                            </td>
+                                
+                                                                                                                            <td> 
+                                                                                                                                <b>O'Level Certificate (2)</b>
+                                                                                                                            
+                                                                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                                                                <div id="imgModal" class="modal" role="dialog">
+                                                                                                                                <div class="modal-dialog modal-md">
+                                                                                                                                  
+                                                                                                                                    <!-- Modal content-->
+                                                                                                                                    <div class="modal-content">
+                                                                                                                                      <div class="modal-header">
+                                                                                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                                                                        <h4 class="modal-title">Marriage Certificate</h4>
+                                                                                                                                      </div>
+                                                                                                                                      <div class="modal-body">
+                                                                                                                                        <img style="display:none;" class="img img-responsive" id="pic" src=" "  />
+                                                                                                                                      </div>
+                                                                                                                                      <div class="modal-footer">
+                                                                                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                                                      </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                </div>
+                                                                                </td>
+                                                                                
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <b>Display Grade</b>
+                                                                                    <button type="button"  data-toggle="modal" data-target="#gradeDisplay{{student_record.id}}" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                    <div id="gradeDisplay{{student_record.id}}" class="modal" role="dialog">
+                                                                                        <div class="modal-dialog modal-md">
+                                
+                                                                                            <!-- Modal content-->
+                                                                                            <div class="modal-content">
+                                                                                              <div class="modal-header">
+                                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                                <h4 class="modal-title">O'Level Result(1)</h4>
+                                                                                              </div>
+                                                                                              <div class="modal-body">
+                                                                                                <p><strong> Examination Number: {{student_record.examination_number2}} </strong></p>
+                                                                                                <p><strong> Examination Type:  {{student_record.examination_type2}} </strong> </p>
+                                                                                                <p><strong> Examination Year:  {{ student_record.examination_year2}} </strong></h5>
+                                                                                                <!-- <h5 </h5> -->
+                                                                                                    <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                                                                                        <thead>
+                                                                                                        <tr>
+                                                                                                            <th>Subjects</th>
+                                                                                                            <th>Grade</th>
+                                                                                                            
+                                                                                                        </tr>
+                                                                                                        </thead>
+                                                                                                        <tfoot>
+                                                                                                        <tr>
+                                                                                                            <th>Subjects</th>
+                                                                                                            <th>Grade</th>
+                                                                                                            
+                                                                                                        </tr>
+                                                                                                        </tfoot>
+                                                                                                        <tbody>
+                                                                                                            <tr>
+                                                                                                                <td>{{student_record.sub1}}</td>
+                                                                                                                <td>{{student_record.grade1}}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td>{{student_record.sub2}}</td>
+                                                                                                                <td>{{student_record.grade2}}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td>{{student_record.sub3}}</td>
+                                                                                                                <td>{{student_record.grade3}}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td>{{student_record.sub4}}</td>
+                                                                                                                <td>{{student_record.grade4}}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td>{{student_record.sub5}}</td>
+                                                                                                                <td>{{student_record.grade5}}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td>{{student_record.sub6}}</td>
+                                                                                                                <td>{{student_record.grade6}}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td>{{student_record.sub7}}</td>
+                                                                                                                <td>{{student_record.grade7}}</td>
+                                                                                                            </tr>
+                                                                                               
+                                                                                                        </tbody>
+                                                                                                        </table>
+                                
+                                                                                                        {% if student_record.exam_sitting == 2 %}
+                                                                                                            <br><br>
+                                                                                                                <h5 style="font-size: 16px;">O'Level Result(2)</h5><br>
+                                                                                                                <p><strong> Examination Number: {{student_record.examination_number2}} </strong></p>
+                                                                                                                <p><strong> Examination Type:  {{student_record.examination_type2}} </strong> </p>
+                                                                                                                <p><strong> Examination Year:  {{ student_record.examination_year2}} </strong></h5>
+                                                                                                                    <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th>Subjects</th>
+                                                                                                                            <th>Grade</th>
+                                                                                                                            
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tfoot>
+                                                                                                                        <tr>
+                                                                                                                            <th>Subjects</th>
+                                                                                                                            <th>Grade</th>
+                                                                                                                            
+                                                                                                                        </tr>
+                                                                                                                        </tfoot>
+                                                                                                                        <tbody>
+                                                                                                                            <tr>
+                                                                                                                                <td>{{student_record.sub1}}</td>
+                                                                                                                                <td>{{student_record.grade1}}</td>
+                                                                                                                            </tr>
+                                                                                                                            <tr>
+                                                                                                                                <td>{{student_record.sub2}}</td>
+                                                                                                                                <td>{{student_record.grade2}}</td>
+                                                                                                                            </tr>
+                                                                                                                            <tr>
+                                                                                                                                <td>{{student_record.sub3}}</td>
+                                                                                                                                <td>{{student_record.grade3}}</td>
+                                                                                                                            </tr>
+                                                                                                                            <tr>
+                                                                                                                                <td>{{student_record.sub4}}</td>
+                                                                                                                                <td>{{student_record.grade4}}</td>
+                                                                                                                            </tr>
+                                                                                                                            <tr>
+                                                                                                                                <td>{{student_record.sub5}}</td>
+                                                                                                                                <td>{{student_record.grade5}}</td>
+                                                                                                                            </tr>
+                                                                                                                            <tr>
+                                                                                                                                <td>{{student_record.sub6}}</td>
+                                                                                                                                <td>{{student_record.grade6}}</td>
+                                                                                                                            </tr>
+                                                                                                                            <tr>
+                                                                                                                                <td>{{student_record.sub7}}</td>
+                                                                                                                                <td>{{student_record.grade7}}</td>
+                                                                                                                            </tr>
+                                                                                                            
+                                                                                                                        </tbody>
+                                                                                                                        </table>
+                                                                                                        {% endif %}
+                                
+                                                                                            
+                                                                                              <div class="modal-footer">
+                                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                              </div>
+                                                                                            </div>
+                                
+                                                                                          </div>
+                                                                                        </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <b>Marriage Certificate</b>
+                                                                                    <button type="button"  data-toggle="modal" data-target="#imgModal{{student_record.id}}" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                    <div id="imgModal{{student_record.id}}" class="modal" role="dialog">
+                                                                                        <div class="modal-dialog modal-md">
+                                
+                                                                                            <!-- Modal content-->
+                                                                                            <div class="modal-content">
+                                                                                              <div class="modal-header">
+                                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                                <h4 class="modal-title">Waec Certificate</h4>
+                                                                                              </div>
+                                                                                              <div class="modal-body">
+                                                                                                <img style="display:none;" class="img img-responsive" id="pic" src=" "  />
+                                                                                              </div>
+                                                                                              <div class="modal-footer">
+                                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                              </div>
+                                                                                            </div>
+                                
+                                                                                          </div>
+                                                                                        </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                                                                        </table>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                    {% if "/admin/sch_indexed_rec/" in request.path %}
+                                                                                                        {% if student_record.approved == False and student_record.unapproved == False %}
+                                                                        
+                                                                                                          <div class="" style="margin-top: -30px; margin-left: 10px">
+                                                                                                            <div class="col-lg-5" >
+                                                                                                               
+                                                                                                                <a href="{% url 'adminPortal:approve_index' id=student_record.id %}">
+                                                                                                                    <button class="btn btn-block btn-lg btn-success waves-effect " name="approved">
+                                                                                                                        <h5>APPROVE STUDENT</h5>
+                                                                                                                    </button>
+                                                                                                                </a>
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-5" style="float: right; margin-right: 10px;" >
+                                                                                                                <button class="btn btn-block btn-lg btn-danger waves-effect " data-toggle="collapse" data-target="#remark{{student_record.id}}"><h5>DECLINE STUDENT</h5></button></a>
+                                                                                                            </div>
+                                                                                                        
+                                                                                                            <form method="POST" action="{% url 'adminPortal:decline_index' id=student_record.id %}">
+                                                                                                                {% csrf_token %}
+                                                                                                      
+                                                                                                                   
+                                                                                                                
+                                                                                                                    <div id="remark{{student_record.id}}" class="collapse" style="text-align: left;">
+                                                                                                                        <div class="row clearfix" style="margin-top:10px ">
+                                                                                                                            <div class="col-sm-12" >
+                                                                                                                                <div class="form-group">
+
+                                                                                                                                
+                                                                                                                                <label for="unemployed">REMARK</label>
+                
+                                                                                                                                <textarea class="form-control" name="comment" rows="5" id="comment" style="border: 2px black solid; text-align: left; padding-right: 10px;">
+                                                
+                                                                                                                                </textarea>
+                                                                                                                                <input type="checkbox" name="unapproved" checked  display="none"/>
+                                                                                                                                <input type="checkbox" name="approved" value="False"  display="none"/>
+                                                                                                                                 <button type="submit" class="btn btn-block btn-sm btn-primary waves-effect " name="unapproved" value="True"><h5>SUBMIT</h5></button>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                
+                                                                                                                </div>
+                                                                                                            </form>
+                                                                                                            
+                                                                                                              <br><br>  <br><br><br>
+
+                                                                                                            {% elif student_record.approved == True and student_record.unapproved == False %}
+                                                                                                                    <div class="col-lg-12" style="float: right; margin-right: 10px;" >
+                                                                                                                        <button class="btn btn-block btn-lg btn-danger waves-effect " data-toggle="collapse" data-target="#remark{{student_record.id}}"><h5>DECLINE STUDENT</h5></button></a>
+                                                                                                                    </div>
+                                                                                                                
+                                                                                                                    <form method="POST" action="{% url 'adminPortal:decline_index' id=student_record.id %}">
+                                                                                                                        {% csrf_token %}
+                                                                                                                        <div id="remark{{student_record.id}}" class="collapse" style="text-align: left;">
+                                                                                                                                <div class="row clearfix" style="margin-top:10px ">
+                                                                                                                                    <div class="col-sm-12" >
+                                                                                                                                        <div class="form-group">
+
+                                                                                                                                        
+                                                                                                                                        <label for="unemployed">REMARK</label>
+                        
+                                                                                                                                        <textarea class="form-control" name="comment" rows="5" id="comment" style="border: 2px black solid; text-align: left; padding-right: 10px;">
+                                                        
+                                                                                                                                        </textarea>
+                                                                                                                                        <input type="checkbox" name="unapproved" checked  display="none"/>
+                                                                                                                                        <input type="checkbox" name="approved" value="False"  display="none"/>
+                                                                                                                                        <button type="submit" class="btn btn-block btn-sm btn-primary waves-effect " name="unapproved" value="True"><h5>SUBMIT</h5></button>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        
+                                                                                                                        </div>
+                                                                                                                    </form>
+                                                                                                                    
+                                                                                                                    <br><br>  <br><br><br>
+
+
+                                                                                                                    {% elif student_record.approved == False and student_record.unapproved == True %}
+
+                                                                                                                        <div class="" style="margin-top: -30px; margin-left: 10px">
+                                                                                                                            <div class="col-lg-12" >
+                                                                                                                            
+                                                                                                                                <a href="{% url 'adminPortal:approve_index' id=student_record.id %}">
+                                                                                                                                    <button class="btn btn-block btn-lg btn-success waves-effect " name="approved">
+                                                                                                                                        <h5>APPROVE STUDENT</h5>
+                                                                                                                                    </button>
+                                                                                                                                </a>
+                                                                                                                            </div>
+                                                                                                                    {% endif %}
+                                                                                                        {% endif %}
+
+                                                                                                       
+                                                                                                    <div class="modal-footer">
+                                                                                                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                </td>
+                                                                               
+                                                                            </tr>
+                                                                           {% endfor %}
+                                                                 </tbody>
+                                                                </table>
+                                                                {% if all_sch_records.has_other_pages %}
+                                                                <nav aria-label="all_sch_records Pagination" class="mb-4">
+                                                                    <ul class="pagination">
+                                                                        {% if all_sch_records.has_previous %}
+                                                                            <li class="page-item">
+                                                                                <a class="page-link" href="?page={{ all_sch_records.previous_page_number }}">Previous</a>
+                                                                            </li>
+                                                                        {% else %}
+                                                                        <li class="page-item disabled">
+                                                                            <span class="page-link">Previous</span>
+                                                                        </li>
+                                                                        {% endif %}
+                                                    
+                                                                        {% for page_num in all_sch_records.paginator.page_range %}
+                                                                            {% if all_sch_records.number == page_num %}
+                                                                                <li class="page-item active">
+                                                                                    <span class="page-link">
+                                                                                        {{page_num}}
+                                                                                        <span class="sr-only">(current)</span>
+                                                                                    </span>
+                                                                                </li>
+                                                                            {% else %}
+                                                                                <li class="page-item">
+                                                                                    <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                                                                                </li>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                    
+                                                                        {% if all_sch_records.has_next %}
+                                                                                <li class="page-item">
+                                                                                    <a class="page-link" href="?page={{all_sch_records.next_page_number}}">Next</a>
+                                                                                </li>
+                                                                        {% else %}
+                                                                            <li class="page-item disabled">
+                                                                                <span class="page-link">Next</span>
+                                                                            </li>
+                                                                        {% endif %}
+                                                                    </ul>
+                                                                </nav>
+                                                            {% endif %}
+                                                            </div>
+                                                        </div>
+                                                     </div>
+                                                    </div>
+                          
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+        
+        <!-- #END# Exportable Table -->
+    </section>
+
+   {% endblock %}

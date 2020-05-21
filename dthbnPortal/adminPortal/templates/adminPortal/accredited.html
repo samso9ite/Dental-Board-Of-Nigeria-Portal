@@ -1,0 +1,248 @@
+{% extends 'adminPortal/base.html' %}
+{% load static %}
+{% block body %}      
+    <section class="content">
+        <div class="container-fluid">
+            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                ACCREDITED SCHOOLS
+                            </h2>
+                        </div>
+                  
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">             
+                        <h2>
+                            SCHOOLS RECORD
+                            <span style="float: right;"><a href="{% url 'adminPortal:export_school_xls' %}">
+                                <button type="submit" class="btn bg-red waves-effect" value="Export All School Details"
+                                 name="export">Export All Accredited Schools</button></a></span>
+
+                      </h2>
+                    
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Reg Number</th>
+                        
+                                        <th>Office Address</th>
+                                        <th>Phone Number</th>
+                                        <th>Email</th>
+                                               
+                                        <th>View</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                            <!--<th>Select</th>-->
+                                            <th>Name</th>
+                                            <th>Reg Number</th>
+                                        
+                                         
+                                            <th>Office Address</th>
+                                            <th>Phone Number</th>
+                                            <th>Email</th>
+                                                  
+                                            <th>View</th>
+                                            <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                   
+                                    <tr>
+                                        {% if accredited_schools_record %}
+                                        
+                                        {% for school in accredited_schools_record %}
+                                            <td> {{school.username|title}}</td>
+                                            <td> {{school.code|title}}</td>
+                                            <td> {{school.user.address|title }}</td>
+                                            <td>{{school.phone_number}}</td>
+                                            <td>{{school.email|lower}}</td>
+                                            <td><a href="#"><i class="material-icons" data-toggle="modal" data-target="#largeModal{{school.id}}">visibility</i></a>
+                                        
+                                                    <div class="modal fade" id="largeModal{{school.id}}" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <div class="image" style="text-align: center">
+                                                                        <img src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-body"> 
+                                                                        <div class="row clearfix">
+                                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                <div class="card">
+                                                                                    <div class="header">
+                                                                                        <h4 style="align:center;">
+                                                                                        <b> SCHOOL DETAILS </b>
+                                                                                        <span style="float: right; margin-right: 5%"><b>REGISTRATION NUMBER: {{school.code}} </b> </span>
+                                                                                            <!-- <small>Use <code>.table-striped</code> to add zebra-striping to any table row within the <code>&lt;tbody&gt;</code></small> -->
+                                                                                        </h4>
+                                                                                        
+                                                                                        <ul class="header-dropdown m-r--5">
+                                                                                        
+                                                                                            <li class="dropdown">
+                                                                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                                                    <i class="material-icons">more_vert</i>
+                                                                                                </a>
+                                                                                                <ul class="dropdown-menu pull-right">
+                                                                                                
+                                                                                                {% if school.suspend is False %}
+                                                                                                    <li> <a href="{% url 'adminPortal:suspend_user' id=school.id %}">Suspend</a></li>
+                                                                                                {% endif %} 
+                                                                                                {% if school.suspend is True %}
+                                                                                                    <li> <a href="{% url 'adminPortal:unsuspend_user' id=school.id %}">Unsuspend</a></li>
+                                                                                                {% endif %}
+                                                                                                {% if school.block is False %}
+                                                                                                    <li> <a href="{% url 'adminPortal:block_user' id=school.id %}">Block</a></li>
+                                                                                                {% endif %}
+                                                                                                {% if school.block is True %}
+                                                                                                    <li> <a href="{% url 'adminPortal:unblock_user' id=school.id %}">Unblock</a></li>
+                                                                                                {% endif %}
+                                                                                                </ul>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                    
+                                                                        <div class="body table-responsive">
+                                                                            <table class="table table-striped">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td><b>Name:</b> {{school.username|title}} </td>
+                                                                                        <td><b>Address: </b> {{school.user.address|title}}</td>
+                                                                                        
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td><b>Phone Number: </b> {{school.phone_number}} </td>
+                                                                                        <td><b>Email: </b>  {{school.email|lower}}</td>
+                                                                                   </tr>   
+
+                                                                                <tr>
+                                                                                    <td><b>State:</b> {{school.user.country|title}}</td>
+                                                                                    <td><b>Postal Address:</b> {{school.user.postal_number }}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td><b>Program:</b> {{school.programme}} </td>
+                                                                                    <td><b>HOD'S Name:</b> {{school.user.hod_name}}</td>
+                                                                                </tr>
+                                                                                    <tr>
+                                                                                    <td><b> HOD'S Number:</b> {{school.user.hod_phone}} </td>
+                                                                                    <td><b>HOD's Email:</b> {{school.user.hod_email}} </td>
+                                                                                </tr>
+
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                                                        
+                                                                                        </td>
+                                                                                        <td> 
+                                                                                    <ul>
+                                                                    <li class="dropdown" style="list-style:none;">
+                                                                        <a href="javascript:void(0);" class="dropdown-toggle"style="padding-left:-10px" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                            <i class="material-icons">more_vert</i>
+                                                                        </a>
+                                                                        <ul class="dropdown-menu pull-right">
+                                                                            <li> <a href="{% url 'adminPortal:delete_user' id=school.id %}">Delete</a></li>
+                                                                        
+                                                                            {% if school.suspend is False %}
+                                                                                <li> <a href="{% url 'adminPortal:suspend_user' id=school.id %}">Suspend</a></li>
+                                                                            {% endif %} 
+                                                                            {% if school.suspend is True %}
+                                                                                <li> <a href="{% url 'adminPortal:unsuspend_user' id=school.id %}">Unsuspend</a></li>
+                                                                            {% endif %}
+                                                                            {% if school.block is False %}
+                                                                                <li> <a href="{% url 'adminPortal:block_user' id=school.id %}">Block</a></li>
+                                                                            {% endif %}
+                                                                            {% if school.block is True %}
+                                                                                <li> <a href="{% url 'adminPortal:unblock_user' id=school.id %}">Unblock</a></li>
+                                                                            {% endif %}
+                                                                        </ul>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                   
+                                        <!--<td><?php echo $school->licence_due; ?></td>-->
+                                    </tr>
+                                    {% endfor %}
+                                    {% endif %} 
+                                
+                                </tbody>
+                            </table>
+
+                                 <!-- Accredited Paginator -->
+        {% if accredited_schools_record.has_other_pages %}
+            <nav aria-label="accredited_schools_record Pagination" class="mb-4">
+                <ul class="pagination">
+                    {% if accredited_schools_record.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ accredited_schools_record.previous_page_number }}">Previous</a>
+                        </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                    {% endif %}
+
+                    {% for page_num in accredited_schools_record.paginator.page_range %}
+                        {% if accredited_schools_record.number == page_num %}
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    {{page_num}}
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if accredited_schools_record.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{accredited_schools_record.next_page_number}}">Next</a>
+                            </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+        
+        <!-- #END# Exportable Table -->
+    </section>
+
+   {% endblock %}
