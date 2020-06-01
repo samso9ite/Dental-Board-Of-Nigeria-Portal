@@ -36,7 +36,15 @@
                                         </h2>
 
                                     {% elif request.path == '/school/current_index' %}
-                                        <h2> CURRENT INDEXED STUDENT</h2>
+                                        <h2>
+                                             CURRENT INDEXED STUDENT
+
+                                             <span style="float: right;">
+                                                <a href="{% url 'schoolPortal:export_current_student' %}"> 
+                                                    <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
+                                                 name="export">Export All Indexed Record</button></a>
+                                            </span>
+                                        </h2>
 
                                     {% elif request.path == '/school/indexed_record/' %}
                                         <h2>INDEXED STUDENT

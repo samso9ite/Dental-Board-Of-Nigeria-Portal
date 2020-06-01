@@ -168,7 +168,10 @@ class ExamRegistration(models.Model):
     referee_email1 = models.CharField(max_length=200, blank=True, null=True)  
     referee_phone1 = models.CharField(max_length=200, blank=True, null=True)  
     referee_name2 = models.CharField(max_length=200, blank=True, null=True) 
-    referee_email2 = models.CharField(max_length=200, blank=True, null=True)  
+    referee_email2 = models.CharField(max_length=200, blank=True, null=True) 
+    state_of_origin =  models.ForeignKey(Region,on_delete=models.SET_NULL, blank=True, null=True, related_name='state_of_origin')
+    lga_of_origin = models.ForeignKey(LGA, on_delete=models.SET_NULL, blank=True, null=True, related_name='lga_of_origin')
+   
     
     mode_of_payment = models.CharField(max_length=200, blank=True, null=True)
     cadre = models.CharField(max_length=200, blank=True, null=True)
@@ -176,8 +179,6 @@ class ExamRegistration(models.Model):
     dental_school_result = models.ImageField(upload_to='images/exam_sector/dental_result', blank=True, null=True)
     dental_school_testimonial = models.ImageField(upload_to='images/exam_sector/dental_testimonial', blank=True, null=True)
     gender = models.CharField(max_length=10, blank=True, null=True)
-    state_of_origin =  models.ForeignKey(Region,on_delete=models.SET_NULL, blank=True, null=True, related_name='state_of_origin')
-    lga_of_origin = models.ForeignKey(LGA, on_delete=models.SET_NULL, blank=True, null=True, related_name='lga_of_origin')
     submitted = models.BooleanField(default=False, blank=True)
     approved = models.BooleanField(default=False, blank=True)
     declined = models.BooleanField(default=False, blank=True)

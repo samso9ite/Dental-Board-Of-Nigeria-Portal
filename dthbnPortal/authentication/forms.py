@@ -59,7 +59,7 @@ class SignUp(forms.ModelForm):
 
 class ProfSignUp(forms.ModelForm):
     programme = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), choices=User.cadre_choices)
-    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Registration Code'}))
+    code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Registration Code'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',
@@ -68,19 +68,42 @@ class ProfSignUp(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'programme', 'is_professional')
+        fields = ('code', 'email', 'password', 'programme', 'is_professional')
 
     def clean(self):
         cleaned_data = super(ProfSignUp, self).clean()
         password = cleaned_data.get("password")
         confirm_pwd = cleaned_data.get("confirm_password")
         email = cleaned_data.get("email")
+        code = cleaned_data.get("code")
+        programme = cleaned_data.get("programme")
+        print(password, confirm_pwd, email, code, programme)
 
         if password != confirm_pwd:
             raise forms.ValidationError("Password doesn't match")
+            print('Password dont match')
 
         elif email == User.objects.filter(email="email"):
             raise forms.ValidationError("Email has been used")
+            print('Email has been used')
+        
+        try:
+            prof_code = ProfessionalCode.objects.get(Q(reg_number=code) & Q(cadre=programme))
+            if prof_code:
+                print(prof_code.id)
+                if prof_code.used is True:
+                    self.add_error('code', "Professional code already has been used ")
+                    print("Code has been used")
+                # elif prof_code.used is False:
+                #     pass
+            else:
+                self.add_error('code', "Please confirm if the code is correct")
+        except ProfessionalCode.DoesNotExist:
+            self.add_error('code', "Please confirm if the code is correct")
+            print('Code incorrect')
+
+
+
 
 
 class LoginForm(forms.ModelForm):

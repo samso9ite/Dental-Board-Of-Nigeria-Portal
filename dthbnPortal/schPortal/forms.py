@@ -33,6 +33,8 @@ class IndexingForm(forms.ModelForm):
 
 
 class ExamRegForm(forms.ModelForm):
+    residential_country = forms.ModelChoiceField(queryset=Country.objects.all(), widget=forms.Select(attrs={'id':'country'}))
+    residential_state = forms.ModelChoiceField(queryset=Region.objects.all(), widget=forms.Select(attrs={'id':'state'}))
     class Meta:
         model = ExamRegistration
         fields = "__all__"

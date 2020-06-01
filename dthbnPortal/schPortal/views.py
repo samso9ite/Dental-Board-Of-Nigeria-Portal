@@ -6,7 +6,7 @@ from authentication.forms import *
 from authentication.models import Ticket, SubTicket
 from cities_light.models import Region
 from cities_light.models import Country
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from authentication.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -17,9 +17,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.defaulttags import register
 import sweetify
 import xlwt
-from django.urls import reverse
 import random
 from django.template.defaulttags import register
+from django.http import JsonResponse
+from django.core import serializers
 
 
 # Create your views here.
@@ -51,10 +52,12 @@ class SchoolProfile(LoginRequiredMixin,CreateView):
 #     return render(request, 'school/schools_account_update.html', {'region': region} )
 
 def load_cities(request):
-    country_id = request.Get.get('country')
+    country_id = 1 #request.Get.get('country')
     print(country_id)
     region = Region.objects.filter(country_id=country_id).order_by('name')
-    return render(request, 'school/schools_account_update.html', {'region': region} )
+    response = serializers.serialize('json', region)
+    return JsonResponse(response, safe=False)
+    #return HttpResponse(response, content_type='application/json')
 
 
 @login_required
@@ -67,10 +70,13 @@ def Dashboard(request):
        
             exam_reg_stud = ExamRegistration.objects.filter(institute_id=school_data.id).count()
             total_indexed = Indexing.objects.filter(institution_id=request.user).count()
+            notification = Ticket.objects.filter(Q(ticket_status='Answered') & Q(notification=False)).count()
+   
             context =    {
                 'school_data': school_data,
                 'exam_reg_stud': exam_reg_stud,
                 'total_indexed': total_indexed,
+                'notification' : notification,
             }
             return render(request, "school/Dashboard.html", context)
         else:
@@ -197,7 +203,6 @@ def ExamListView(request):
         else:
             pass
 
-
         page = request.GET.get('page', 1)
         paginator = Paginator(queryset, 1)
 
@@ -293,11 +298,6 @@ def submit_exam_record(request):
     return render(request, 'school/exam_record_list.html')
 
 
-
-# Ticket Views
-# class Ticket(TemplateView):
-#     template_name = 'school/ticket.html'
-
 class ViewTicket(TemplateView):
     template_name = 'school/view_ticket.html'
 
@@ -316,6 +316,18 @@ class CreateTicket(CreateView, LoginRequiredMixin):
         form.instance.first_created = True
         sweetify.success(self.request, 'Ticket Created', button='Great!')
         return super().form_valid(form)
+
+    # def get_query_set(self):
+    #     print("Jesus is great")
+    #     query = Ticket.objects.filter(user_id=self.request.user, first_created=True).order_by('_id')[:5]
+    #     all_answered = Ticket.objects.filter(user_id=self.request.user.id, ticket_status='Answered').count()
+    #     all_closed = Ticket.objects.filter(user_id=self.request.user.id, ticket_status='Closed').count()
+    #     all_opened = Ticket.objects.filter(user_id=self.request.user.id, ticket_status='Open').count()
+    #     print(query)
+    #     print(all_opened)
+    #     context = {'query': query, 'all_answered':all_answered, 'all_closed': all_closed, 'all_opened': all_opened }
+    #     return  query
+
 
 @login_required
 def ticket_list(request):
@@ -387,6 +399,7 @@ def view_a_ticket(request, id):
                 form.instance.ticket_status = 'Customer Reply'
                 form.save()
                 sweetify.success(request, 'Ticket Updated', button='Great!')
+                return HttpResponseRedirect(reverse('schPortal:view_ticket', kwargs={'id':id}))
             else:
                 sweetify.error(request, 'Form is not valid', button='Great!')
         else:
@@ -397,13 +410,14 @@ def view_a_ticket(request, id):
             record.ticket_status = 'Closed'
             record.save()
             sweetify.success(request, 'Ticket Closed', button='Great!')
+            return HttpResponseRedirect(reverse('adminPortal:view_ticket', kwargs={'id':id}))
         else:
             sweetify.error(request, "Ticket Status is Closed ")
         
         
     return render(request, 'school/view_ticket.html', {'record': record, 'all_records': all_records})
 
-
+@login_required
 def export_indexed_stu(request):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Schools')
@@ -417,6 +431,9 @@ def export_indexed_stu(request):
             response['Content-Disposition'] = 'attachment; filename=  "Indexed Record.xls"'
         elif '/school/export_approved_student/xls/' in request.path:
             response['Content-Disposition'] = 'attachment; filename=  "Approved Student Record.xls"'
+        
+        elif '/school/export_current_student/xls/' in request.path:
+            response['Content-Disposition'] = 'attachment; filename=  "Current Student Record.xls"'
 
         columns = ['First Name', 'Middle Name',  'Surname',  'Cadre', 'Permanent Address', 'Phone Number', 'Email', 
                         'Age', 'State Of Origin', 'Religion', 'Nationality', 'Marital Status', 'School Attended(1)', 'Qualification(1)', 'School Attended(2)', 'Qualification(2)',
@@ -443,6 +460,14 @@ def export_indexed_stu(request):
             'age', 'state', 'religion', 'nationality', 'marital_status', 'school_attended1', 'qualification1', 'school_attended2', 'qualification2',
                 'school_attended3', 'qualification3', 'admission_year', 'graduation_year', 'contact_address', 'place_of_work', 
                 'referee_name1', 'referee_address1', 'referee_phone1', 'referee_name2', 'referee_address2', 'referee_phone2', )
+        
+        elif '/school/export_current_student/xls/' in request.path:
+            
+            rows = Indexing.objects.filter(institution_id=request.user.id, submitted=False).values_list('first_name', 'middle_name', 'surname', 'cadre', 'permanent_address', 'telephone', 'email', 
+                'age', 'state', 'religion', 'nationality', 'marital_status', 'school_attended1', 'qualification1', 'school_attended2', 'qualification2',
+                'school_attended3', 'qualification3', 'admission_year', 'graduation_year', 'contact_address', 'place_of_work', 
+                'referee_name1', 'referee_address1', 'referee_phone1', 'referee_name2', 'referee_address2', 'referee_phone2', )
+
     for row in rows:
         row_num +=1
         for col_num in range(len(row)):
@@ -458,7 +483,7 @@ def export_exam_record(request):
    
     font_style = xlwt.XFStyle()
     font_style.font.bold = True   
-    if '/school/export_submitted_exam_record/xls/' or '/school/export_current_exam_record/xls/' in request.path: 
+    if '/school/export_submitted_exam_record/xls/' or '/school/export_current_exam_record/xls/' or '/school/export_approved_exam_record/xls/' in request.path: 
         sch_id = School.objects.values_list('id', flat=True).get(User_id=request.user.id)
         print(sch_id)
         response = HttpResponse(content_type='applicaton/mx-excel')
@@ -466,6 +491,8 @@ def export_exam_record(request):
             response['Content-Disposition'] = 'attachment; filename=  "Submitted Record for Exam.xls"'
         elif '/school/export_current_exam_record/xls/' in request.path:
             response['Content-Disposition'] = 'attachment; filename=  "Current Exam Record.xls"'
+        elif '/school/export_approved_exam_record/xls/' in request.path:
+            response['Content-Disposition'] = 'attachment; filename=  "Approved Exam Record.xls"'
 
         columns = ['Title', 'First Name', 'Middle Name',  'Surname',  'Cadre', 'Address', 'Phone Number', 'Email', 
                     'Date of Birth', 'State of Origin', 'Religion', 'Marital Status', 'Maiden Name', 'Senatorial District', 'Qualification(1)', 'qualification(2)', 'qualification(3)', 'qualification(4)',
@@ -490,6 +517,13 @@ def export_exam_record(request):
         elif '/school/export_current_exam_record/xls/' in request.path:
             
             rows = ExamRegistration.objects.filter(institute_id=sch_id, submitted=False).values_list('title', 'first_name', 'middle_name', 'surname', 'cadre', 'residential_address', 'telephone', 'email', 
+                 'date_of_birth', 'state_of_origin', 'religion', 'marital_status', 'maiden_name', 'senatorial_district', 'qualification1', 'qualification2', 'qualification3', 'qualification4', 'prof_qualification1',
+                  'prof_qualification2', 'prof_qualification3', 'prof_qualification4', 'institution_attended1', 'institution_attended2', 'institution_attended3', 'institution_attended4', 'hod_name', 'hod_phone', 'hod_email',
+                  'employment_status', 'office_name', 'office_address', 'office_country', 'office_lga', 'office_phone', 'office_email', 'sector', 'present_position', 'department' )
+
+        elif '/school/export_approved_exam_record/xls/' in request.path:
+            
+            rows = ExamRegistration.objects.filter(institute_id=sch_id, approved=True).values_list('title', 'first_name', 'middle_name', 'surname', 'cadre', 'residential_address', 'telephone', 'email', 
                  'date_of_birth', 'state_of_origin', 'religion', 'marital_status', 'maiden_name', 'senatorial_district', 'qualification1', 'qualification2', 'qualification3', 'qualification4', 'prof_qualification1',
                   'prof_qualification2', 'prof_qualification3', 'prof_qualification4', 'institution_attended1', 'institution_attended2', 'institution_attended3', 'institution_attended4', 'hod_name', 'hod_phone', 'hod_email',
                   'employment_status', 'office_name', 'office_address', 'office_country', 'office_lga', 'office_phone', 'office_email', 'sector', 'present_position', 'department' )

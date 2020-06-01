@@ -1,6 +1,7 @@
 {% extends "school/base.html" %}
 {% load static %}
 {% block body %}
+{% load humanize %}
 
     <section class="content">
         <div class="container-fluid">
@@ -66,7 +67,7 @@
                                 </td> 
                                             
                                 <td>
-                                    {{all_sch_ticket|get_item:ticket.id}}
+                                    {{last_updated_time|get_item:ticket.id|naturaltime}}
                                 </td> 
                                     
                             

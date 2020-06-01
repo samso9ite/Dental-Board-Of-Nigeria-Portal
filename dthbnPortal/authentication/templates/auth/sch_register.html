@@ -23,7 +23,7 @@
                                 <!-- /Error messaging -->
 
                           {% elif prof_form.errors %}
-                            <!-- Error messaging -->
+                            <!-- Error messaging -->  
                             <div id="errors">
                                 <div class="inner">
                                     <ul>
@@ -48,8 +48,7 @@
                             </div>
                             <!-- /Error messaging -->
                         {% endif %}
-
-                        <!-- {% if messages %}
+                       <!-- {% if messages %}
                         <ul class="messages">
                             {% for message in messages %}
                                 <li {% if message.tags %}  class="{{message.tags}}"{% endif %}>
@@ -71,9 +70,12 @@
                             </ul>
                         {% endif %} -->
 
-                         <form class="p-a30 dez-form" action=" " method="post">
+                         <form class="p-a30 dez-form"  method="POST">
                              {% csrf_token %}
                                 <h3 class="form-title m-t0">Sign In</h3>
+                                {{login_form.errors}}
+
+                        
                                 <div class="dez-separator-outer m-b5">
                                     <div class="dez-separator bg-primary style-liner"></div>
                                     <div id="infoMessage" style="color:red;font-style:bold;"></div>
@@ -86,8 +88,9 @@
                                 <div class="form-group">
                                     <input name="password" required="" class="form-control" placeholder="Password" type="password"/>
                                 </div>
+                                
                                 <div class="form-group text-left">
-                                    <button class="site-button dz-xs-flex m-r5" type="submit">login</button>
+                                    <button class="site-button dz-xs-flex m-r5" type="submit" name="loginSubmit" value="login_all">login</button>
                                     <label>
                                         <label for="check1"> <a href="{% url 'Auth:password_reset' %}"><i class="fa fa-unlock"></i>Forgot Password</a></label>
                                     </label>
@@ -164,8 +167,8 @@
                         </div>
 
                         <div class="m-b30">
-                            <!--<input name="is_school" required="" class="form-control" id="id_is_school" checked type="checkbox" />-->
-                            <input type="checkbox" checked name="is_school" id="id_is_school">
+                            <input name="is_school" required="" class="form-control" id="id_is_school" checked type="checkbox" />
+                            <!-- <input type="checkbox" checked name="is_school" id="id_is_school"> -->
                         </div>
 
                         <div style="margin-top:-20px">
@@ -177,12 +180,12 @@
                             <button type="submit" name=""class="site-button pull-right">Submit
                             </button>
                         </div>
-                    </form>
-                </div>
+                    </form> 
+                `</div> 
 
 
              <div id="developement-3" class="tab-pane">
-                <form class="p-a30 dez-form text-center"  action="" method="post">
+                <form class="p-a30 dez-form text-center"  action="" method="POST">
                     {% csrf_token %}
 
                     <h3 class="form-title m-t0" style="color:black">Sign Up</h3>
@@ -192,7 +195,7 @@
                     <h5>Enter your details below: </h5>
 
                     <div class="form-group">
-                        {{prof_form.username}}
+                        {{prof_form.code}}
                     </div>
                     <div class="form-group">
                         {{prof_form.email}}
@@ -212,11 +215,11 @@
                     <div class="m-b30">
                             <input name="is_professional" required="" class="form-control" id="id_is_school" checked type="checkbox" style="display:none"/>
                         </div>
-                    <div class="form-group text-left ">
-                        <a data-toggle="tab"  class="site-button outline gray" href="#login">Back</a>
-                        <button type="submit" name="{{prof_form.is_professional}}" class="site-button pull-right">Submit
-                        </button>
-                    </div>
+                        <div class="form-group text-left ">
+							<a data-toggle="tab"  class="site-button outline gray" href="#login">Back</a>
+                            <button type="submit" name="" class="site-button pull-right">Submit
+                            </button>
+                        </div>
                 </form>
             </div>
 </div>

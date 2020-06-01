@@ -12,14 +12,8 @@ class User(AbstractUser):
         ('Dental Surgery Technician', 'Dental Surgery Technician'),
         ('Dental Surgery Assistant', 'Dental Surgery Assistant'),
         ('Dental Nurses', 'Dental Nurses'),
-    )
-    prof_cadre_choices = (
-        ('Dental', 'Therapist'),
-        ('Dental Technician', 'Dental Surgery '),
-        ('Dental Assistant', 'Dental Assistant'),
-        ('Nurses', 'Nurses'),
-    )
-    username = models.CharField(max_length=50, unique=True)
+    ) 
+    username = models.CharField(max_length=200, unique=True,null=True)
     code = models.CharField(max_length=50, blank=True)
     phone_number = models.CharField(max_length=50, blank=True, null=True)
     programme = models.CharField(max_length=100, null=True)
@@ -51,7 +45,8 @@ class ProfessionalCode(models.Model):
     reg_number = models.CharField(max_length=50)
     used = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-
+    cadre = models.CharField(max_length=30, null=True)
+    
 
 class Ticket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -68,6 +63,7 @@ class Ticket(models.Model):
     ticket_id = models.IntegerField(null=True)
     first_created = models.BooleanField(default=False)
     read = models.BooleanField(default=False)
+    notification = models.BooleanField(default=False)
 
 
 class SubTicket(models.Model):

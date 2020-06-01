@@ -68,7 +68,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="index.html"><b>{{user.username|upper}}</b></a>
+                <a class="navbar-brand" href="index.html"><b>{{user.username|upper|truncatechars:100}}</b></a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -294,6 +294,28 @@
     <!-- Demo Js -->
     <script src="{% static 'general/js/demo.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js" integrity="sha256-2RS1U6UNZdLS0Bc9z2vsvV4yLIbJNKxyA4mrx5uossk=" crossorigin="anonymous"></script>
+
+
+    <script>
+        
+        $("#country").change(function () {
+            $.get("http://127.0.0.1:8000/school/ajax/load-lga/", function(data, status){
+           
+        var resObj = JSON.parse(data)
+        var htmlDesign = ""
+     
+        resObj.map((value,index)=>{
+               console.log(value.fields.name)
+               htmlDesign+= '<option value="'+value.model.pk+'">'+value.fields.name+'</option>'
+           })
+
+           $("#state").html(htmlDesign)
+
+
+     });
+        })
+     </script>
+
 
     {% load sweetify %}
     {% sweetify %}

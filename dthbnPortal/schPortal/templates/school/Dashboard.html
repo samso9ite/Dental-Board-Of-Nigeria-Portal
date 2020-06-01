@@ -39,7 +39,7 @@
                         </div>
                         <div class="content">
                             <div class="text"><b>NOTIFICATIONS</b></div>
-                            <div class="number count-to" data-from="0" data-to="0" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="{{notification}}" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                                     <div class="card">
                                         <div class="header">
                                             <h4 style="align:center;">
-                                             <b> SCHOOL NAME: {{user.username|upper}} </b>
+                                             <b> SCHOOL NAME: {{user.username|upper|truncatechars:25}} </b>
                                              <span style="float: right; margin-right: 5%"><b>SCHOOL CODE: {{user.code|upper}}</b> </span>
                                            
                                             </h4>

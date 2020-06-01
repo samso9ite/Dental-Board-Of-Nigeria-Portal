@@ -7,9 +7,11 @@ from adminPortal.views import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from adminPortal.forms import *
+from schPortal.forms import UpdateTicketForm
 from django.template.defaulttags import register
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.db.models import Q
 import sweetify
 import xlwt
 # Create your views here.
@@ -20,10 +22,27 @@ class Dashboard(TemplateView):
 
 def dashboard(request):
     all_school = User.objects.filter(is_school=True)[:10]
-    total_sch_num = User.objects.all().count()
+    total_sch_num = User.objects.filter(is_school=True).count()
+    total_prof_num = User.objects.filter(is_professional=True).count()
     total_submited_index = Indexing.objects.filter(submitted=True).count() 
-    
-    return render(request, 'adminPortal/dashboard.html', {'all_school':all_school, 'total_sch_num':total_sch_num, 'total_submited_index':total_submited_index})
+    notification = Ticket.objects.filter(Q(ticket_status='School Reply') & Q(notification=False)| Q(ticket_status='Open') & Q(notification=False)).count()
+    if 'admin/reset_notification' in request.path:
+        try:
+            notifications = Ticket.objects.filter(Q(ticket_status='School Reply') & Q(notification=False) & Q()| Q(ticket_status='Open') & Q(notification=False))
+            if notifications:
+                reset = notifications.update(notification=True)
+                return HttpResponseRedirect(reverse('adminPortal:all_ticket'))
+            elif not notifications:
+                sweetify.error(request, 'Notification is empty', button='Great!')
+                return HttpResponseRedirect(reverse('adminPortal:all_ticket'))
+        except:
+            pass
+           
+
+    context = {'all_school':all_school, 'total_sch_num':total_sch_num, 'total_submited_index':total_submited_index,
+     'notification':notification, 'total_prof_num':total_prof_num}
+
+    return render(request, 'adminPortal/dashboard.html', context)
 
 class AccreditedSchools(TemplateView):
     template_name = 'adminPortal/indexing.html'
@@ -41,6 +60,7 @@ def school_index(request):
 
     return render (request, 'adminPortal/indexing.html', {'school_index_records': school_index_records})
 
+@login_required
 def accredited_schools(request):
     school_records = User.objects.filter(is_school=True).select_related('user')
    
@@ -55,6 +75,22 @@ def accredited_schools(request):
         accredited_schools_record = paginator.page(paginator.num_pages)
 
     return render (request, 'adminPortal/accredited.html', {'accredited_schools_record':accredited_schools_record})
+
+@login_required
+def professionals(request):
+    professional_records = User.objects.filter(is_professional=True).select_related('user')
+   
+    page = request.GET.get('page', 1)
+    paginator = Paginator(professional_records, 3)
+
+    try:
+        all_professional_records = paginator.page(page)
+    except PageNotAnInteger:
+        all_professional_records = paginator.page(1)
+    except EmptyPage:
+        all_professional_records = paginator.page(paginator.num_pages)
+
+    return render (request, 'adminPortal/professionals.html', {'all_professional_records':all_professional_records})
 
 
 @login_required
@@ -339,7 +375,7 @@ def ticket_list(request):
                 closed_ticket = Ticket.objects.filter(user_id=sch.id, ticket_status='Closed').count()
                 answered_ticket = Ticket.objects.filter(user_id=sch.id, ticket_status='Answered').count()
               
-                if sch_replies or open_ticket or answered_ticket:
+                if sch_replies or open_ticket:
                     schools.append({'sch_replies':sch_replies, 'sch_details': sch, 'open_ticket': open_ticket, 
                     'closed_ticket': closed_ticket, 'answered_ticket': answered_ticket})
                   
@@ -354,15 +390,17 @@ def ticket_list(request):
 def sch_ticket_list(request, id):
     if request.user.is_authenticated and request.user.is_admin:
         if 'admin/sch_reply_list/' in request.path:
-            query = Ticket.objects.filter(user_id = id, ticket_status='School Reply', read=False)
+            query = Ticket.objects.filter(user_id = id, ticket_status='School Reply')
+            query.update(read=True)
         elif 'admin/answered_ticket_list' in request.path:
             query = Ticket.objects.filter(user_id=id, ticket_status='Answered')
+            query.update(read=True)
         elif 'admin/opened_ticket_list' in request.path:
-            query = Ticket.objects.filter(user_id= id, ticket_status='Open', read=False)
+            query = Ticket.objects.filter(user_id= id, ticket_status='Open')
+            query.update(read=True)
         elif 'admin/closed_ticket_list' in request.path:
             query = Ticket.objects.filter(user_id=  id, ticket_status='Closed')
-        # print(query)
-
+       
         page = request.GET.get('page', 1)
         paginator = Paginator(query, 3)
 
@@ -375,8 +413,49 @@ def sch_ticket_list(request, id):
 
         return render(request, 'adminPortal/sch_ticket_list.html', {'query_list':query_list})
 
+@login_required
+def view_a_ticket(request, id):
+    record = Ticket.objects.get(id=id)
+
+    latest_record = Ticket.objects.filter(ticket_id=record.ticket_id).latest('last_updated')
+    all_records = Ticket.objects.filter(ticket_id=record.ticket_id).order_by('-id')
+ 
+    if 'admin/update_ticket' in request.path:
+        if record.ticket_status != 'Closed':
+            form = UpdateTicketForm(request.POST or None)
+            if form.is_valid:
+                form.save(commit=False)
+                form.instance.ticket_id =record.ticket_id
+                form.instance.user_id = record.user_id
+                form.instance.priority = record.priority
+                form.instance.department = record.department
+                form.instance.subject = record.department
+                form.instance.name = record.name
+                form.instance.created_date = record
+                form.instance.ticket_status = 'Answered'
+                form.save()
+                sweetify.success(request, 'Ticket Updated', button='Great!')
+                return HttpResponseRedirect(reverse('adminPortal:view_ticket', kwargs={'id':id}))
+            else:
+                sweetify.error(request, 'Form is not valid', button='Great!')
+        else:
+           sweetify.error(request, 'Ticket has been closed', button='Great!') 
     
+    elif 'admin/close_ticket' in request.path:
+        if latest_record.ticket_status !=  'Closed':
+            latest_record.ticket_status = 'Closed'
+            latest_record.save()
+            sweetify.success(request, 'Ticket Closed', button='Great!')
+            return HttpResponseRedirect(reverse('adminPortal:view_ticket', kwargs={'id':id}))
+        else:
+            sweetify.error(request, "Ticket Status is Closed ")
+        
+        
+    return render(request, 'adminPortal/view_ticket.html', {'all_records': all_records, 'record': record, 'latest_record': latest_record
+    }) 
     
+
+
 
 @login_required
 def export_school(request):

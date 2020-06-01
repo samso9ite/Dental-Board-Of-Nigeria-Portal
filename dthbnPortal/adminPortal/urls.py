@@ -45,6 +45,13 @@ urlpatterns = [
     path('answered_ticket_list/<int:id>', views.sch_ticket_list, name='answered_ticket_list'),
     path('closed_ticket_list/<int:id>', views.sch_ticket_list, name='closed_ticket_list'),
     path('opened_ticket_list/<int:id>', views.sch_ticket_list, name='opened_ticket_list'),
+    path('update_ticket/<int:id>', views.view_a_ticket, name='update_ticket'),
+    path('view_ticket/<int:id>', views.view_a_ticket, name='view_ticket'),
+    path('close_ticket/<int:id>', views.view_a_ticket, name='close_ticket'),
+    path('reset_notification', views.dashboard, name='reset_notification'),
+
+    #Professional Records
+    path('professionals/', views.professionals, name='professionals'),
 
     path('export/xls/', views.export_school, name='export_school_xls'),
     path('export_indexed_student/xls/<int:id>', views.export_indexed_stu, name='export_indexed_student'),

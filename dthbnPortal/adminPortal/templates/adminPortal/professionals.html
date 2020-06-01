@@ -1,0 +1,373 @@
+{% extends 'adminPortal/base.html' %}
+{% load static %}
+{% block body %}      
+    <section class="content">
+        <div class="container-fluid">
+            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Professional professionalS
+                            </h2>
+                        </div>
+                  
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">             
+                        <h2>
+                            PROFESSIONALS RECORD
+                            <span style="float: right;"><a href="">
+                                <button type="submit" class="btn bg-red waves-effect" value="Export All professional Details"
+                                 name="export">Export All Professional professionals</button></a></span>
+
+                      </h2>
+                    
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Reg Number</th>
+                        
+                                        <th>Cadre</th>
+                                        <th>Phone Number</th>
+                                        <th>Email</th>
+                                        <th> Licence Due Date</th>    
+                                        <th>View</th> 
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        
+                                        <th> Name</th>
+                                        <th> Reg Number</th>
+                        
+                                        <th> Cadre</th>
+                                        <th> Phone Number</th>
+                                        <th> Email</th>
+                                        <th> Licence Due Date</th>    
+                                        <th> View</th> 
+                                        <th> Action</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                   
+                                    <tr>
+                                        {% if all_professional_records %}
+                                        
+                                        {% for each_professional in all_professional_records %}
+                                            <td> {{each_professional.username|title}}</td>
+                                            <td> {{each_professional.ProfessionalUser.first_name}}</td>
+                                            <td> {{each_professional.programme|title }}</td>
+                                            <td>{{each_professional.phone_number}}</td>
+                                            <td>{{each_professional.email|lower}}</td>
+                                            <td>{{each_professional.professional.licence_due|lower}}</td>
+                                            <td><a href="#"><i class="material-icons" data-toggle="modal" data-target="#largeModal{{each_professional.id}}">visibility</i></a>
+                                        
+                                                    <div class="modal fade" id="largeModal{{each_professional.id}}" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <div class="image" style="text-align: center">
+                                                                        <img src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-body"> 
+                                                                        <div class="row clearfix">
+                                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                <div class="card">
+                                                                                    <div class="header">
+                                                                                        <h4 style="align:center;">
+                                                                                        <b> PROFESSIONAL DETAILS </b>
+                                                                                        <span style="float: right; margin-right: 5%"><b>REGISTRATION NUMBER: {{each_professional.code}} </b> </span>
+                                                                                            <!-- <small>Use <code>.table-striped</code> to add zebra-striping to any table row within the <code>&lt;tbody&gt;</code></small> -->
+                                                                                        </h4>
+                                                                                        
+                                                                                        <ul class="header-dropdown m-r--5">
+                                                                                        
+                                                                                            <li class="dropdown">
+                                                                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                                                    <i class="material-icons">more_vert</i>
+                                                                                                </a>
+                                                                                                <ul class="dropdown-menu pull-right">
+                                                                                               
+                                                                                                </ul>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                    
+                                                                <div class="body table-responsive">
+                                                                    <table class="table table-striped">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td><b>First Name: </b>{{each_professional.user.first_name|title}} </td>
+                                                                            <td><b>Middle Name: </b>{{each_professional.middle_name|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Surname: </b>{{each_professional.surname|title}} </td>
+                                                                            <td><b>Gender: </b>{{each_professional.gender|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>State Of Birth: </b> {{each_professional.state_of_birth|title}}</td>
+                                                                            <td><b>Age: </b>{{each_professional.date_of_birth|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Telephone: </b>{{each_professional.telephone|title}} </td>
+                                                                            <td><b>Email: </b> {{each_professional.email|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Title: </b> {{each_professional.title|title}}</td>
+                                                                            <td><b>Postal Address: </b> {{each_professional.postal_address|title}}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Marital Status: </b> {{each_professional.marital_status|title}}</td>
+                                                                            <td><b>Residential Country: </b>{{each_professional.residential_country|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Residential State: </b>{{each_professional.residential_state|title}} </td>
+                                                                            <td><b>Residential Address: </b> {{each_professional.residential_address|title}}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Residential LGA: </b> {{each_professional.residential_lga|title}}</td>
+                                                                            <td><b>State Of Origin: </b> {{each_professional.state_of_origin|title}}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>LGA: </b> {{each_professional.lga_of_birth|title}}</td>
+                                                                            <td><b>Senatorial District: </b> {{each_professional.senatorial_district|title}}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>School Attended with Date (1): </b> {{each_professional.institution_attended1|title}}  </td>
+                                                                            <td><b>School Attended with Date (2): </b> {{each_professional.institution_attended2|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>School Attended with Date (3): </b> {{each_professional.institution_attended3|title}}</td>
+                                                                            <td><b>School Attended with Date (4): </b> {{each_professional.institution_attended4|title}}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Educational Qualification (1): </b>{{each_professional.qualification1|title}} </td>
+                                                                            <td><b>Educational Qualification (2): </b>{{each_professional.qualification2|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Educational Qualification (3): </b>{{each_professional.qualification3|title}} </td>
+                                                                            <td><b>Educational Qualification (4): </b>{{each_professional.qualification4|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Professional Qualification (1): </b>{{each_professional.prof_qualification1|title}} </td>
+                                                                            <td><b>Professional Qualification (2): </b>{{each_professional.prof_qualification2|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Professional Qualification (3): </b>{{each_professional.prof_qualification3|title}} </td>
+                                                                            <td><b>Professional Qualification (4): </b>{{each_professional.prof_qualification4|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                        <tr>
+                                                                            <td><b>Employment Status: </b> {{each_professional.employment_status|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Present Position: </b> {{each_professional.present_position|title}}</td>
+                                                                            <td><b>Department: </b> </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Office Name: </b>{{each_professional.office_name|title}}  </td>
+                                                                            <td><b>Office Address: </b>{{each_professional.office_address|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Sector: </b>  {{each_professional.sector|title}}</td>
+                                                                            <td><b>Office Country: </b> {{each_professional..office_country|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Office State: </b> {{each_professional.office_state|title}} </td>
+                                                                            <td><b>Office LGA: </b>{{each_professional.office_lga|title}}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Office Phone Number:</b> {{each_professional.Office_phone}}   </td>
+                                                                            <td><b>Office Email:</b> {{each_professional.office_email|title}}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Referee (1): </b>{{each_professional.referee_name1|title}} </td>
+                                                                            <td><b>Email: </b> {{each_professional.referee_email1|title}}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Referee (2): </b> {{each_professional.referee_name2|title}} </td>
+                                                                            <td><b>Email: </b> {{each_professional.referee_email2|title}} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Referee Phone Number (1): </b>{{each_professional.referee_phone1|title}}  </td>
+                                                                            <td><b>Referee Phone Number (2): </b> </td>
+                                                                        </tr>
+                                                                      
+                                                                        <tr>
+                                                                            <td><b>Mode Of Payment: </b>{{each_professional.mode_of_payment|title}}  </td>
+                                                                            <td> 
+                                                                                <h4 style="font-size: 15px;">Waec Certificate(1)</h4>
+                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal1" onclick="document.getElementById('pic1<?php echo $student->id; ?>').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                <div id="imgModal1" class="modal" role="dialog">
+                                                                                    <div class="modal-dialog modal-md">
+
+                                                                                        <!-- Modal content-->
+                                                                                        <div class="modal-content">
+                                                                                          <div class="modal-header">
+                                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                            <h4 class="modal-title">School Result</h4>
+                                                                                          </div>
+                                                                                          <div class="modal-body">
+                                                                                            <img style="display:none;" class="img img-responsive" id="pic1" src=" "  />
+                                                                                          </div>
+                                                                                          <div class="modal-footer">
+                                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                          </div>
+                                                                                        </div>
+                                                                                      </div>
+                                                                                    </div>
+                                                                               </td>
+                                                                        </tr>
+                                                                         <tr>
+                                                                        
+                                                                            <td> 
+                                                                                <h4 style="font-size: 15px;">Waec Certificate(2)</h4>
+                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal2" onclick="document.getElementById('pic2<?php echo $student->id; ?>').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                <div id="imgModal2" class="modal" role="dialog">
+                                                                                    <div class="modal-dialog modal-md">
+
+                                                                                        <!-- Modal content-->
+                                                                                        <div class="modal-content">
+                                                                                          <div class="modal-header">
+                                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                            <h4 class="modal-title">Testimonial </h4>
+                                                                                          </div>
+                                                                                          <div class="modal-body">
+                                                                                            <img style="display:none;" class="img img-responsive" id="pic2" src=" "  />
+                                                                                          </div>
+                                                                                          <div class="modal-footer">
+                                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                          </div>
+                                                                                        </div>
+
+                                                                                      </div>
+                                                                                    </div>
+                                                                               </td>
+                                                                               <td>
+                                                                                <h4 style="font-size: 15px;">Testimonial From Dental School</h4>
+                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal3" onclick="document.getElementById('pic3<?php echo $student->id; ?>').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                <div id="imgModal3" class="modal" role="dialog">
+                                                                                    <div class="modal-dialog modal-md">
+
+                                                                                        <!-- Modal content-->
+                                                                                        <div class="modal-content">
+                                                                                          <div class="modal-header">
+                                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                            <h4 class="modal-title">Testimonial </h4>
+                                                                                          </div>
+                                                                                          <div class="modal-body">
+                                                                                              <img style="display:none;" class="img img-responsive" id="pic3" src=" "  />
+                                                                                          </div>
+                                                                                          <div class="modal-footer">
+                                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                          </div>
+                                                                                        </div>
+
+                                                                                      </div>
+                                                                                    </div>
+                                                                               </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td> 
+                                                                            
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                                                        
+                                                                                        </td>
+                                                                                        <td> 
+                                                                                    <ul>
+                                                                    <li class="dropdown" style="list-style:none;">
+                                                                        <a href="javascript:void(0);" class="dropdown-toggle"style="padding-left:-10px" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                            <i class="material-icons">more_vert</i>
+                                                                        </a>
+                                                                        
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                   
+                                        <!--<td><?php echo $professional->licence_due; ?></td>-->
+                                    </tr>
+                                    {% endfor %}
+                                    {% endif %} 
+                                
+                                </tbody>
+                            </table>
+
+                                 <!-- Professional Paginator -->
+        {% if all_professional_records.has_other_pages %}
+            <nav aria-label="all_professional_records Pagination" class="mb-4">
+                <ul class="pagination">
+                    {% if all_professional_records.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ all_professional_records.previous_page_number }}">Previous</a>
+                        </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                    {% endif %}
+
+                    {% for page_num in all_professional_records.paginator.page_range %}
+                        {% if all_professional_records.number == page_num %}
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    {{page_num}}
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if all_professional_records.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{all_professional_records.next_page_number}}">Next</a>
+                            </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+        
+        <!-- #END# Exportable Table -->
+    </section>
+
+   {% endblock %}

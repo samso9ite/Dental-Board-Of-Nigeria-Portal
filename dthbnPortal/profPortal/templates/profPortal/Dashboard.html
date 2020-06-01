@@ -1,0 +1,163 @@
+{% extends 'profPortal/base.html' %}
+{% load static %}
+{% block title %} Professional Dashboard {% endblock %}
+{% block body %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>DASHBOARD</h2>
+            </div>
+            <div class="row clearfix">
+                <marquee>Please update your profile if you are a new user. Note that Name, Date of Birth, Age and State of Origin can only be updated once.</marquee>
+            </div>
+            <!-- Widgets -->
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-7 col-xs-12">
+                    <div class="info-box bg-pink hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">autorenew</i>
+                        </div>
+                        <div class="content">
+                            <div class="text"> <b>RENEWAL DUE DATE</b></div>
+                            <div><h4>10 - 11 - 2019</h4></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-7 col-xs-12">
+                    <div class="info-box bg-cyan hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">payment</i>
+                        </div>
+                        <div class="content">
+                            <div class="text"><b>LICENCE RENEWAL</b></div>
+                            <div><h4>#2,000.00</h4></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-7 col-xs-12">
+                    <div class="info-box bg-light-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">account_balance</i>
+                        </div>
+                        <div class="content">
+                            <div class="text"><b>RENEWAL BALANCE</b></div>
+                            <div><h4>#4,000.00</h4></div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+            <!-- #END# Widgets -->
+            <div class="row clearfix">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div id='wrap'>
+
+                                <div id='calendar'></div>
+                                
+                                <div style='clear:both'></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                        <iframe src="https://calendar.google.com/calendar/embed?src=dthrbn.events%40gmail.com&ctz=Africa%2FLagos" style="border: 0" width="1010" height="600" frameborder="0" scrolling="no"></iframe>   
+                    </div>
+           
+                    <div class="row clearfix" style="padding-left:2%">
+                        <!-- Task Info -->
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="card">
+                                <div class="header">
+                                    <h2><b>PAYMENT ACTIVITIES</h2></b></h2>
+                                    <ul class="header-dropdown m-r--5">
+                                        <li class="dropdown">
+                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                <i class="material-icons">more_vert</i>
+                                            </a>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li><a href="javascript:void(0);">Delete</a></li>
+                                                <!-- <li><a href="javascript:void(0);">Another action</a></li>
+                                                <li><a href="javascript:void(0);">Something else here</a></li> -->
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover dashboard-task-infos">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Payment</th>
+                                                    <th>Year</th>
+                                                    <th>Amount</th>
+                                                    <th>Date of Payment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                            <td>1</td>
+                                                            <td>License Renewal</td>
+                                                            <td><h4><span class="label bg-green" style="margin-top:-5%">2017</span></h4></td>
+                                                            <td><b>#4,000</b></td>
+                                                            <td>
+                                                                2-11-2019
+                                                            </td>
+                                                        </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>License Renewal</td>
+                                                    <td><h4><span class="label bg-green" style="margin-top:-5%">2017</span></h4></td>
+                                                    <td><b>#4,000</b></td>
+                                                    <td>
+                                                        2-11-2019
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>License Renewal</td>
+                                                    <td><h4><span class="label bg-green" style="margin-top:-5%">2017</span></h4></td>
+                                                    <td><b>#4,000</b></td>
+                                                    <td>
+                                                        2-11-2019
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4</td>
+                                                    <td>License Renewal</td>
+                                                    <td><h4><span class="label bg-green" style="margin-top:-5%">2017</span></h4></td>
+                                                    <td><b>#4,000</b></td>
+                                                    <td>
+                                                        2-11-2019
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5</td>
+                                                    <td>License Renewal</td>
+                                                    <td><h4><span class="label bg-green" style="margin-top:-5%">2017</span></h4></td>
+                                                    <td><b>#4,000</b></td>
+                                                    <td>
+                                                        2-11-2019
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>6</td>
+                                                    <td>License Renewal</td>
+                                                    <td><h4><span class="label bg-green" style="margin-top:-5%">2017</span></h4></td>
+                                                    <td><b>#4,000</b></td>
+                                                    <td>
+                                                        2-11-2019
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- #END# Task Info -->
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

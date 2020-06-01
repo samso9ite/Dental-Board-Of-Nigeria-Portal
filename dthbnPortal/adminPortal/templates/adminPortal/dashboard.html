@@ -30,7 +30,7 @@
                         </div>
                         <div class="content">
                             <div class="text"><b>PROFESSIONALS</b></div>
-                            <div class="number count-to" data-from="0" data-to="" data-speed="1500" data-fresh-interval="20"></div>
+                          <div class="number count-to" data-from="0" data-to="{{total_prof_num}}" data-speed="1500" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -46,15 +46,16 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box bg-orange hover-expand-effect">
+                   <a href="{% url 'adminPortal:reset_notification' %}" target="_blank" style="text-decoration: none;"><div class="info-box bg-orange hover-expand-effect">
                         <div class="icon">
                             <i class="material-icons">forum</i>
                         </div>
                         <div class="content">
                             <div class="text"><b>NOTIFICATIONS</b></div>
-                            <div class="number count-to" data-from="0" data-to="0" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="{{notification}}" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
+                    </a>
                 </div>
             </div>
             <!-- #END# Widgets -->

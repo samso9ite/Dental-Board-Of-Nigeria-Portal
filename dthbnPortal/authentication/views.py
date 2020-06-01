@@ -17,95 +17,130 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.urls import reverse
 import sweetify
+from django.db.models import Q
 # Create your views here
 
 
 def sign_up_view(request):
-    if request.user.is_authenticated:
-        HttpResponseRedirect('/')
-    if request.method == 'POST' and 'is_school' in request.POST:
-        form = SignUp(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.set_password(user.password)
-            user.save()
-            current_site = get_current_site(request)
-            subject = 'Account Activation Link'
-            message = render_to_string('auth/account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(subject, message)
-            return redirect('Auth:account_activation_sent')
+    if request.user.is_authenticated and request.user.is_school:
+        return redirect(reverse('schoolPortal:dashboard'))
+    elif request.user.is_authenticated and request.user.is_admin:
+        return redirect(reverse('adminPortal:dashboard'))
+    elif request.user.is_authenticated and request.user.is_professional:
+        return redirect(reverse('profPortal:dashboard'))
     else:
-        form = SignUp()
-   
-    if request.method == 'POST' and 'is_professional' in request.POST:
-        prof_form = SignUp(request.POST)
-        if prof_form.is_valid():
-            print("professional FORM IS VALID")
-            user = prof_form.save(commit=False)
-            user.is_active = False
-            user.set_password(user.password)
-            user.save()
-            current_site = get_current_site(request)
-            subject = 'Account Activation Link'
-            message = render_to_string('auth/account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(subject, message)
-            return redirect('Auth:account_activation_sent')
-    else:
-        prof_form = ProfSignUp()
+        login_form = ''
 
-    if request.method == 'POST':
-        login_form = LoginForm(request.POST)
-        if login_form.is_valid():
-            email = login_form.cleaned_data.get('email')
-            password = login_form.cleaned_data.get('password')
-            try:
-                get_user_name = User.objects.get(email=email)
-                user = authenticate(username=get_user_name, password=password)
-                if user and user.is_active and user.suspend is False and user.block is False:
-                    login(request, user)
-                    if User.objects.filter(email=user.email).filter(is_school=True).filter(profile_update="False"):
-                        sweetify.success(request, 'Login Successful', button='Great!')
-                        return redirect("schoolPortal:schoolProfile")
-
-                    elif User.objects.filter(email=user.email).filter(is_school=True).filter(profile_update="True"):
-                        sweetify.success(request, 'Login Successful', button='Great!')
-                        return redirect("schoolPortal:dashboard")
+        if request.method == 'POST' and 'is_school' in request.POST:
+            form = SignUp(request.POST)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.is_active = False
+                user.set_password(user.password)
+                user.save()
+                current_site = get_current_site(request)
+                subject = 'Account Activation Link'
+                message = render_to_string('auth/account_activation_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': account_activation_token.make_token(user),
+                })
+                user.email_user(subject, message)
+                return redirect('Auth:account_activation_sent')
+        else:
+            form = SignUp()
     
-                    elif User.objects.filter(email=user.email).filter(is_professional=True):
-                        return HttpResponse('Logged in Professional')
+        if request.method == 'POST' and 'is_professional' in request.POST:
+            prof_form = ProfSignUp(request.POST)
+            # print(prof_form)
+            print(prof_form.errors)
+            if prof_form.is_valid():
+                user = prof_form.save(commit=False)
+                user.is_active = False
+                print(user.programme)
+                if user.programme == 'Dental Therapist':
+                    user.code = 'RDTH' + user.code
+                elif user.programme == 'Dental Nurses':
+                    user.code = 'RDSN' + user.code
+                elif user.programme == 'Dental Surgery Assistant':
+                    user.code = 'RDSA' + user.code
+                elif user.programme == 'Dental Surgery Technician':
+                    user.code = 'RDST' + user.code
+                user.username = user.code
+                # elif user.programme is 'Dental Nurses':
+                #     user.code = Rdsn''user.code    
+                user.set_password(user.password)
+                user.save()
+                current_site = get_current_site(request)
+                subject = 'Account Activation Link'
+                message = render_to_string('auth/account_activation_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': account_activation_token.make_token(user),
+                })
+                user.email_user(subject, message)
+                return redirect('Auth:account_activation_sent')
+            # else:
+            #     print('The form isn\'t valid')
+        else:
+            prof_form = ProfSignUp()
 
-                    elif User.objects.filter(email=user.email).filter(is_admin=True):
-                        sweetify.success(request, 'Login Successful', button='Great!')
-                        return redirect('adminPortal:dashboard')
+        if request.method == 'POST' and request.POST.get('loginSubmit') == 'login_all':
+            login_form = LoginForm(request.POST)
+            print('login_form')
+            if login_form.is_valid():
+                email = login_form.cleaned_data.get('email')
+                password = login_form.cleaned_data.get('password')
+                try:
+                    get_user_name = User.objects.get(email=email)
+                    print (get_user_name)
+                    user = authenticate(username=get_user_name, password=password)
+                    if user and user.is_active and user.suspend is False and user.block is False:
+                        print('Valid')
+                    
+                
+                        login(request, user)
+                        print(user.email)
+                        if User.objects.filter(email=user.email, is_school=True, profile_update=False):
+                            sweetify.success(request, 'Login Successful', button='Great!')
+                            return redirect("schoolPortal:schoolProfile")
 
-                elif user and user.is_active and user.suspend is True and user.block is False:
-                    sweetify.error(request, 'School Has Been Suspended', text='Contact the board for more details', button='Great!')
-                    return HttpResponseRedirect(reverse("Auth:Register"))
+                        elif User.objects.filter(email=user.email, is_school=True, profile_update=True):
+                            sweetify.success(request, 'Login Successful', button='Great!')
+                            print('This is working  ')
+                            return redirect("schoolPortal:dashboard")
+        
+                        elif User.objects.filter(email=user.email, is_professional=True):
+                            sweetify.success(request, 'Login Successful', button='Great!')
+                            return redirect("profPortal:dashboard")
 
-                elif user and user.is_active and user.suspend is False and user.block is True:
-                    sweetify.error(request, 'School Has Been Blocked', text='Contact the board for more details', button='Great!')
+                        elif User.objects.filter(email=user.email, is_admin=True):
+                            print('Admin is true')
+                            sweetify.success(request, 'Login Successful', button='Great!')
+                            return redirect('adminPortal:dashboard')
+
+                    elif user and user.is_active and user.suspend is True and user.block is False:
+                        sweetify.error(request, 'School Has Been Suspended', text='Contact the board for more details', button='Great!')
+                        return HttpResponseRedirect(reverse("Auth:Register"))
+
+                    elif user and user.is_active and user.suspend is False and user.block is True:
+                        sweetify.error(request, 'School Has Been Blocked', text='Contact the board for more details', button='Great!')
+                        return HttpResponseRedirect(reverse("Auth:Register"))
+                    else:
+                        sweetify.error(request, 'Invalid Username or Password')
+                        
+                        return HttpResponseRedirect(reverse("Auth:Register"))
+                except:
+                    sweetify.success(request, 'Invalid Username or Password')
                     return HttpResponseRedirect(reverse("Auth:Register"))
-                else:
-                    sweetify.error(request, 'Invalid Username or Password')
-                    return HttpResponseRedirect(reverse("Auth:Register"))
-            except:
-                sweetify.success(request, 'Invalid Username or Password')
-                return HttpResponseRedirect(reverse("Auth:Register"))
-    else:
-        login_form = LoginForm()
-    return render(request, 'auth/sch_register.html',
-                  {'form': form, 'prof_form': prof_form, 'login_form': login_form})
+            else:
+                login_form = LoginForm()
+                print(login_form.errors)
+                print("Login Not Valid")
+        return render(request, 'auth/sch_register.html',
+                    {'form': form, 'prof_form': prof_form, 'login_form': login_form})
 
 
 def account_activation_sent(request):
@@ -126,11 +161,17 @@ def activate(request, uidb64, token):
             SchoolCode.objects.filter(reg_number=user.code).update(used=True, user_id=user.id)
             user.save()
             login(request, user)
+            sweetify.success(request, 'Account Created Successful', button='Great!')
             return redirect('schoolPortal:schoolProfile',)
-       
+        elif user.is_professional:
+            ProfessionalCode.objects.filter(reg_number=user.code).update(used=True, user_id=user.id)
+            user.save()
+            login(request, user)
+            sweetify.success(request, 'Account Created Successful', button='Great!')
+            return redirect('profPortal:dashboard',)   
       
     else:
-        return render(request, 'auth/sch_registration.html')
+        return render(request, 'auth/sch_register.html')
 
 
 @login_required

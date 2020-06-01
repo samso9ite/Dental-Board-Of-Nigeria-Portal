@@ -42,8 +42,10 @@ urlpatterns = [
 
     path('export_indexed_student/xls/', views.export_indexed_stu, name='export_indexed_stu'),
     path('export_approved_student/xls/', views.export_indexed_stu, name='export_approved_student'),
+    path('export_current_student/xls/', views.export_indexed_stu, name='export_current_student'),
     path('export_current_exam_record/xls/', views.export_exam_record, name='export_current_exam_record'),
     path('export_submitted_exam_record/xls/', views.export_exam_record, name='export_submitted_exam_record'),
+    path('export_approved_exam_record/xls/', views.export_exam_record, name='export_approved_exam_record'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     

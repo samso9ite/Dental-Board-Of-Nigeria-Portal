@@ -24,5 +24,6 @@ urlpatterns = [
     path('auth/', include('authentication.urls')),
     path('school/', include('schPortal.urls')),
     url('^/', include('django.contrib.auth.urls')),
+    path('professional/', include('profPortal.urls')),
     path('admin/', include('adminPortal.urls')),
    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
