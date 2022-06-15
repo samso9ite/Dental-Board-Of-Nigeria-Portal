@@ -1,0 +1,588 @@
+{% extends 'profPortal/base.html' %}
+{% load static %}
+{% block title %} Professional Dashboard {% endblock %}
+{% block body %}
+        
+    <form action="#"  method="post"  onkeydown="return event.key != 'Enter';" enctype="multipart/form-data">
+        {% csrf_token %}
+        <section class="content">
+                <div class="container-fluid">
+                    {{form.errors}}
+                    <div class="row clearfix">
+    
+                                <div class="card" >
+                                    <div class="header">
+                                            <h4> ACCOUNT DETAILS</h4>
+                                    </div>
+                                        <div class="body">
+                                                <div class="row clearfix">
+                                                    <div class="col-sm-4">
+                                                        <p><b>REGISTRATION NUMBER</b></p>
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                            
+                                                                <input type="text" class="form-control" name="reg_number" value="{{request.user.code}}" readonly>
+                                                                <label class="form-label" >EX: RDST112234</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                  
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </section>    
+
+     <!-- Account Details -->
+      
+     <!--Personal Details-->
+    <section class="content">
+        <div class="container-fluid" style="margin-top: -10%">
+            <div class="row clearfix">
+                        <div class="card" >
+                                <div class="header">
+                                      <h4> PERSONAL DETAILS</h4>
+                                </div>
+                                   
+                                <div class="body">
+                                     <div class="row clearfix">
+                                        <div class="col-sm-3">
+                                                <div class="image" style="margin-left: 2%;">
+                                                    <p><b>PROFILE IMAGE</b></p>
+                                                    
+                                                        <img id="ShowImage" src="{% static 'general/images/default_avtar.jpg' %} " width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                        <input name="profile_image" type="file" onchange="readFIle(this);" multiple />
+                                                </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                                <div class="form-group">
+                                                        <p><b>GENDER</b></p>
+                                                        <input type="radio" value="male" name="gender" id="male" class="with-gap" required>
+                                                        <label for="male">Male</label>
+                    
+                                                        <input type="radio" value="female" name="gender" id="female" class="with-gap"  required>
+                                                        <label for="female" class="m-l-20">Female</label>
+                                                </div>
+                                                <p>First Name</p>
+                                                <div class="form-group form-float">
+                                                    <div class="form-line">
+                                                     <!-- {{form.first_name}} -->
+                                                        <input type="text" name="first_name" class="form-control" value="" />
+                                                        <label class="form-label">First Name</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                        <div class="col-sm-3">
+                                                <div class="form-group">
+                                                        <p><b>TITLE</b></p>
+                                                        <input type="radio" value="mr" name="title" id="mr" class="with-gap"  required>
+                                                        <label for="mr">Mr.</label>
+                                                        <input type="radio" value="mrs" name="title" id="mrs" class="with-gap" required>
+                                                        <label for="mrs" class="m-l-20">Mrs.</label>
+                                                         <input type="radio" value="miss" name="title"  id="miss" class="with-gap" required> 
+                                                        <label for="miss" class="m-l-20">Miss</label> 
+                                                    </div>
+                
+                                                    <p>Middle Name</p>
+                                                    <div class="form-group form-float">
+                                                        <div class="form-line">
+                                                         <!-- {{form.middle_name    }} -->
+                                                            <input type="text"name="middle_name"  class="form-control" value="">
+                                                       
+                                                            <label class="form-label">Middle Name</label>
+                                                        </div>
+                                                    </div>
+                                                   
+                                        </div>
+                                        <div class="col-sm-3">
+                                                <div class="form-group">
+                                                        <p><b>MARITAL STATUS</b></p>
+                                                        <input type="radio" name="marital_status" value="married" id="married" class="with-gap"   required>
+                                                        <label for="married">Married</label>
+                                                        <input type="radio" name="marital_status" value="single" id="single" class="with-gap"  required>
+                                                        <label for="single" class="m-l-20">Single</label>
+                                                         
+                                                        </div>
+                
+                                                    <p>Last Name</p>
+                                                    <div class="form-group form-float">
+                                                        <div class="form-line">
+                                                         <!-- {{form.last_name}} -->
+                                                            <input type="text" name="last_name"  class="form-control" value="">
+                                                        
+                                                            <label class="form-label">Last Name</label>
+                                                        </div>
+                                                    </div>
+                                                   
+                                        </div>
+                                    </div>
+
+                                    <div class="demo-masked-input">
+                                            <div class="row clearfix">
+                                                    <div class="demo-masked-input">
+                                                            <div class="row clearfix">
+                                                                <div class="col-sm-3">
+                                                                    <b>MAIDEN NAME</b>
+                                                                    <div class="form-group form-float">
+                                                                            <div class="form-line">
+                                                                             <!-- {{form.maiden_name}} -->
+                                                                                <input type="text" name="maiden_name"  class="form-control" value="">
+                                                                                <label class="form-label">Ex: Mother's Name</label>
+                                                                            </div>
+                                                                    </div>
+                                                                    </div>
+                                                                <div class="col-md-3">
+                                                                    <b>PHONE NO</b>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">
+                                                                            <i class="material-icons">call</i>
+                                                                        </span>
+                                                                        <div class="form-line">
+                                                                            <!-- {{form.telephone}} -->
+                                                                            <input type="text"  name="telephone" class="form-control date" value="" placeholder="+2348124451038">
+                     
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <b>EMAIL</b>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">
+                                                                            <i class="material-icons">email</i>
+                                                                        </span>
+                                                                        <div class="form-line">
+                                                                            <!-- {{form.email}} -->
+                                                                            <input type="text" name="email"  class="form-control" readonly value="{{user.email}}" placeholder="samso9ite@gmail.com">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <b>POSTAL ADDRESS</b>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">
+                                                                            <i class="material-icons">message</i>
+                                                                        </span>
+                                                                        <div class="form-line">
+                                                                            <!-- {{form.postal_address}} -->
+                                                                            <input type="text" name="postal_address" value="" class="form-control time12" placeholder="P.O. Box 59">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                        </div>
+                                      
+                                    <div class="demo-masked-input">
+                                        <div class="row clearfix">
+                                                <div class="col-md-3">
+                                                    <div class="form-group ">
+                                                    <p><b>RESIDENTIAL COUNTRY</b></p>
+                                                    
+                                                            <!-- <div class="form-line"> -->
+                                                             {{form.residential_country}}
+                                                                <!-- <input type="text" name="residential_country" value="" class="form-control"> -->
+                                                                <label class="form-label">Ex: Nigeria</label>
+                                                            <!-- </div> -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                        <p><b>RESIDENTIAL STATE</b></p>
+                                                        <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                 {{form.residential_state}}
+                                                                    <!-- <input type="text" name="residential_state" value=" " class="form-control"> -->
+                                                                    <label class="form-label">Ex: Lagos</label>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                <div class="col-md-3">
+                                                        <p><b>RESIDENTIAL ADDRESS</b></p>
+                                                        <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                  <!-- {{form.residential_address}} -->
+                                                                    <input type="text" name="residential_address" value="" class="form-control">
+                                                                    <label class="form-label">Ex: 10,Kunle street ojuelegba  lagos </label>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                        <p><b>RESIDENTIAL LGA</b></p>
+                                                        <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                 {{form.residential_lga}}
+                                                                    <!-- <input type="text" name="residential_lga" value=" " class="form-control"> -->
+                                                                    <label class="form-label">Ex: Surulere</label>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                    </div>
+
+                                    <div class="demo-masked-input">
+                                            <div class="row clearfix">
+                                                    <div class="col-md-4">
+                                                        <p><b>STATE OF ORIGIN</b></p>
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                {{form.lga_state}}
+                                                                <!-- <input type="text"  name="state_of_origin" value="" class="form-control"> -->
+                                                                <label class="form-label">Ex: Anambra </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <p><b>LGA</b></p>
+                                                            <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                        {{form.lga_state}}
+                                                                        <!-- <input type="text"  name="lga_state" value="" class="form-control"> -->
+                                                                        <label class="form-label">Ex: Anambra </label>
+                                                                    </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <p><b>SENATORIAL DISTRICT</b></p>
+                                                            <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                     <!-- {{form.senatorial_district}} -->
+                                                                        <input type="text" name="senatorial_district" value="" class="form-control">
+                                                                        <label class="form-label">Ex: Afigio</label>
+                                                                    </div>
+                                                            </div>
+                                                    </div>
+                                        </div>
+                                    <div class="demo-masked-input">
+                                            <div class="row clearfix">
+                                                    <div class="col-md-4">
+                                                        <p><b>DATE OF BIRTH</b></p>
+                                                        <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                 <!-- {{form.date_of_birth}} -->
+                                                                    <input type="text" name="date_of_birth" value=""class="form-control">
+                                                                    <label class="form-label">Ex: 30/07/1990</label>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <p><b>STATE OF BIRTH</b></p>
+                                                            <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                     {{form.state_of_birth}}
+                                                                        <!-- <input type="text" name="state_of_birth" value="" class="form-control"> -->
+                                                                        <label class="form-label">Ex: Lagos </label>
+                                                                    </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <p><b>LGA OF BIRTH</b></p>
+                                                            <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                        {{form.lga_of_birth}}
+                                                                        <!-- <input type="text" name="lga_of_birth" value="" class="form-control"> -->
+                                                                        <label class="form-label">Ex: Surulere</label>
+                                                                    </div>
+                                                            </div>
+                                                    </div>
+                                        </div>
+                </div>
+    </section>
+    <!--End of Personal Details-->
+
+    <!--Education Qualifications -->
+    <section class="content">
+            <div class="container-fluid" style="margin-top: -10%">
+                <div class="row clearfix">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>
+                                   <b>EDUCATION QUALIFICATIONS WITH DATES</b>
+                                </h2>
+                            
+                            </div>
+                            <div class="body">
+                               
+                                <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <!-- {{form.qualification1}} -->
+                                                <input type="text" name="qualification1" class="form-control" value="" placeholder="Ex: SSCE (1990-1993)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <!-- {{form.qualification2}} -->
+                                                    <input type="text" name="qualification2" class="form-control" value="" placeholder="Ex: OND/HND/BSC (1995-1998)" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <!-- {{form.qualification3}} -->
+                                                    <input type="text" name="qualification3" class="form-control" value="" placeholder="Ex: MSC (1995-1998)" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <!-- {{form.qualification4}} -->
+                                                    <input type="text" name="qualification4" value="" class="form-control" placeholder="Ex: OTHERS (1995-1998)" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                   
+                                </div>
+                                    
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>
+                                       <b>PROFESSIONAL QUALIFICATIONS WITH DATES</b>
+                                    </h2>
+                                
+                                </div>
+                                <div class="body">
+                                
+                                    <div class="row clearfix">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <!-- {{form.prof_qualification1}} -->
+                                                    <input type="text" name="prof_qualification1" class="form-control" value="" placeholder="Ex: SSCE (1990-1993)" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <!-- {{form.prof_qualification2}} -->
+                                                        <input type="text" name="prof_qualification2" class="form-control" value="" placeholder="Ex: OND/HND/BSC (1995-1998)" />
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <!-- {{form.prof_qualification3}} -->
+                                                        <input type="text" name="prof_qualification3" class="form-control" value="" placeholder="Ex: MSC (1995-1998)" />
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <!-- {{form.prof_qualification4}} -->
+                                                        <input type="text" name="prof_qualification4"  value="" class="form-control" placeholder="Ex: OTHERS (1995-1998)" />
+                                                    </div>
+                                                </div>
+                                        </div>
+                            </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+    </section>
+    <!--End Of Education Qualifications-->  
+
+    <!--Offic Details-->
+    <section class="content">
+            <div class="container-fluid" style="margin-top: -10%">
+    
+                <div class="row clearfix">
+    
+                            <div class="card" >
+                                    <div class="header">
+                                          <h4> OFFICE DETAILS</h4>
+                                    </div>
+                                    <div class="body">
+                                         <div class="row clearfix">
+                                    
+                                            <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                            <p><b>EMPLOYMENT STATUS</b></p>
+                                                            <input type="radio" value="employed" name="employment_status"  id="employed" class="with-gap" required>
+                                                            <label for="employed">Employed</label>
+                        
+                                                            <input type="radio" value="unemployed" name="employment_status" id="unemployed" class="with-gap"  required>
+                                                            <label for="unemployed" class="m-l-20">Unemployed</label>
+                                                    </div>
+                                                   
+                                                </div>
+                    
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <p><b>PRESENT POSITION</b></p>
+                                                    <div class="form-group form-float">
+                                                        <div class="form-line">
+                                                            <!-- {{form.present_position}} -->
+                                                            <input type="text" name="present_position" value="" class="form-control">
+                                                            <label class="form-label">Present Position</label>
+                                                        </div>
+                                                    </div>
+                                                       
+                                                 </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <p><b>DEPARTMENT</b></p>
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <!-- {{form.department}} -->
+                                                                <input type="text" name="department" value="" class="form-control">
+                                                                <label class="form-label">Department</label>
+                                                            </div>
+                                                        </div>
+                                                           
+                                                     </div>
+                                                </div>
+                                            
+    </div>
+    <div class="row clearfix">
+                                    
+            <div class="col-sm-4">
+                    <div class="form-group">
+                            <p><b>OFFICE NAME</b></p>
+                            <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <!-- {{form.office_name}} -->
+                                        <input type="text" value="" name="office_name" class="form-control">
+                                        <label class="form-label">Office Name</label>
+                                    </div>
+                                </div>
+                    </div>
+                   
+                </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <p><b>OFFICE ADDRESS</b></p>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <!-- {{form.office_address}} -->
+                            <input type="text" name="office_address" value="" class="form-control">
+                            <label class="form-label">Office Address</label>
+                        </div>
+                    </div>
+                       
+                </div>
+            </div>
+            <div class="col-sm-4">
+                    <div class="form-group">
+                            <p><b>SECTOR</b></p>
+                            <input type="radio" name="sector" value="private" id="private"  class="with-gap" >
+                            <label for="private">Private</label>
+
+                            <input type="radio" name="sector" value="public" id="public" class="with-gap" >
+                            <label for="public" class="m-l-20">Public</label>
+                    </div>
+                    
+            </div>
+    </div>
+
+    <div class="row clearfix">
+                                    
+            <div class="col-sm-4">
+                    <div class="form-group">
+                            <p><b>OFFICE COUNTRY</b></p>
+                            <div class="form-group form-float">
+                                    <div class="form-line">
+                                        {{form.office_country}}
+                                        <!-- <input type="text" name="office_country" value="" class="form-control"> -->
+                                        <label class="form-label">Office Country</label>
+                                    </div>
+                            </div>
+                    </div>
+                </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <p><b>OFFICE STATE</b></p>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{form.office_state}}
+                            <!-- <input type="text" name="office_state" value=" " class="form-control"> -->
+                            <label class="form-label">Office State</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                    <div class="form-group">
+                            <p><b>OFFICE LGA</b></p>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    {{form.office_lga}}
+                                    <!-- <input type="text" name="office_lga" value="" class="form-control"> -->
+                                    <label class="form-label">Local Government Area</label>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+    </div>
+    <div class="row clearfix">
+            <div class="col-sm-3">
+                    <div class="form-group">
+                            <p><b>OFFICE PHONE NO</b></p>
+                            <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <!-- {{form.office_phone}} -->
+                                        <input type="text" name="office_phone" value="" class="form-control">
+                                        <label class="form-label">+2348124451038</label>
+                                    </div>
+                            </div>
+                    </div>
+                </div>
+
+            <div class="col-sm-3 ">
+                <div class="form-group">
+                    <p><b>OFFICE EMAIL</b></p>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <!-- {{form.office_email}} -->
+                            <input type="text" name="office_email" class="form-control"value="">
+                            <label class="form-label">info@dentaltherapist.com</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+           <div class="col-sm-6">
+                    <div class="form-group">
+                            <p><b>CATEGORIES</b></p>
+                            <input type="radio" name="categories" value="Dental Therapist" id="dental_therapist" class="with-gap" readonly >
+                            <label for="dental_therapist">Dental Therapist</label>
+
+                            <input type="radio" name="categories" value="Dental Nurse" id="dental_nurse" class="with-gap" readonly >
+                            <label for="dental_nurse" class="m-l-20">Dental Nurse</label>
+                            <input type="radio" name="categories" value="Surgery Technician" id="dental_third"  class="with-gap" readonly >
+                            <label for="dental_third" class="m-l-20">Surgery Technician</label>
+                    </div>
+                    
+            </div> 
+        </div>
+        </section>
+    <!--End of Office Details-->
+
+        <section class="content">
+                <div class="container-fluid">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: -10%">
+                                <div class="button-demo">
+                                        <button type="submit" class="btn btn-block btn-lg btn-success waves-effect"><h5>SUBMIT</h5></button>
+                                </div>
+                                </div>
+                                </div>
+                                </section>
+     
+     </form>
+     
+{% endblock %}

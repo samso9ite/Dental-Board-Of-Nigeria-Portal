@@ -1,3 +1,4 @@
+
 """
 Django settings for dthbnPortal project.
 
@@ -11,6 +12,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import pymysql
+pymysql.version_info = (1, 4, 6, 'final', 0)
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +30,7 @@ SECRET_KEY = '2u7qhk(%4jhj3qz6+s(^zik_rv7hy^b54$1$cjs^!7v((x^m_e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['136.244.113.115','portal.dthbn.gov.ng','127.0.0.1']
 
 
 # Application definition
@@ -70,6 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'schPortal.general_context_processor.index_access_control',
             ],
         },
     },
@@ -88,10 +93,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dthbnPortal',
+        'NAME': 'dthbnportal',
         'PASSWORD': '',
         'USER': 'root',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': 'SET default_storage_engine=INNODB',
@@ -135,7 +140,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -156,6 +161,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = "/media/"
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'mail.dthbn.gov.ng'
+# EMAIL_PORT = '25'
+# EMAIL_HOST_USER = 'info@dthbn.gov.ng'
+# EMAIL_HOST_PASSWORD = 'Point066##@@'
+# EMAIL_USE_TLS =  False
+# EMAIL_USE_SSL = False 
 # LOGIN_URL =
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']

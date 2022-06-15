@@ -14,15 +14,15 @@ class Update(TemplateView):
 
 class ProfAccntView(CreateView):
     model = Professional
-    template_name = 'profPortal/Add.html'
+    template_name = 'profPortal/create.html'
     form_class = ProfAccntForm
     success_url = reverse_lazy('profPortal:dashboard')
 
     def form_valid(self, form):
         print('form is valid')
-        user = self.request.user
-        form.instance.user_id = user.id
-        user.save()
+        # user = self.request.user
+        form.instance.profuser = self.request.user
+        form.save()
         print(form.errors)
         return super().form_valid(form)
 

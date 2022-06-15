@@ -37,7 +37,7 @@ class Professional(models.Model):
     prof_qualification2 = models.CharField(max_length=200, blank=True, null=True) 
     prof_qualification3 = models.CharField(max_length=200, blank=True, null=True) 
     prof_qualification4 = models.CharField(max_length=200, blank=True, null=True) 
-    employment_status = models.BooleanField(null=True, blank=True)
+    employment_status = models.CharField(null=True, max_length=50, blank=True)
     present_position = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
     office_name = models.CharField(max_length=100, blank=True, null=True)

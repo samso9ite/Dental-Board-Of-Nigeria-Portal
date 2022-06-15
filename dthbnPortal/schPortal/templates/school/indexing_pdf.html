@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+     
+      <meta charset="utf:8">
+  
+      <!-- <!:: Google Fonts ::> -->
+   
+      <title> Student Profile </title>
+        <style type="text/css">
+            @page{
+                size: A4;
+                margin: 1cm;
+            }
+        </style>
+  </head> 
+  <body>
+        <div>
+              
+                        <img src="https://dthbn.gov.ng/wp-content/uploads/2019/06/slider_logo.png" width="120px" height="120px" /> 
+                    <br>
+                     <span style="float: right;  color: #323f96; font-size: 18px; padding-top: 10px;">
+                         <b>DENTAL THERAPIST REGISTRATION BOARD OF NIGERIA</b></span>
+                    <br><br><span style="color:#323f96 ; font-size: 16px; text-align: center; "> <b> STUDENT PERSONAL DETAILS </b></span>
+                    
+                    <table class="table" style="padding-top: 5px;">
+                        <tr>
+                            <td> <h1>Full Name : {{record.first_name}} {{record.middle_name}} {{record.surname}}</h1> </td>
+                           
+                        </tr>
+                        <tr>
+                            <td> <h1>Cadre : {{record.cadre|title}}</h1> </td>
+                            <td>  <h1>Gender  : {{record.sex|title}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td><h1>Age  : {{record.age}}</h1> </td>
+                            <td> <h1>Telephone  : {{record.telephone}}</h1></td>
+                        </tr>
+                        <tr>
+                            <td> <h1>Email : {{record.email}}</h1> </td>
+                            <td> <h1>Nationality : {{record.nationality|title}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td> <h1>State Of Origin : {{record.state|title}}</h1> </td>
+                            <td> <h1>Religion : {{record.religion|title}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td>  <h1>Marital Status : {{record.marital_status|title}}</h1> </td>
+                            <td> <h1>Place of Work : {{record.place_of_work}}</h1></td>
+                        </tr>
+                        <tr>
+                            <td>  <h1>Permanent Address : {{record.permanent_address}}</h1> </td>
+                            <td> <h1>Contact Address : {{record.contact_address}}</h1> </td>
+                        </tr>
+                       
+                        <tr>
+                            <td> <h1>School Attended(1) : {{record.school_attended1}}</h1></td>
+                            <td><h1>School Attended(2) : {{record.school_attended2}}</h1></td>
+                        </tr>
+
+                        <tr>
+                            <td>  <h1>Qualification(1) : {{record.qualification1}}</h1> </td>
+                            <td>  <h1>Qualification(2) : {{record.qualification2}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td><h1>Qualification(3) : {{record.qualification3}}</h1></td>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <td>  <h1>Year of Admission : {{record.admission_year}}</h1> </td>
+                            <td>  <h1>Year of Graduation : {{record.graduation_year}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td>   <h1>Name of Referee(1) : {{record.referee_name1}}</h1> </td>
+                            <td> <h1>Referee Phone Number (1) : {{record.phone1}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td>  <h1>Referee Address (1) :  {{record.referee_address1}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td> <h1>Name of Referee (2) : {{record.referee_name2}}</h1> </td>
+                            <td> <h1>Referee Phone Number (2) : {{record.phone2}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td> <h1>Referee Address (2) :  {{record.referee_address2}}</h1> </td>
+                        </tr>
+                             <!-- <th>O level Result</th> -->
+                        <tr>
+                            <td> <h1>Number of Sittings : {{record.exam_sitting}}</h1> </td>
+                            <td><h1>Examination Number (1) : {{record.examination_number1}}</h1></td>
+                        </tr>
+                        <tr>
+                            <td><h1>Examination Type (1) : {{record.examination_type1}} </h1></td>
+                            <td>  <h1>Examination Year (1) :  {{record.examination_year1}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td> <h1> {{record.sub1}} : {{record.grade1}}</span></h1></td>
+                            <td> <h1> {{record.sub2}} : {{record.grade2}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td> <h1> {{record.sub3}} : {{record.grade3}}</h1></td>
+                            <td> <h1> {{record.sub3}} : {{record.grade3}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td><h1> {{record.sub4}} : {{record.grade4}}</span></h1></td>
+                            <td>      <h1> {{record.sub5}} : {{record.grade5}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td>  <h1> {{record.sub6}} : {{record.grade6}}</h1> </td>
+                            <td> <h1> {{record.sub7}} : {{record.grade7}}</h1> </td>
+                        </tr>
+
+                        <tr>
+                            <td> <h1>Examination Number (2) : {{record.examination_number2}}</h1></td>
+                            <td> <h1>Examination Type (2) : {{record.examination_type2}} ({{record.examination_year2}})</h1> </td>
+                        </tr>
+                        <tr>
+                            <td> <h1> {{record.sub1_2}} : {{record.grade1_2}}</span></h1></td>
+                            <td> <h1> {{record.sub2_2}} : {{record.grade2_2}}</h1></td>
+                        </tr>
+                        <tr>
+                            <td> <h1> {{record.sub3_2}} : {{record.grade3_2}}</h1></td>
+                            <td> <h1> {{record.sub4_2}} : {{record.grade4_2}}</span></h1></td>
+                        </tr>
+                        <tr>
+                            <td> <h1> {{record.sub5_2}} : {{record.grade5_2}}</h1></td>
+                            <td>  <h1> {{record.sub6_2}} : {{record.grade6_2}}</h1> </td>
+                        </tr>
+                        <tr>
+                            <td> <h1> {{record.sub7_2}} : {{record.grade7_2}}</h1> </td>
+                        </tr>
+                        </table>
+                  
+                </div>
+            </div>
+        </div>
+
+</body>
+</html>

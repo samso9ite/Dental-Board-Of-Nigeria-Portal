@@ -7,9 +7,12 @@
      <!--Personal Details-->
      {% if user.is_authenticated %}
 
-     
-      <form action="#"  method="post"   onkeydown="return event.key != 'Enter';" enctype="multipart/form-data">
+    
+      <form action="#"  method="post" id="reg_form" data-state-url="{% url 'schoolPortal:ajax_load_lga' %}" data-origin-url="{% url 'schoolPortal:ajax_load_origin' %}"
+      data-office-url="{% url 'schoolPortal:load_office_cities' %}"  data-officelga-url="{% url 'schoolPortal:load_office_lga' %}"
+      data-lga-url="{% url 'schoolPortal:ajax_lga' %}" data-cities-url="{% url 'schoolPortal:ajax_load' %}" novalidate  onkeydown="return event.key != 'Enter';" enctype="multipart/form-data">
         {% csrf_token %}
+        {{form.errors}}
         <section class="content">
              <div class="container-fluid">
 
@@ -36,25 +39,34 @@
                                         <div class="col-sm-3">
                                                 <div class="image" style="margin-left: 2%;">
                                                     <p><b>PROFILE IMAGE</b></p>
-                                                    <img id="ShowImage" src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
-                                                    <input name="profile_image" type="file" onchange="readFIle(this);" multiple />
+                                                    {% if form.instance.profile_image %}
+                                                    <img id="ShowImage"  src="{{form.instance.profile_image.url}}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                    {% else %}
+                                                    <img id="ShowImage"  src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                    {% endif %}
+                                                    <input name="profile_image" type="file"  onchange="readFIle(this);"  multiple />
                                                 </div>
                                         </div>
                                         <div class="col-sm-3">
                                                 <div class="form-group">
-                                                        <p><b>GENDER</b></p>
-                                                        <input type="radio" value="male" name="gender" id="male" class="with-gap" required>
-                                                        <label for="male">Male</label>
-                    
-                                                        <input type="radio" value="female" name="gender" id="female" class="with-gap" required>
-                                                        <label for="female" class="m-l-20">Female</label>
+                                                    <p><b>GENDER</b></p>
+                                                    {% if form.instance.gender == 'male' %}
+                                                        <input type="radio" value="male" name="gender" id="male" class="with-gap "  checked > 
+                                                    {% else %}
+                                                        <input type="radio" value="male" name="gender" id="male" class="with-gap "   >
+                                                    {% endif %}
+                                                    <label for="male">Male</label>
+                                                    {% if form.instance.gender == 'female' %}   
+                                                        <input type="radio" value="female" name="gender" id="female" class="with-gap"  checked >
+                                                    {% else %}
+                                                    <input type="radio" value="female" name="gender" id="female" class="with-gap"   >
+                                                    {% endif %}
+                                                    <label for="female" class="m-l-20">Female</label>
                                                 </div>
-                                                <p>First Name</p>
+                                                <p><b>First Name</b></p>
                                                 <div class="form-group form-float">
                                                     <div class="form-line">
-                                                     
-                                                        <input type="text" name="first_name" class="form-control">
-                                                        <label class="form-label">First Name</label>
+                                                     {{form.first_name}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -62,37 +74,74 @@
                                         <div class="col-sm-3">
                                                 <div class="form-group">
                                                         <p><b>TITLE</b></p>
-                                                        <input type="radio" value="mr" name="title" id="mr" class="with-gap" required>
-                                                        <label for="mr">Mr.</label>
-                                                        <input type="radio" value="mrs" name="title" id="mrs" class="with-gap" required>
+                                                        {% if form.instance.title == 'mr' %}
+                                                            <input type="radio" value="mr" name="title" id="mr" checked class="with-gap" >
+                                                            <label for="mr">Mr.</label>
+                                                            <input type="radio" value="mrs" name="title" id="mrs" class="with-gap" >
+                                                            <label for="mrs" class="m-l-20">Mrs.</label>
+                                                             <input type="radio" value="miss" name="title" id="miss" class="with-gap" > 
+                                                            <label for="miss" class="m-l-20">Miss</label> 
+                                                        {% elif form.instance.title == 'mrs' %}
+                                                            <input type="radio" value="mr" name="title" id="mr" class="with-gap" >
+                                                            <label for="mr" class="m-l-20">Mr.</label>
+                                                       
+                                                            <input type="radio" value="mrs" name="title" id="ms" checked class="with-gap" >
+                                                            <label for="mrs" class="m-l-20">Mrs.</label>
+                                                            <input type="radio" value="miss" name="title" id="miss" class="with-gap" > 
+                                                            <label for="miss" class="m-l-20">Miss</label> 
+                                                           
+                                                        {% elif form.instance.title == 'miss' %}
+                                                            <input type="radio" value="mr" name="title" id="mr" class="with-gap" >
+                                                            <label for="mr" class="m-l-20">Mr.</label>
+                                                            
+                                                            <input type="radio" value="mrs" name="title" id="mrs" class="with-gap" >
+                                                            <label for="mrs" class="m-l-20">Mrs.</label>
+                                                        
+                                                            <input type="radio" value="miss" name="title" id="miss" class="with-gap" > 
+                                                            <label for="miss" class="m-l-20">Miss</label> 
+                                                       {% else %}
+                                                       <input type="radio" value="mr" name="title" id="mr" class="with-gap" >
+                                                        <label for="mr" class="m-l-20">Mr.</label>
+                                                        
+                                                        <input type="radio" value="mrs" name="title" id="mrs" class="with-gap" >
                                                         <label for="mrs" class="m-l-20">Mrs.</label>
-                                                         <input type="radio" value="miss" name="title" id="miss" class="with-gap" required> 
+                                                         <input type="radio" value="miss" name="title" id="miss" class="with-gap" > 
                                                         <label for="miss" class="m-l-20">Miss</label> 
+                                                        {% endif %}
                                                     </div>
                 
-                                                    <p>Middle Name</p>
+                                                    <p><b>Middle Name</b></p>
                                                     <div class="form-group form-float">
                                                         <div class="form-line">
-                                                         
-                                                            <input type="text"name="middle_name"  class="form-control">
-                                                            <label class="form-label">Middle Name</label>
+                                                            {{form.middle_name}}
                                                         </div>
                                                     </div>
                                         </div>
                                         <div class="col-sm-3">
                                                 <div class="form-group">
                                                         <p><b>MARITAL STATUS</b></p>
-                                                        <input type="radio" name="marital_status" value="married" id="married" class="with-gap" required>
-                                                        <label for="married">Married</label>
-                                                        <input type="radio" name="marital_status" value="single" id="single" class="with-gap" required>
-                                                        <label for="single" class="m-l-20">Single</label>
+                                                        {% if form.instance.marital_status == 'married' %}
+                                                            <input type="radio" name="marital_status" checked value="married" id="married" class="with-gap" >
+                                                            <label for="married">Married</label>
+                                                            <input type="radio" name="marital_status" value="single" id="single" class="with-gap" >
+                                                            <label for="single" class="m-l-20">Single</label>
+                                                        {% elif form.instance.marital_status == 'single' %}
+                                                            <input type="radio" name="marital_status" value="married" id="married" class="with-gap" >
+                                                            <label for="married">Married</label>
+                                                            <input type="radio" name="marital_status" checked value="single" id="single" class="with-gap" >
+                                                            <label for="single" class="m-l-20">Single</label>
+                                                        {% else %}
+                                                            <input type="radio" name="marital_status" value="married" id="married" class="with-gap" >
+                                                            <label for="married">Married</label>
+                                                            <input type="radio" name="marital_status" value="single" id="single" class="with-gap" >
+                                                            <label for="single" class="m-l-20">Single</label>
+                                                        {% endif %}
                                                 </div>
-                                            <p>Surname</p>
+                                            <p><b>Surname</b></p>
                                             <div class="form-group form-float">
                                                 <div class="form-line">
-                                                    <input type="text" name="surname"  class="form-control">
-                                                            <label class="form-label">Surname</label>
-                                                        </div>
+                                                    {{form.surname}}
+                                                </div>
                                                     </div>
                                         </div>
                                     </div>
@@ -105,9 +154,9 @@
                                                                     <b>MAIDEN NAME</b>
                                                                     <div class="form-group form-float">
                                                                             <div class="form-line">
-                                                                             
-                                                                                <input type="text" name="maiden_name"  class="form-control">
-                                                                                <label class="form-label">Ex: Mother's Name</label>
+                                                                             {{form.maiden_name}}
+                                                                                <!-- <input type="text" name="maiden_name"  class="form-control"> -->
+                                                                                <!-- <label class="form-label">Ex: Mother's Name</label> -->
                                                                             </div>
                                                                     </div>
                                                                     </div>
@@ -118,7 +167,9 @@
                                                                             <i class="material-icons">call</i>
                                                                         </span>
                                                                         <div class="form-line">
-                                                                            <input type="text"  name="phone" class="form-control date" placeholder="+2348124451038">
+                                                                            {{form.telephone}}
+                                                                            <!-- <label class="form-label">Ex: +234 811 2417 083 </label> -->
+                                                                            <!-- <input type="text"  name="phone" class="form-control date" placeholder="+2348124451038"> -->
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -129,7 +180,8 @@
                                                                             <i class="material-icons">email</i>
                                                                         </span>
                                                                         <div class="form-line">
-                                                                            <input type="text" name="email"  class="form-control time24" placeholder="samso9ite@gmail.com">
+                                                                            {{form.email}}
+                                                                            <!-- <input type="text" name="email"  class="form-control time24" placeholder="samso9ite@gmail.com"> -->
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -140,7 +192,8 @@
                                                                             <i class="material-icons">message</i>
                                                                         </span>
                                                                         <div class="form-line">
-                                                                            <input type="text" name="postal_address"  class="form-control time12" placeholder="P.O. Box 59">
+                                                                            {{form.postal_address}}
+                                                                            <!-- <input type="text" name="postal_address"  class="form-control time12" placeholder="P.O. Box 59"> -->
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -150,21 +203,24 @@
                                         <div class="row clearfix">
                                                 <div class="col-md-3">
                                                     <p><b>RESIDENTIAL COUNTRY</b></p>
-                                                    <div class="form-group form-float">
+                                                    <div class="form-group">
                                                             <div class="form-line">
-                                                             {{form.residential_country}}
-                                                                <!-- <input type="text" name="residential_country"  class="form-control"> -->
-                                                                <label class="form-label">Ex: Nigeria</label>
+                                                                {{form.residential_country}}
                                                             </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                         <p><b>RESIDENTIAL STATE</b></p>
-                                                        <div class="form-group form-float">
-                                                                <div class="form-line">
-                                                                 {{form.residential_state}}
+                                                        <div class="form-group">
+                                                            <div class="form-line">
+                                                                {{form.residential_state}}
+                                                                    <!-- <select class="" id='id_residential_state' >
+                                                                        {% for value in state %}
+                                                                            <option value="{{value.id}}" >{{value.name}}</option>
+                                                                        {% endfor %}
+                                                                    </select> -->
                                                                     <!-- <input type="text" name="residential_state" class="form-control"> -->
-                                                                    <label class="form-label">Ex: Lagos</label>
+                                                                    <!-- <label class="form-label">Ex: Lagos</label> -->
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -172,9 +228,7 @@
                                                         <p><b>RESIDENTIAL ADDRESS</b></p>
                                                         <div class="form-group form-float">
                                                                 <div class="form-line">
-                                                                  
-                                                                    <input type="text" name="residential_address" class="form-control">
-                                                                    <label class="form-label">Ex: 10,Kunle street ojuelegba  lagos </label>
+                                                                  {{form.residential_address}}
                                                                 </div>
                                                         </div>
                                                 </div>
@@ -183,146 +237,92 @@
                                                         <div class="form-group form-float">
                                                                 <div class="form-line">
                                                                     {{form.residential_lga}}
+                                                                    <!-- <select class="" id='id_residential_lga' >
+                                                                        {% for value in lga %}
+                                                                            <option value="{{value.id}}" >{{value.local_gov_area}}</option>
+                                                                        {% endfor %}
+                                                                    </select> -->
                                                                     <!-- <input type="text" name="residential_lga" class="form-control"> -->
-                                                                    <label class="form-label">Ex: Surulere</label>
+                                                                    <!-- <label class="form-label">Ex: Surulere</label> -->
                                                                 </div>
                                                         </div>
                                                 </div>
                                     </div>
-
                                     <div class="demo-masked-input">
-                                            <div class="row clearfix">
-                                                    <div class="col-md-4">
-                                                        <p><b>STATE OF ORIGIN</b></p>
-                                                        {{form.state_of_origin}}
-                                                <!-- <select class="form-control form-line show-tick" name="state_of_origin">
-                                                    <option value="">-- Please select --</option>
-                                                    <option value="Abia" name="state">Abia</option>
-                                                    <option value="Adamawa" name="state">Adamawa</option>
-                                                    <option value="Akwa Ibom" name="state">Akwa Ibom</option>
-                                                    <option value="Anambra" name="state">Anambra</option></option>
-                                                    <option value="Bauchi" name="state">Bauchi</option>   
-                                                    <option value="Bayelsa" name="state">Bayelsa</option>
-                                                    <option value="Benue" name="state">Benue</option>
-                                                    <option value="Borno" name="state">Borno</option>
-                                                    <option value="Cross River" name="state">Cross River</option>
-                                                    <option value="Delta" name="state">Delta</option>
-                                                    <option value="Ebonyi" name="state">Ebonyi</option>
-                                                    <option value="Edo" name="state">Edo</option>
-                                                    <option value="Ekiti" name="state">Ekiti</option>
-                                                    <option value="Enugu" name="state">Enugu</option></option>
-                                                    <option value="Gombe" name="state">Gombe</option>
-                                                    <option value="Delta" name="state">Imo</option>
-                                                    <option value="Jigawa" name="state">Jigawa</option>
-                                                    <option value="Kaduna" name="state">Kaduna</option>
-                                                    <option value="Kano" name="state">Kano</option>
-                                                    <option value="Katsina" name="state">Katsina</option></option>
-                                                    <option value="Kebbi" name="state">Kebbi</option>
-                                                    <option value="Kogi" name="state">Kogi</option>
-                                                    <option value="Kwara" name="state">Kwara</option></option>
-                                                    <option value="Lagos" name="state">Lagos</option>
-                                                    <option value="Nasarawa" name="state">Nasarawa</option>
-                                                    <option value="Niger" name="state">Niger</option>
-                                                    <option value="Ogun" name="state">Ogun</option>
-                                                    <option value="Ondo" name="state">Ondo</option>
-                                                    <option value="Osun" name="state">Osun</option></option>
-                                                    <option value="Oyo" name="state">Oyo</option>
-                                                    <option value="Plateau" name="state">Plateau</option>
-                                                    <option value="Rivers" name="state">Rivers</option>
-                                                    <option value="Sokoto" name="state">Sokoto</option></option>
-                                                    <option value="Taraba" name="state">Taraba</option>
-                                                    <option value="Yobe" name="state">Yobe</option>
-                                                    <option value="Kwara" name="state">Kwara</option></option>
-                                                    <option value="Zamfara" name="state">Zamfara</option>
-                                                <select> -->
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                            <p><b>LGA</b></p>
-                                                            <div class="form-group form-float">
-                                                                    <div class="form-line">
-                                                                     {{form.lga_state}}
-                                                                        <!-- <input type="text"  name="lga" class="form-control"> -->
-                                                                        <label class="form-label">Ex: Anambra </label>
-                                                                    </div>
-                                                            </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                            <p><b>SENATORIAL DISTRICT</b></p>
-                                                            <div class="form-group form-float">
-                                                                    <div class="form-line">
-                                                                     
-                                                                        <input type="text" name="senatorial_district" class="form-control">
-                                                                        <label class="form-label">Ex: Afigio</label>
-                                                                    </div>
-                                                            </div>
-                                                    </div>
-                                        </div>
-                                    <div class="demo-masked-input">
-                                            <div class="row clearfix">
-                                                    <div class="col-md-4">
-                                                        <p><b>DATE OF BIRTH</b></p>
+                                        <div class="row clearfix">
+                                                <div class="col-md-4">
+                                                    <p><b>STATE OF ORIGIN</b></p>
+                                                    <div class="form-group ">
+                                                        <div class="form-line">
+                                                
+                                                    {{form.state_of_origin}}
+                                                   </div>
+                                                   </div>
+                                           
+                                                </div>
+                                                <div class="col-md-4">
+                                                        <p><b> STATE OF ORIGIN LGA</b></p>
                                                         <div class="form-group form-float">
                                                                 <div class="form-line">
-                                                                    <!-- <input type="text" name="date_of_birth"class="form-control"> -->
-                                                                    <label class="form-label">Ex: 30/07/1990</label>
+                                                                    {{form.lga_state}}
+                                                                    <!-- <input type="text" name="lga_of_birth" class="form-control"> -->
+                                                                    <!-- <label class="form-label">Ex: Surulere</label> -->
                                                                 </div>
                                                         </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <p><b>RELIGION</b></p>
+                                                    <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                {{form.religion}}
+                                                                <!-- <input type="text" name="religion"class="form-control"> -->
+                                                                <!-- <label class="form-label">Ex: 30/07/1990</label> -->
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+
+                                       
+                                        
+                                </div>
+                                    <div class="demo-masked-input">
+                                            <div class="row clearfix">
+                                                    <div class="col-md-4">
+                                                        <p><b>STATE OF BIRTH</b></p>
+                                                        <div class="form-group ">
+                                                            <div class="form-line">
+                                                    
+                                                        {{form.state_of_birth}}
+                                                       </div>
+                                                       </div>
+                                               
                                                     </div>
                                                     <div class="col-md-4">
-                                                            <p><b>STATE OF BIRTH</b></p>
-                                                            {{form.state_of_birth}}
-                                                             <!-- <select class="form-control form-line show-tick" name="state_of_birth">
-                                                                    <option value="">-- Please select --</option>
-                                                                    <option value="Abia" name="state">Abia</option>
-                                                                    <option value="Adamawa" name="state">Adamawa</option>
-                                                                    <option value="Akwa Ibom" name="state">Akwa Ibom</option>
-                                                                    <option value="Anambra" name="state">Anambra</option></option>
-                                                                    <option value="Bauchi" name="state">Bauchi</option>
-                                                                    <option value="Bayelsa" name="state">Bayelsa</option>
-                                                                    <option value="Benue" name="state">Benue</option>
-                                                                    <option value="Borno" name="state">Borno</option>
-                                                                    <option value="Cross River" name="state">Cross River</option>
-                                                                    <option value="Delta" name="state">Delta</option>
-                                                                    <option value="Ebonyi" name="state">Ebonyi</option>
-                                                                    <option value="Edo" name="state">Edo</option>
-                                                                    <option value="Ekiti" name="state">Ekiti</option>
-                                                                    <option value="Enugu" name="state">Enugu</option></option>
-                                                                    <option value="Gombe" name="state">Gombe</option>
-                                                                    <option value="Delta" name="state">Imo</option>
-                                                                    <option value="Jigawa" name="state">Jigawa</option>
-                                                                    <option value="Kaduna" name="state">Kaduna</option>
-                                                                    <option value="Kano" name="state">Kano</option>
-                                                                    <option value="Katsina" name="state">Katsina</option></option>
-                                                                    <option value="Kebbi" name="state">Kebbi</option>
-                                                                    <option value="Kogi" name="state">Kogi</option>
-                                                                    <option value="Kwara" name="state">Kwara</option></option>
-                                                                    <option value="Lagos" name="state">Lagos</option>
-                                                                    <option value="Nasarawa" name="state">Nasarawa</option>
-                                                                    <option value="Niger" name="state">Niger</option>
-                                                                    <option value="Ogun" name="state">Ogun</option>
-                                                                    <option value="Ondo" name="state">Ondo</option>
-                                                                    <option value="Osun" name="state">Osun</option></option>
-                                                                    <option value="Oyo" name="state">Oyo</option>
-                                                                    <option value="Plateau" name="state">Plateau</option>
-                                                                    <option value="Rivers" name="state">Rivers</option>
-                                                                    <option value="Sokoto" name="state">Sokoto</option></option>
-                                                                    <option value="Taraba" name="state">Taraba</option>
-                                                                    <option value="Yobe" name="state">Yobe</option>
-                                                                    <option value="Kwara" name="state">Kwara</option></option>
-                                                                    <option value="Zamfara" name="state">Zamfara</option>
-                                                                </select> -->
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                            <p><b>LGA OF BIRTH</b></p>
+                                                            <p><b>STATE OF BIRTH LGA</b></p>
                                                             <div class="form-group form-float">
                                                                     <div class="form-line">
                                                                         {{form.lga_of_birth}}
                                                                         <!-- <input type="text" name="lga_of_birth" class="form-control"> -->
-                                                                        <label class="form-label">Ex: Surulere</label>
+                                                                        <!-- <label class="form-label">Ex: Surulere</label> -->
                                                                     </div>
                                                             </div>
                                                     </div>
+
+                                                    <div class="col-md-4">
+                                                        <p><b>DATE OF BIRTH</b></p>
+                                                        <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                    {{form.date_of_birth}}
+                                                                    <!-- <input type="text" name="religion"class="form-control"> -->
+                                                                    <!-- <label class="form-label">Ex: 30/07/1990</label> -->
+                                                                </div>
+                                                        </div>
+                                                    </div>
                                             </div>
+
+                                           
+                                            
                                     </div>
           </section>
     <!--End of Personal Details-->
@@ -345,28 +345,36 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="qualification1" class="form-control" placeholder="Ex: SSCE (1990-1993)" />
+                                                {{form.qualification1}}
+                                                <!-- <input type="text" name="qualification1" class="form-control" placeholder="Ex: SSCE (1990-1993)" /> -->
+                                                <label class="form-label"> First examination qualification with date</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" name="qualification2" class="form-control" placeholder="Ex: OND/HND/BSC (1995-1998)" />
+                                                    {{form.qualification2}}
+                                                    <label class="form-label"> Second examination qualification with date</label>
+                                                    <!-- <input type="text" name="qualification2" class="form-control" placeholder="Ex: OND/HND/BSC (1995-1998)" /> -->
                                                 </div>
                                             </div>
                                     </div>
                                     <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" name="qualification3" class="form-control" placeholder="Ex: MSC (1995-1998)" />
+                                                    {{form.qualification3}}
+                                                    <label class="form-label"> Third examination qualification with date</label>
+                                                    <!-- <input type="text" name="qualification3" class="form-control" placeholder="Ex: MSC (1995-1998)" /> -->
                                                 </div>
                                             </div>
                                     </div>
                                     <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" name="qualification4" class="form-control" placeholder="Ex: OTHERS (1995-1998)" />
+                                                    {{form.qualification4}}
+                                                    <label class="form-label"> Fourth examination qualification with date</label>
+                                                    <!-- <input type="text" name="qualification4" class="form-control" placeholder="Ex: OTHERS (1995-1998)" /> -->
                                                 </div>
                                             </div>
                                     </div>
@@ -389,28 +397,39 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" name="prof_qualification1" class="form-control" placeholder="Ex: SSCE (1990-1993)" />
+                                                    {{form.prof_qualification1}}
+                                                    <label class="form-label"> First qualification with date</label>
+                                                    <!-- <input type="text" name="prof_qualification1" class="form-control" placeholder="Ex: SSCE (1990-1993)" /> -->
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <input type="text" name="prof_qualification2" class="form-control" placeholder="Ex: OND/HND/BSC (1995-1998)" />
+                                                        {{form.prof_qualification2}}
+                                                        <label class="form-label"> Second qualification with date</label>
+                                                   
+                                                        <!-- <input 2="text" name="prof_qualification2" class="form-control" placeholder="Ex: OND/HND/BSC (1995-1998)" /> -->
                                                     </div>
                                                 </div>
                                         </div>
                                         <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <input type="text" name="prof_qualification3" class="form-control" placeholder="Ex: MSC (1995-1998)" />
+                                                        {{form.prof_qualification3}}
+                                                        <label class="form-label"> Third qualification with date</label>
+                                                   
+                                                        <!-- <input type="text" name="prof_qualification3" class="form-control" placeholder="Ex: MSC (1995-1998)" /> -->
                                                     </div>
                                                 </div>
                                         </div>
                                         <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <input type="text" name="prof_qualification4" class="form-control" placeholder="Ex: OTHERS (1995-1998)" />
+                                                        {{form.prof_qualification4}}
+                                                        <label class="form-label"> Fourth qualification with date</label>
+                                                   
+                                                        <!-- <input type="text" name="prof_qualification4" class="form-control" placeholder="Ex: OTHERS (1995-1998)" /> -->
                                                     </div>
                                                 </div>
                                         </div>
@@ -438,28 +457,40 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <input type="text" name="institution_attended1" class="form-control" placeholder="Ex: Name Of Institution Attended (1990-1993)" />
+                                                        {{form.institution_attended1}}
+                                                        <label class="form-label">Ex: Aiyetoro Senior Grammar School (2000 - 2003)</label>
+                                       
+                                                        <!-- <input type="text" name="institution_attended1" class="form-control" placeholder="Ex: Name Of Institution Attended (1990-1993)" /> -->
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <input type="text" name="institution_attended2" class="form-control" placeholder="Ex:  Name Of Institution Attended  (1995-1998)" />
+                                                            {{form.institution_attended2}}
+                                                            <label class="form-label">Yaba College of Technology (2003-2006)</label>
+                                                   
+                                                            <!-- <input type="text" name="institution_attended2" class="form-control" placeholder="Ex:  Name Of Institution Attended  (1995-1998)" /> -->
                                                         </div>
                                                     </div>
                                             </div>
                                             <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <input type="text" name="institution_attended3"class="form-control" placeholder="Ex: Name Of Institution Attended  (1995-1998)" />
+                                                            {{form.institution_attended3}}
+                                                            <label class="form-label"> Asman Dental School (2006-2010)</label>
+
+                                                            <!-- <input type="text" name="institution_attended3"class="form-control" placeholder="Ex: Name Of Institution Attended  (1995-1998)" /> -->
                                                         </div>
                                                     </div>
                                             </div>
                                             <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <input type="text" name="institution_attended4" class="form-control" placeholder="Ex:  Name Of Institution Attended (1995-1998)" />
+                                                            {{form.institution_attended4}}
+                                                            <label class="form-label"> University Of Lagos (2010-2015)</label>
+
+                                                            <!-- <input type="text" name="institution_attended4" class="form-control" placeholder="Ex:  Name Of Institution Attended (1995-1998)" /> -->
                                                         </div>
                                                     </div>
                                             </div>
@@ -470,7 +501,8 @@
                                                     <p><b>HOD's Name</b></p>
                                                     <div class="form-group form-float">
                                                         <div class="form-line">
-                                                            <input type="text" name="hod_name" class="form-control">
+                                                            {{form.hod_name}}
+                                                            <!-- <input type="text" name="hod_name" class="form-control"> -->
                                                             <label class="form-label">Mr.Charles Okorocha</label>
                                                         </div>
                                                     </div>
@@ -482,8 +514,7 @@
                                                 <p><b>HOD's Phone Number</b></p>
                                                 <div class="form-group form-float">
                                                     <div class="form-line">
-
-                                                        <input type="text" name="hod_phone" class="form-control">
+                                                        {{form.hod_phone}}
                                                         <label class="form-label">+234812345678</label>
                                                     </div>
                                                 </div>
@@ -494,7 +525,8 @@
                                                         <p><b>HOD's Email</b></p>
                                                         <div class="form-group form-float">
                                                             <div class="form-line">
-                                                                <input type="text" name="hod_email" class="form-control">
+                                                                {{form.hod_email}}
+                                                                <!-- <input type="text" name="hod_email" class="form-control"> -->
                                                                 <label class="form-label">HOD's@gmail.com</label>
                                                             </div>
                                                         </div>
@@ -527,8 +559,12 @@
                                              <div class="row clearfix" style="margin-top:10px ">
                                                  <div class="col-sm-6">
                                                      <div class="form-group">
-                                                         <input type="radio" name="employment_status" value="unemployed" id="unemployed" class="with-gap">
-                                                         <label for="unemployed">Unemployed</label>
+                                                        {% if form.instance.employment_status == 'unemployed' %}
+                                                            <input type="radio" name="employment_status" checked value="unemployed" id="unemployed" class="with-gap">
+                                                        {% else %}
+                                                            <input type="radio" name="employment_status" value="unemployed" id="unemployed" class="with-gap">
+                                                            <label for="unemployed">Unemployed</label>
+                                                        {% endif %}
                                                      </div>
                                                  </div>
                                              </div>
@@ -544,8 +580,13 @@
                                                          <div class="col-sm-12">
                                                             <div class="form-group">
                                                                     <p><b>EMPLOYMENT STATUS</b></p>
-                                                                    <input type="radio" name="employment_status" value="employed"  id="employed" class="with-gap">
-                                                                    <label for="employed">Employed</label>
+                                                                    {% if form.instance.employment_status == 'employed' %}
+                                                                        <input type="radio" name="employment_status" checked value="employed"  id="employed" class="with-gap">
+                                                                        
+                                                                    {% else %}
+                                                                        <input type="radio" name="employment_status"  value="employed"  id="employed" class="with-gap">
+                                                                    {% endif %}  
+                                                                        <label for="employed">Employed</label>
                                                             </div>
                                                      </div>
 
@@ -554,8 +595,8 @@
                                                                 <p><b>PRESENT POSITION</b></p>
                                                                 <div class="form-group form-float">
                                                                     <div class="form-line">
-
-                                                                        <input type="text" class="form-control" name="present_position">
+                                                                        {{form.present_position}}
+                                                                        <!-- <input type="text" class="form-control" name="present_position"> -->
                                                                         <label class="form-label">Present Position</label>
                                                                     </div>
                                                                 </div>
@@ -566,7 +607,8 @@
                                                                  <p><b>DEPARTMENT</b></p>
                                                                  <div class="form-group form-float">
                                                                      <div class="form-line">
-                                                                         <input type="text" class="form-control" name="department">
+                                                                         {{form.department}}
+                                                                         <!-- <input type="text" class="form-control" name="department"> -->
                                                                          <label class="form-label">Department</label>
                                                                      </div>
                                                                  </div>
@@ -579,8 +621,8 @@
                                                                  <p><b>OFFICE NAME</b></p>
                                                                  <div class="form-group form-float">
                                                                     <div class="form-line">
-
-                                                                        <input type="text" name="office_name" class="form-control">
+                                                                        {{form.office_name}}
+                                                                        <!-- <input type="text" name="office_name" class="form-control"> -->
                                                                         <label class="form-label">Office Name</label>
                                                                     </div>
                                                                 </div>
@@ -592,7 +634,8 @@
                                                                 <p><b>OFFICE ADDRESS</b></p>
                                                                 <div class="form-group form-float">
                                                                     <div class="form-line">
-                                                                        <input type="text" name="office_address" class="form-control">
+                                                                        {{form.office_address}}
+                                                                        <!-- <input type="text" name="office_address" class="form-control"> -->
                                                                         <label class="form-label">Office Address</label>
                                                                     </div>
                                                                 </div>
@@ -601,12 +644,21 @@
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <p><b>SECTOR</b></p>
-                                                                <input type="radio" name="sector" id="private" class="with-gap">
-                                                                <label for="private">Private</label>
+                                                                {% if form.instance.sector == 'private' %}
+                                                                    <input type="radio" name="sector" checked value='private' id="private" class="with-gap">
+                                                                {% else %}
+                                                                    <input type="radio" name="sector"  value='private' id="private" class="with-gap">
+                                                                {% endif %}
+                                                                    <label for="private">Private</label>
+                                                                {% if form.instance.sector == 'public' %}
+                                                                    <input type="radio" name="sector" checked id="public" class="with-gap">
+                                                                {% else %}
+                                                                    <input type="radio" name="sector"  id="public" class="with-gap">
+                                                             
+                                                                {% endif %}
+                                                                    <label for="public" class="m-l-20">Public</label>
 
-                                                                <input type="radio" name="sector" id="public" class="with-gap">
-                                                                <label for="public" class="m-l-20">Public</label>
-                                                            </div>
+                                                        </div>
                                                         </div>
                                                      </div>
 
@@ -618,8 +670,13 @@
                                                                 <div class="form-group form-float">
                                                                         <div class="form-line">
                                                                             {{form.office_country}}
+                                                                            <!-- <select class="" id='id_office_country' name="">
+                                                                                {% for value in countries %}
+                                                                                    <option value="{{value.id}}" name="office_country">{{value.name}}</option>
+                                                                                {% endfor %}
+                                                                            </select> -->
                                                                             <!-- <input type="text" name="office_country" class="form-control"> -->
-                                                                            <label class="form-label">Office Country</label>
+                                                                            <!-- <label class="form-label">Office Country</label> -->
                                                                         </div>
                                                                 </div>
                                                             </div>
@@ -630,9 +687,9 @@
                                                                 <p><b>OFFICE STATE</b></p>
                                                                 <div class="form-group form-float">
                                                                     <div class="form-line">
-                                                                        {{office_state}}
+                                                                        {{form.office_state}}
                                                                         <!-- <input type="text" name="office_state" class="form-control"> -->
-                                                                        <label class="form-label">Office State</label>
+                                                                        <!-- <label class="form-label">Office State</label> -->
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -642,31 +699,33 @@
                                                                 <p><b>OFFICE LGA</b></p>
                                                                 <div class="form-group form-float">
                                                                     <div class="form-line">
-                                                                       {{office_lga}}
-                                                                        <label class="form-label">Local Government Area</label>
+                                                                       {{form.office_lga}}
+                                                                        <!-- <label class="form-label">Local Government Area</label> -->
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                      </div>
                                                      <div class="row clearfix">
-                                                         <div class="col-sm-3">
+                                                         <div class="col-sm-4">
                                                              <div class="form-group">
                                                                 <p><b>OFFICE PHONE NO</b></p>
                                                                 <div class="form-group form-float">
                                                                     <div class="form-line">
-                                                                        <input type="text" name="office_phone" class="form-control">
+                                                                        {{form.office_phone}}
+                                                                        <!-- <input type="text" name="office_phone" class="form-control"> -->
                                                                         <label class="form-label">+2348124451038</label>
                                                                     </div>
                                                                 </div>
                                                              </div>
                                                          </div>
-                                                         <div class="col-sm-3 ">
+                                                         <div class="col-sm-4 ">
                                                              <div class="form-group">
                                                                  <p><b>OFFICE EMAIL</b></p>
                                                                  <div class="form-group form-float">
                                                                      <div class="form-line">
-                                                                         <input type="text" name="office_email" class="form-control">
+                                                                         {{form.office_email}}
+                                                                         <!-- <input type="text" name="office_email" class="form-control"> -->
                                                                          <label class="form-label">info@dentaltherapist.com</label>
                                                                      </div>
                                                                  </div>
@@ -695,8 +754,8 @@
                                         <p><b>REFEREE'S NAME</b></p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
-
-                                                <input type="text"name="referee_name1" class="form-control">
+                                                {{form.referee_name1}}
+                                                <!-- <input type="text"name="referee_name1" class="form-control"> -->
                                                 <label class="form-label">Referees Name</label>
                                             </div>
                                         </div>
@@ -705,8 +764,8 @@
                                             <p><b>REFEREE'S PHONE NUMBER</b></p>
                                             <div class="form-group form-float">
                                                 <div class="form-line">
-
-                                                    <input type="text" name="referee_phone1" class="form-control">
+                                                    {{form.referee_phone1}}
+                                                    <!-- <input type="text" name="referee_phone1" class="form-control"> -->
                                                     <label class="form-label">Referee's phone number</label>
                                                 </div>
                                             </div>
@@ -715,8 +774,8 @@
                                                 <p><b>REFEREE'S EMAIL</b></p>
                                                 <div class="form-group form-float">
                                                     <div class="form-line">
-
-                                                        <input type="text"name="referee_email1" class="form-control">
+                                                        {{form.referee_email1}}
+                                                        <!-- <input type="text"name="referee_email1" class="form-control"> -->
                                                         <label class="form-label">Referee's email</label>
                                                     </div>
                                                 </div>
@@ -727,28 +786,28 @@
                                         <p><b>REFEREE'S NAME</b></p>
                                         <div class="form-group form-float">
                                             <div class="form-line">
-
-                                                <input type="text" name="referee_name2"class="form-control">
+                                                {{form.referee_name2}}
+                                                <!-- <input type="text" name="referee_name2"class="form-control"> -->
                                                 <label class="form-label">Referee's name</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                             <p><b>REFEREE'S PHONE NUMBER</b></p>
-                                            <!-- <div class="form-group form-float">
+                                            <div class="form-group form-float">
                                                 <div class="form-line">
-
-                                                    <input type="text" name="referee_phone2" class="form-control">
+                                                        {{form.referee_phone2}}
+                                                    <!-- <input type="text" name="referee_phone2" class="form-control"> -->
                                                     <label class="form-label">Referee's phone number</label>
                                                 </div>
-                                            </div> -->
+                                            </div>
                                         </div>
                                         <div class="col-sm-4">
                                                 <p><b>REFEREE'S EMAIL</b></p>
                                                 <div class="form-group form-float">
                                                     <div class="form-line">
-
-                                                        <input type="text" name="referee_email2" class="form-control">
+                                                        {{form.referee_email2}}
+                                                        <!-- <input type="text" name="referee_email2" class="form-control"> -->
                                                         <label class="form-label">Referee's email</label>
                                                     </div>
                                                 </div>
@@ -777,10 +836,33 @@
                                     <div class="body">
                                             <div class="form-group">
                                                 <p><b>MODE OF PAYMENT</b></p>
-                                                <input type="radio" value="Cheque" name="mode_of_payment" id="cheque" class="with-gap">
-                                                <label for="cheque">Cheque</label>
-                                                <input type="radio" value="Online payment" name="mode_of_payment" id="online" class="with-gap">
+                                                {% if form.instance.mode_of_payment == 'Cheque' %}
+                                                    <input type="radio" value="Cheque" checked name="mode_of_payment" id="cheque" class="with-gap">
+                                                    <label for="cheque">Cheque</label>
+                                                    <label class="m-l-20">Others (Please specify below)</label>
+                                                   <div class="form-group form-float">
+                                                        <div class="form-line">
+                                                            <input type="text" name="mode_of_payment" class="form-control">
+                                                            <label class="form-label">Please specify other mode of payment</label>
+                                                        </div>
+                                                    </div>
+                                                {% elif form.instance.mode_of_payment == 'Online payment' %}
+                                                    <input type="radio" value="Online payment"  checked name="mode_of_payment" id="online" class="with-gap">
                                                     <label for="online" class="m-l-20">Online Payment</label>
+                                                    <label class="m-l-20">Others (Please specify below)</label>
+                                                    <div class="form-group form-float">
+                                                        <div class="form-line">
+                                                            <input type="text" name="mode_of_payment" class="form-control">
+                                                            <label class="form-label">Please specify other mode of payment</label>
+                                                        </div>
+                                                    </div>
+                                                {% else %}
+                                                    <input type="radio" value="Cheque" checked name="mode_of_payment" id="cheque" class="with-gap">
+                                                    <label for="cheque">Cheque</label>
+                                              
+                                                    <input type="radio" value="Online payment" name="mode_of_payment" id="online" class="with-gap">
+                                                    <label for="online" class="m-l-20">Online Payment</label>
+                                              
                                                    <label class="m-l-20">Others (Please specify below)</label>
                                                    <div class="form-group form-float">
                                                         <div class="form-line">
@@ -788,16 +870,85 @@
                                                             <label class="form-label">Please specify other mode of payment</label>
                                                         </div>
                                                     </div>
+                                                    {% endif %}
                                             </div>
-                                                
+                                                <br>
                                                 <p><b> SELECT AREA OF SPECIALIZATION</b></p>
-                                                        <input type="radio" name="cadre" value="RDTh" id="dental_therapist" class="with-gap">
+                                                    {% if form.instance.cadre == 'Dental Therapist' %}
+                                                        <input type="radio" name="cadre" value="Dental Therapist" id="dental_therapist" class="with-gap">
                                                         <label for="dental_therapist">Dental Therapist</label>
-                                                        <input type="radio" name="cadre"  value="RDSN" id="dental_nurse" class="with-gap">
+                                                        <input type="radio" name="cadre" value="Dental Therapist(Abr)"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Therapist(Abr)</label>
+                                       
+                                                        <input type="radio" name="cadre"  value="Dental Nurse" id="dental_nurse" class="with-gap">
                                                         <label for="dental_nurse" class="m-l-20">Dental Nurse</label>
-                                                        <input type="radio" name="cadre" value="RDST"  id="dental_third" class="with-gap">
-                                                        <label for="dental_third" class="m-l-20" >Surgery Technician</label>
-                                        <div class="row clearfix" style="margin-left: 1%">
+                                                        <input type="radio" name="cadre" value="Dental Surgery Technician"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Technician</label>
+                                                        <input type="radio" name="cadre" value="Dental Surgery Assistant"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Assistants</label>
+                                                    {% elif form.instance.cadre == 'Dental Therapist(Abr)' %}
+                                                        <input type="radio" name="cadre" value="Dental Therapist" id="dental_therapist" class="with-gap">
+                                                        <label for="dental_therapist">Dental Therapist</label>
+                                                        <input type="radio" name="cadre" checked value="Dental Therapist(Abr)"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Therapist(Abr)</label>
+                                    
+                                                        <input type="radio" name="cadre"  value="Dental Nurse" id="dental_nurse" class="with-gap">
+                                                        <label for="dental_nurse" class="m-l-20">Dental Nurse</label>
+                                                        <input type="radio" name="cadre" value="Dental Surgery Technician"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Technician</label>
+                                                        <input type="radio" name="cadre" value="Dental Surgery Assistant"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Assistants</label>
+                                                    {% elif form.instance.cadre == 'Dentak Nurse' %}
+                                                        <input type="radio" name="cadre" value="Dental Therapist" id="dental_therapist" class="with-gap">
+                                                        <label for="dental_therapist">Dental Therapist</label>
+                                                        <input type="radio" name="cadre" value="Dental Therapist(Abr)"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Therapist(Abr)</label>
+                                    
+                                                        <input type="radio" name="cadre" checked value="Dental Nurse" id="dental_nurse" class="with-gap">
+                                                        <label for="dental_nurse" class="m-l-20">Dental Nurse</label>
+                                                        <input type="radio" name="cadre" value="Dental Surgery Technician"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Technician</label>
+                                                        <input type="radio" name="cadre" value="Dental Surgery Assistant"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Assistants</label>
+                                                    {% elif form.instance.cadre == 'Dental Surgery Technician' %}
+                                                        <input type="radio" name="cadre" value="Dental Therapist" id="dental_therapist" class="with-gap">
+                                                        <label for="dental_therapist">Dental Therapist</label>
+                                                        <input type="radio" name="cadre" value="Dental Therapist(Abr)"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Therapist(Abr)</label>
+                                    
+                                                        <input type="radio" name="cadre"  value="Dental Nurse" id="dental_nurse" class="with-gap">
+                                                        <label for="dental_nurse" class="m-l-20">Dental Nurse</label>
+                                                        <input type="radio" name="cadre" checked value="Dental Surgery Technician"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Technician</label>
+                                                        <input type="radio" name="cadre" value="Dental Surgery Assistant"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Assistants</label>
+                                                    {% elif form.instance.cadre == 'Dental Surgery Assistant' %}
+                                                        <input type="radio" name="cadre" value="Dental Therapist" id="dental_therapist" class="with-gap">
+                                                        <label for="dental_therapist">Dental Therapist</label>
+                                                        <input type="radio" name="cadre" value="Dental Therapist(Abr)"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Therapist(Abr)</label>
+                                    
+                                                        <input type="radio" name="cadre"  value="Dental Nurse" id="dental_nurse" class="with-gap">
+                                                        <label for="dental_nurse" class="m-l-20">Dental Nurse</label>
+                                                        <input type="radio" name="cadre"  value="Dental Surgery Technician"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Technician</label>
+                                                        <input type="radio" name="cadre" checked value="Dental Surgery Assistant"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Assistants</label>
+                                                    {% else %}
+                                                        <input type="radio" name="cadre" value="Dental Therapist" id="dental_therapist" class="with-gap">
+                                                        <label for="dental_therapist">Dental Therapist</label>
+                                                        <input type="radio" name="cadre" value="Dental Therapist(Abr)"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Therapist(Abr)</label>
+                                    
+                                                        <input type="radio" name="cadre"  value="Dental Nurse" id="dental_nurse" class="with-gap">
+                                                        <label for="dental_nurse" class="m-l-20">Dental Nurse</label>
+                                                        <input type="radio" name="cadre"  value="Dental Surgery Technician"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Technician</label>
+                                                        <input type="radio" name="cadre"  value="Dental Surgery Assistant"  id="dental_third" class="with-gap">
+                                                        <label for="dental_third" class="m-l-20" >Dental Surgery Assistant</label>
+                                                    {% endif %}
+                                        
+                                            <div class="row clearfix" style="margin-left: 1%">
                                             <div class="col-sm-4">
                                                 <div class="dz-message">
                                                     <h5>Upload WAEC/NECO/GCE/NABTEB:</h5>
@@ -806,7 +957,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="fallback">
-                                                    <input name="waec_result" type="file" multiple />
+                                                    {{form.waec_result}}
+                                                    <!-- <input name="waec_result" type="file" multiple /> -->
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
@@ -817,7 +969,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="fallback">
-                                                    <input name="dental_school_result" type="file" multiple />
+                                                    {{form.dental_school_result}}
+                                                    <!-- <input name="dental_school_result" type="file" multiple /> -->
                                                 </div>
                                              </div>
                                              <div class="col-sm-4">
@@ -828,7 +981,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="fallback">
-                                                    <input name="dental_school_testimonial" type="file" multiple />
+                                                    {{form.dental_school_testimonial}}
+                                                    <!-- <input name="dental_school_testimonial" type="file" multiple /> -->
                                                 </div>
                                              </div>
                                         </div>

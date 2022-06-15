@@ -1,0 +1,29 @@
+asgiref
+bcrypt                                                                                                         
+certifi                                                                                                   
+# cffi==1.14.0     reinstall                                                                                                      
+# client                                                                                          
+configparser                                                                                                   
+Django                                                                                                    
+django-autoslug-iplweb                                                                                    
+django-cities-light                                                                                           
+django-xhtml2pdf                                                                                              
+html5lib                                                                                                         
+mysql                                                                                                       
+mysqlclient                                                                                                    
+Pillow                                                                                                         
+progressbar2                                                                                                  
+pycparser                                                                                                       
+PyMySQL                                                                                                        
+PyPDF2                                                                                                       
+python-dateutil                                                                                                
+python-utils                                                                                                   
+pytz                                                                                                          
+reportlab                                                                                                     
+six                                                                                                           
+sqlparse                                                                                                       
+sweetify    
+Unidecode                                                                                                     
+webencodings                                                                                                 
+xhtml2pdf                                                                                                   
+xlwt                       

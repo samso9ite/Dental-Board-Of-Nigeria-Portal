@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, CreateView
 from authentication.forms import SignUp, ProfSignUp, LoginForm, ChangePasswordForm
 from django.http import HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from authentication.tokens import account_activation_token
@@ -18,8 +18,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.urls import reverse
 import sweetify
 from django.db.models import Q
-# Create your views here
-
 
 def sign_up_view(request):
     if request.user.is_authenticated and request.user.is_school:
@@ -53,12 +51,9 @@ def sign_up_view(request):
     
         if request.method == 'POST' and 'is_professional' in request.POST:
             prof_form = ProfSignUp(request.POST)
-            # print(prof_form)
-            print(prof_form.errors)
             if prof_form.is_valid():
                 user = prof_form.save(commit=False)
                 user.is_active = False
-                print(user.programme)
                 if user.programme == 'Dental Therapist':
                     user.code = 'RDTH' + user.code
                 elif user.programme == 'Dental Nurses':
@@ -68,8 +63,6 @@ def sign_up_view(request):
                 elif user.programme == 'Dental Surgery Technician':
                     user.code = 'RDST' + user.code
                 user.username = user.code
-                # elif user.programme is 'Dental Nurses':
-                #     user.code = Rdsn''user.code    
                 user.set_password(user.password)
                 user.save()
                 current_site = get_current_site(request)
@@ -82,34 +75,27 @@ def sign_up_view(request):
                 })
                 user.email_user(subject, message)
                 return redirect('Auth:account_activation_sent')
-            # else:
-            #     print('The form isn\'t valid')
+          
         else:
             prof_form = ProfSignUp()
 
         if request.method == 'POST' and request.POST.get('loginSubmit') == 'login_all':
             login_form = LoginForm(request.POST)
-            print('login_form')
             if login_form.is_valid():
                 email = login_form.cleaned_data.get('email')
                 password = login_form.cleaned_data.get('password')
+               
                 try:
                     get_user_name = User.objects.get(email=email)
-                    print (get_user_name)
                     user = authenticate(username=get_user_name, password=password)
                     if user and user.is_active and user.suspend is False and user.block is False:
-                        print('Valid')
-                    
-                
                         login(request, user)
-                        print(user.email)
                         if User.objects.filter(email=user.email, is_school=True, profile_update=False):
                             sweetify.success(request, 'Login Successful', button='Great!')
                             return redirect("schoolPortal:schoolProfile")
 
                         elif User.objects.filter(email=user.email, is_school=True, profile_update=True):
                             sweetify.success(request, 'Login Successful', button='Great!')
-                            print('This is working  ')
                             return redirect("schoolPortal:dashboard")
         
                         elif User.objects.filter(email=user.email, is_professional=True):
@@ -117,7 +103,10 @@ def sign_up_view(request):
                             return redirect("profPortal:dashboard")
 
                         elif User.objects.filter(email=user.email, is_admin=True):
-                            print('Admin is true')
+                            sweetify.success(request, 'Login Successful', button='Great!')
+                            return redirect('adminPortal:dashboard')
+                        
+                        elif User.objects.filter(email=user.email, is_staff=True):
                             sweetify.success(request, 'Login Successful', button='Great!')
                             return redirect('adminPortal:dashboard')
 
@@ -129,16 +118,18 @@ def sign_up_view(request):
                         sweetify.error(request, 'School Has Been Blocked', text='Contact the board for more details', button='Great!')
                         return HttpResponseRedirect(reverse("Auth:Register"))
                     else:
-                        sweetify.error(request, 'Invalid Username or Password')
-                        
+                        # sweetify.error(request, 'Invalid Username or Password')
+                        messages.errors(request, "Invalid Username or Password", extra_tags='alert')
+                      
                         return HttpResponseRedirect(reverse("Auth:Register"))
                 except:
                     sweetify.success(request, 'Invalid Username or Password')
+                    messages.success(request, "Invalid Username or Password", extra_tags='alert')
+                    print("Password not correct")
                     return HttpResponseRedirect(reverse("Auth:Register"))
             else:
                 login_form = LoginForm()
-                print(login_form.errors)
-                print("Login Not Valid")
+             
         return render(request, 'auth/sch_register.html',
                     {'form': form, 'prof_form': prof_form, 'login_form': login_form})
 
@@ -168,8 +159,7 @@ def activate(request, uidb64, token):
             user.save()
             login(request, user)
             sweetify.success(request, 'Account Created Successful', button='Great!')
-            return redirect('profPortal:dashboard',)   
-      
+            return redirect('profPortal:dashboard')   
     else:
         return render(request, 'auth/sch_register.html')
 
@@ -180,7 +170,6 @@ def logout_view(request):
     sweetify.success(request, 'Log  Successfully', button='Great!')
     return redirect("Auth:Register")
 
-
 @login_required
 def change_password_view(request):
     if request.method == 'POST':
@@ -188,28 +177,21 @@ def change_password_view(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            # messages.success(request, 'Your password has been reset')
             sweetify.success(request, 'Password Changed Successfully')
                 
             if user.is_school:
                 return HttpResponseRedirect(reverse("schoolPortal:dashboard"))
             elif user.is_professional:
-               return HttpResponse("Password for professional Chanegd")
-            elif user.is_admin:
-                return HttpResponse("Password changed for admin")
+                return HttpResponseRedirect(reverse("profPortal:dashboard"))
+            else:
+                return HttpResponseRedirect(reverse("adminPortal:dashboard"))
        
     else:
         form = PasswordChangeForm(request.user)
     if request.user.is_school:
         return render(request, 'school/change_password.html', {"form":form})
-    elif request.user.is_admin:
-        return render(request, 'adminPortal/change_password.html', {'form':form})
     else:
-        pass
-
-# class SweetAlert (TemplateView):
-#     sweetify.sweetalert(request, 'Westworld is awesome', text='Really... if you have the chance - watch it!')
-#     template_name = 'auth/forgot_password.html'
+        return render(request, 'adminPortal/change_password.html', {'form':form})
 
 @login_required
 def block(request, id):

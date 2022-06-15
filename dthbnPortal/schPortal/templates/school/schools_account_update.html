@@ -29,8 +29,14 @@
                                        <div class="row clearfix">
                                             <div class="image col-sm-6" style="margin-left: 2%;">
                                                 <p><b>SCHOOL LOGO</b></p>
-                                                <img src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
-                                                <input type="file" name="sch_logo" onchange="readFIle(this);"  />
+                                                {% if form.instance.sch_logo %}
+                                                    <img id="ShowImage"  src="{{form.instance.sch_logo.url}}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                    {% else %}
+                                                    <img id="ShowImage"  src="{% static 'general/images/default_avtar.jpg' %}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
+                                                    {% endif %}
+                                                    <input name="sch_logo" type="file"  onchange="readFIle(this);"  multiple />
+                                                
+                                                
                                             </div>
                                             <div class="col-sm-4">
                                                         <p><b>SCHOOL CODE</b></p><br><br><br><br><br>
@@ -60,103 +66,58 @@
                                     <p><b>SCHOOL ADDRESS</b></p>
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" name="address" class="form-control" value="">
-                                            <label class="form-label">School Address</label>
+                                            {% if form.instance.address %}
+                                            <input type="text" name="address" class="form-control" value="{{form.instance.address}}">
+                                           
+                                            {% else %}
+                                                <input type="text" name="address" class="form-control" value="">
+                                                <label class="form-label">School Address</label>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     
                                 </div>
                             </div>
                             <div class="col-sm-4" style="margin-top:5%">
-                                <p><b>SPECIALTY</b>(Uncheck where needed)</p>
-                                    <div class="">
+                                <p><b>SPECIALTY</b></p>
+                                    <div class="form-group">
                                         <!-- {% for label in user.programme %} 
                                             {{label}}
                                         {% endfor %} -->
                                         <!-- {% for data in user.programme %}
                                             {{data|title}}
                                         {% endfor %} -->
-                                        <!-- {{user_data.programme|slugify}} -->
-                                        <!-- {{user.programme}} -->
-                                        <input  name="programme" id=" id_programme_0" value="" type="checkbox"/>
-                                        <label for="user.programme.id">Dental Therapist</label> 
-                                       <input name="programme" id="id_programme_1" value="Dental Nurses" type="checkbox" />
-                                        <label for="id_programme_1">Dental Nurses </label>
-                                        <input name="programme" id="id_programme_2" value="Dental Surgery Technician" type="checkbox" />
-                                        <label for="id_programme_2">Dental Surgery Technician </label>
-                                        <input name="programme" id="id_programme_3" value="Dental Surgery Assistant" type="checkbox" />
-                                        <label for="id_programme_3">Dental Surgery Assistant </label> 
-                                   </div>
+                                        {% for data in user.programme %}
+                                            {{data|slugify|title}}
+                                        {% endfor %}
+                                      
+                                   
                           </div></div>
 
                                                    
                         <div class="col-sm-4">
-                                    <!--<div class="form-group">-->
-                                            <p><b>STATE</b></p>
-                                                {{form.country}}
-                        
-                                           <!--<div class="col-sm-6">-->
-                                                <!-- <select class="form-control form-line show-tick" name="state">
-                                                    <option value="">-- Please select --</option>
-                                                    <option value="Abia" name="state">Abia</option>
-                                                    <option value="Adamawa" name="state">Adamawa</option>
-                                                    <option value="Akwa Ibom" name="state">Akwa Ibom</option>
-                                                    <option value="Anambra" name="state">Anambra</option></option>
-                                                    <option value="Bauchi" name="state">Bauchi</option>   
-                                                    <option value="Bayelsa" name="state">Bayelsa</option>
-                                                    <option value="Benue" name="state">Benue</option>
-                                                    <option value="Borno" name="state">Borno</option>
-                                                    <option value="Cross River" name="state">Cross River</option>
-                                                    <option value="Delta" name="state">Delta</option>
-                                                    <option value="Ebonyi" name="state">Ebonyi</option>
-                                                    <option value="Edo" name="state">Edo</option>
-                                                    <option value="Ekiti" name="state">Ekiti</option>
-                                                    <option value="Enugu" name="state">Enugu</option></option>
-                                                    <option value="Gombe" name="state">Gombe</option>
-                                                    <option value="Delta" name="state">Imo</option>
-                                                    <option value="Jigawa" name="state">Jigawa</option>
-                                                    <option value="Kaduna" name="state">Kaduna</option>
-                                                    <option value="Kano" name="state">Kano</option>
-                                                    <option value="Katsina" name="state">Katsina</option></option>
-                                                    <option value="Kebbi" name="state">Kebbi</option>
-                                                    <option value="Kogi" name="state">Kogi</option>
-                                                    <option value="Kwara" name="state">Kwara</option></option>
-                                                    <option value="Lagos" name="state">Lagos</option>
-                                                    <option value="Nasarawa" name="state">Nasarawa</option>
-                                                    <option value="Niger" name="state">Niger</option>
-                                                    <option value="Ogun" name="state">Ogun</option>
-                                                    <option value="Ondo" name="state">Ondo</option>
-                                                    <option value="Osun" name="state">Osun</option></option>
-                                                    <option value="Oyo" name="state">Oyo</option>
-                                                    <option value="Plateau" name="state">Plateau</option>
-                                                    <option value="Rivers" name="state">Rivers</option>
-                                                    <option value="Sokoto" name="state">Sokoto</option></option>
-                                                    <option value="Taraba" name="state">Taraba</option>
-                                                    <option value="Yobe" name="state">Yobe</option>
-                                                    <option value="Kwara" name="state">Kwara</option></option>
-                                                    <option value="Zamfara" name="state">Zamfara</option>
-                                                </select>  -->
-                                                        <!--<input type="text" name="state" class="form-control"  value="<?php echo ($user->state)?$user->state:''; ?>">-->
-                                                        <!--<label class="form-label">State</label>-->
-                                                    </div>
-                                       
-                          
+                            <div class="form-group">
+                                <div class="form-line">
+                                <p><b>STATE</b></p>
+                                {% if form.instance.state %}
+                                    <input type="text" value="{{form.instance.state}}" name="state" class="form-control"  value="">
+                                {% else %}
+                                    <input type="text" name="state" class="form-control"  value="">
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <p><b>LOCAL GOVERMENT AREA</b></p>
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            {{ form.region}}
-                                            <!-- <select class="form-control form-line show-tick" name="region" id="id_region">
-                                                <option value="">Select an option</option>
-                                                {% for region in regions %}
-                                                    <option value="{{region.pk}}">{{region.name}}</option>
-                                                {% endfor %}
-                                            </select> -->
-
-                                            <!-- <input type="text" name="lga" class="form-control"  value=""> -->
-                                            <!-- <label class="form-label">LGA</label> -->
+                                            {% if form.instance.region %}
+                                            <input type="text" value="{{form.instance.region}}" name="region" class="form-control"  value="">
+                                        {% else %}
+                                            <input type="text" name="region" class="form-control"  value="">
+                                        {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -166,9 +127,12 @@
                                             <p><b>POSTAL ADDRESS</b></p>
                                             <div class="form-group form-float">
                                                 <div class="form-line">
-                                                    <!-- {{form.postal_number}} -->
-                                                    <input type="text" name="postal_number" class="form-control"  value="">
-                                                    <label class="form-label">Ex: P.O BOX 1990</label>
+                                                    {% if form.instance.postal_number %}
+                                                        <input type="text" value="{{form.instance.postal_number}}" name="postal_number" class="form-control"  value="">
+                                                    {% else %}
+                                                        <input type="text" name="postal_number" class="form-control"  value="">
+                                                    {% endif %}
+                                                        <label class="form-label">Ex: P.O BOX 1990</label>
                                                 </div>
                                             </div>
                                     </div>
@@ -207,7 +171,11 @@
                                     <div class="form-group form-float">
                                         <div class="form-line">
                                             
-                                            <input type="text" name="hod_name" class="form-control"  value="">
+                                            {% if form.instance.hod_name %}
+                                            <input type="text"name="hod_name" class="form-control"  value="{{form.instance.hod_name}}">
+                                        {% else %}
+                                            <input type="text"name="hod_name" class="form-control"  value="">
+                                        {% endif %}
                                             <label class="form-label">Mr. Ajanaku Ajibade</label>
                                         </div>
                                     </div>
@@ -221,20 +189,27 @@
                                     <p><b>HOD'S Email</b></p>
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            
-                                            <input type="text"name="hod_email" class="form-control"  value="">
-                                            <label class="form-label">HOD@dentaltherapist.com</label>
+                                            {% if form.instance.hod_email %}
+                                                <input type="text"name="hod_email" class="form-control"  value="{{form.instance.hod_email}}">
+                                            {% else %}
+                                                <input type="text"name="hod_email" class="form-control"  value="">
+                                            {% endif %}
+                                                <label class="form-label">HOD@dentaltherapist.com</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                              <div class="col-sm-4">
-                                <div class="form-group">
+                                <div class="form-group"> 
                                     <p><b>HOD'S Phone Number</b></p>
                                     <div class="form-group form-float">
                                         <div class="form-line">
-                                            <input type="text" name="hod_phone" class="form-control"  value="">
-                                            <label class="form-label">+234 87979368791</label>
+                                            {% if form.instance.hod_phone %}
+                                            <input type="text"name="hod_phone" class="form-control"  value="{{form.instance.hod_phone}}">
+                                        {% else %}
+                                            <input type="text"name="hod_phone" class="form-control"  value="">
+                                        {% endif %}
+                                            <label class="form-label">+234 879 7936 879</label>
                                         </div>
                                     </div>
                                 </div>
@@ -258,7 +233,7 @@
       </form>
 {% endif %}
       <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-      <script>
+      <!-- <script>
           $("#id_region").change(function (){
             var url = $("#schProfileForm").attr("data-region-url");
             var regionId = $(this).val();
@@ -273,7 +248,7 @@
                 }
             });
           });
-      </script>
+      </script> -->
 {% endblock %}
 
 

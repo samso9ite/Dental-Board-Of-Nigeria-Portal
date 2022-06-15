@@ -14,7 +14,38 @@
                         <div class="header">
                             <h2>
                                 INDEXING
-                               
+                                <div class="btn-group" role="group" style="float: right;">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-danger waves-effect dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Search Record by Year
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            {% if '/school/current_index/' in request.path %}
+                                            <li> <a href="{% url 'schoolPortal:currentIndex' year='2019-2020' %}">  2019 / 2020</a>
+                                            </li>
+                                            <li> <a href="{% url 'schoolPortal:currentIndex' year='2020-2021' %}">  2020 / 2021</a>
+                                            </li>
+                                            {% elif '/school/indexed_record/' in request.path %}
+                                            <li> <a href="{% url 'schoolPortal:indexed_record' year='2019-2020' %}">  2019 / 2020</a>
+                                            </li>
+                                            <li> <a href="{% url 'schoolPortal:indexed_record' year='2020-2021' %}">  2020 / 2021</a>
+                                            </li>
+                                            {% elif '/school/approved_student/' in request.path %}
+                                            <li> <a href="{% url 'schoolPortal:approved_student' year='2019-2020' %}">  2019 / 2020</a>
+                                            </li>
+                                            <li> <a href="{% url 'schoolPortal:approved_student' year='2020-2021' %}">  2020 / 2021</a>
+                                            </li>
+                                            {% elif '/school/unapproved_student/' in request.path %}
+                                            <li> <a href="{% url 'schoolPortal:unapproved_student' year='2019-2020' %}">  2019 / 2020</a>
+                                            </li>
+                                            <li> <a href="{% url 'schoolPortal:unapproved_student' year='2020-2021' %}">  2020 / 2021</a>
+                                            </li>
+
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
                             </h2>
                         </div>
 
@@ -24,9 +55,9 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="card">
                                 <div class="header">
-                                    {% if request.path == '/school/approved_student/' %}
+                                    {% if '/school/approved_student/' in request.path %}
                                         <h2>
-                                             APPROVED INDEXED STUDENT
+                                             APPROVED INDEXED STUDENT FOR YEAR <b>{{year}}</b>
                                             <span style="float: right;">
                                                 <a href="{% url 'schoolPortal:export_approved_student' %}"> 
                                                     <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
@@ -35,9 +66,9 @@
                                        
                                         </h2>
 
-                                    {% elif request.path == '/school/current_index' %}
-                                        <h2>
-                                             CURRENT INDEXED STUDENT
+                                    {% elif '/school/current_index' in request.path %}
+                                       <h2>
+                                             CURRENT INDEXED STUDENT  FOR YEAR <b>{{year}}</b> </b>
 
                                              <span style="float: right;">
                                                 <a href="{% url 'schoolPortal:export_current_student' %}"> 
@@ -46,8 +77,8 @@
                                             </span>
                                         </h2>
 
-                                    {% elif request.path == '/school/indexed_record/' %}
-                                        <h2>INDEXED STUDENT
+                                    {% elif '/school/indexed_record/' in request.path %}
+                                        <h2>INDEXED STUDENT  FOR YEAR <b> {{year}} </b>
                                             <span style="float: right;">    
                                                 <a href="{% url 'schoolPortal:export_indexed_stu' %}"> 
                                                     <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
@@ -55,7 +86,7 @@
                                         </h2>
 
                                     {% else %}
-                                    <h2>UNAPPROVED INDEXED STUDENT
+                                    <h2>UNAPPROVED INDEXED STUDENT  FOR YEAR <b> {{year}} </b>
                                         <span style="float: right;">
                                             <!-- <a href="{% url 'schoolPortal:export_indexed_stu' %}">  -->
                                                 <!-- <button type="submit" class="btn bg-red waves-effect" value="Export Indexed Record"
@@ -78,7 +109,7 @@
                                                 <th>Contact</th>
                                                 <th>Email</th>
                                                 <th>View</th>
-                                                {% if request.path == '/school/current_index' %}
+                                                {% if '/school/current_index' in request.path %}
                                                      <th>Action</th>
                                                 {% endif %}
                                             </tr>
@@ -91,7 +122,7 @@
                                                 <th>Contact</th>
                                                 <th>Email</th>
                                                 <th>View</th>
-                                                {% if request.path == '/school/current_index' %}
+                                                {% if '/school/current_index' in request.path %}
                                     
                                                 <th>Action</th>
                                             {% endif %}
@@ -101,15 +132,15 @@
                                         {% if indexed %}
                                             {% for index in indexed %}
                                             <tr>
-                                                <td>{{index.first_name|title}}</td>
+                                                <td>{{index.first_name|title}} {{index.surname|title}}</td>
                                                 <td>{{index.cadre|title}}</td>
                                                 <td>{{index.permanent_address|title}}</td>
                                                 <td>{{index.telephone}}</td>
                                                 <td>{{index.email|title}}</td>
                                               
-                                                <td><a href="#"><i class="material-icons" data-toggle="modal" data-target="#modal">visibility</i></a>
-
-                                                    <div class="modal fade" id="modal{{indexed.id}}" tabindex="-1" role="dialog">
+                                                <td><a href="#"><i class="material-icons" data-toggle="modal" data-target="#modalnew{{index.id}}">visibility</i></a>
+                                                   
+                                                    <div class="modal fade" id="modalnew{{index.id}}" tabindex="-1" role="dialog">
                                                         <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
@@ -128,9 +159,12 @@
                                                                                 <div class="header">
                                                                                     <h4 style="align:center;">
                                                                                         <b> STUDENT DETAILS </b>
+                                                                                        <span style="float: right;">
+                                                                                            <a href="{% url 'schoolPortal:pdf_view' slug=index.id %} " target="_blank"> <button type="submit" class="btn bg-red waves-effect" 
+                                                                                            name="export"><i class="material-icons">print</i> Print Record</button></a></span>
                                                                                     </h4>
                                                                                     
-                                                                                    {% if request.path == '/school/current_index' %}
+                                                                                    {% if '/school/current_index' in request.path %}
                                                                                         <ul class="header-dropdown m-r--5">
                                                                                             <li class="dropdown" style="list-style:none;">
                                                                                                 <a href="javascript:void(0);" class="dropdown-toggle"data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -138,7 +172,11 @@
                                                                                                 </a>
                                                                                                 <ul class="dropdown-menu pull-right">
                                                                                                     <li><a href="{% url 'schoolPortal:delete_record' index.id %} ">Delete</a></li>
-                                                                                                    <li><a href="{% url 'schoolPortal:update_indexing' index.id  %}">Edit</a></li>
+                                                                                                    {% if close_query.close_index_reg is False %}
+                                                                                                        <li>    <a href="{% url 'schoolPortal:update_indexing' index.id  %}">Edit</a></li>
+                                                                                                    {% else %}  
+                                                                                                        <li> <a href="" onclick="closed_alert()">Edit</a></li>
+                                                                                                        {% endif %}
                                                                                                 </ul>
                                                                                             </li>
                                                                                         </ul>
@@ -165,10 +203,14 @@
                                                                                             <td><b>Cadre: </b> {{index.cadre|title}} </td>
                                                                                         </tr>
                                                                                         <tr>
-                                                                                            <td><b>Surname: </b>{{index.surname|title}} </td>
-                                                                                            <td><b>Other Names: </b> {{index.first_name|title}} </td>
+                                                                                            <td><b>First Name: </b>{{index.first_name|title}} </td>
+                                                                                            <td><b>Middle Name: </b> {{index.middle_name|title}} </td>
+                                                                                        </t>
+                                                                                         <tr>
+                                                                                            <td><b>Last Name: </b>{{index.surname|title}} </td>
+                                                                                            <td><b>Gender: </b> {{index.sex|title}} </td>
                                                                                         </tr>
-
+                                                                                        
                                                                                         <tr>
                                                                                             <td><b>State Of Origin:</b> {{index.state|title}} </td>
                                                                                             <td><b>Age: </b> {{index.age|title}} </td>
@@ -191,16 +233,16 @@
                                                                                         </tr>
                                                                                         <tr>
                                                                                             <td><b>School Attended with Date (3): </b> {{index.school_attended3|title}}</td>
-                                                                                            <td><b>School Attended with Date (4): </b> {{index.school_attended4|title}}</td>
-                                                                                        </tr>
-                                                                                        <tr>
                                                                                             <td><b>Qualification with Date (1): </b> {{index.qualification1|title}} </td>
-                                                                                            <td><b>Qualification with Date (2): </b> {{index.qualification2|title}}</td>
                                                                                         </tr>
                                                                                         <tr>
+                                                                                            <td><b>Qualification with Date (2): </b> {{index.qualification2|title}} </td>
+                                                                                            <td><b>Qualification with Date (3): </b> {{index.qualification3|title}}</td>
+                                                                                        </tr>
+                                                                                        <!-- <tr>
                                                                                             <td><b>Qualification with Date (3): </b> {{index.qualification3|title}}</td>
                                                                                             <td><b>Qualification with Date (4): </b> {{index.qualification4|title}}</td>
-                                                                                        </tr>
+                                                                                        </tr> -->
                                                                                         <tr>
                                                                                             <td><b>Year Of Admission: </b> {{index.admission_year|title}}</td>
                                                                                             <td><b>Year Of Graduation: </b> {{index.graduation_year|title}}</td>
@@ -210,7 +252,8 @@
                                                                                             <td><b>Place of Work: </b> {{index.place_of_work|title}}</td>
                                                                                         </tr>
                                                                                         <tr>
-                                                                                              </td>
+                                                                                              
+                                                                                        </td>
                                                                                         </tr>
                                                                                         <tr>
                                                                                             <td><b>Referee Name(1): </b> {{index.referee_name1|title}}</td>
@@ -230,31 +273,31 @@
                                                                                         <tr>
                                                                                             <td> 
                                                                                                 <b>O'Level Certificate (1)</b>
-                                                                                                <button type="button"  data-toggle="modal" data-target="#0level1Modal" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
-                                                                                                <div id="0level1Modal" class="modal" role="dialog">
+                                                                                                <button type="button"  data-toggle="modal" data-target="#olevel1Modal" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                                <div id="olevel1Modal" class="modal" role="dialog">
                                                                                                 <div class="modal-dialog modal-lg">
 
                                                                                                     <!-- Modal content-->
                                                                                                     <div class="modal-content">
                                                                                                       <div class="modal-header">
-                                                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                                        <button type="button" class="close"  onclick="document.getElementById('olevel1Modal').style.display='none'">&times;</button>
                                                                                                         <h4 class="modal-title">O level Result (1)</h4>
                                                                                                       </div>
                                                                                                       <div class="modal-body">
-                                                                                                        {% if index.o_levelcert1 %}
-                                                                                                        <img src="{{index.o_levelcert1.url}}" width="100%" height="100%" alt="User" style="border: 4px solid #efefef;"/>
+                                                                                                        {% if index.o_level_cert1 %}
+                                                                                                        <img src="{{index.o_level_cert1.url}}" width="100%" height="100%" alt="User" style="border: 4px solid #efefef;"/>
                                                                                                         {% elif school_data.sch_logo is none %}
                                                                                                             <h5>Result not uploaded</h5>
                                                                                                         {% endif %}
                                                                                                       </div>
                                                                                                       <div class="modal-footer">
-                                                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                        <button type="button" class="btn btn-default" id="modal1" >Close</button>
                                                                                                       </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 </div>
                                                                                             </td>
-
+                                                                                            {% if index.exam_sitting == '2' %}
                                                                                             <td> 
                                                                                                 <b>O'Level Certificate (2)</b>
                                                                                             
@@ -269,39 +312,39 @@
                                                                                                         <h4 class="modal-title">O level Result (2) </h4>
                                                                                                       </div>
                                                                                                       <div class="modal-body">
-                                                                                                        {% if index.o_levelcert2 %}
-                                                                                                        <img src="{{index.o_levelcert2.url}}" width="100%" height="100%" alt="User" style="border: 4px solid #efefef;"/>
+                                                                                                        {% if index.o_level_cert2 %}
+                                                                                                        <img src="{{index.o_level_cert2.url}}" width="100%" height="100%" alt="User" style="border: 4px solid #efefef;"/>
                                                                                                         {% elif school_data.sch_logo is none %}
                                                                                                             <h5>Result not uploaded</h5>
                                                                                                         {% endif %}
                                                                                                       </div>
                                                                                                       <div class="modal-footer">
-                                                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                        <button type="button" class="btn btn-default" id="modal2">Close</button>
                                                                                                       </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                 </div>
                                                                                         </td>
+                                                                                        {% endif %}
                                                 
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <b>Display Grade</b>
-                                                    <button type="button"  data-toggle="modal" data-target="#gradeDisplay" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
-                                                    <div id="gradeDisplay{{indexed.id}}" class="modal" role="dialog">
+                                                    <button type="button"  data-toggle="modal" data-target="#gradeDisplay{{index.id}}" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                    <div id="gradeDisplay{{index.id}}" class="modal gradeModal" role="dialog">
                                                         <div class="modal-dialog modal-md">
 
                                                             <!-- Modal content-->
                                                             <div class="modal-content">
                                                               <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                <h4 class="modal-title">O'Level Result(1)</h4>
-                                                              </div>
+                                                                <!-- <button type="button" class="close">&times;</button> -->
+                                                               </div>
                                                               <div class="modal-body">
-                                                                <h5 style="font-size: 16px;">O'Level Result(2)</h5><br>
-                                                                <p><strong> Examination Number: {{index.examination_number2}} </strong></p>
-                                                                <p><strong> Examination Type:  {{index.examination_type2}} </strong> </p>
-                                                                <p><strong> Examination Year:  {{ index.examination_year2}} </strong></h5>
+                                                                <h5 style="font-size: 16px;">O'Level Result(1)</h5><br>
+                                                                <p><strong> Examination Number: {{index.examination_number1}} </strong></p>
+                                                                <p><strong> Examination Type:  {{index.examination_type1}} </strong> </p>
+                                                                <p><strong> Examination Year:  {{ index.examination_year1}} </strong></h5>
                                                                 <!-- <h5 </h5> -->
                                                                     <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                                                         <thead>
@@ -352,9 +395,9 @@
                                                                         </table>
 
                                                                         
-                                                                    <br><br>
-                                                                    {% if index.exam_sitting == 2 %}
-                                                                    <br><br>
+                                                                   
+                                                                    {% if index.exam_sitting == '2' %}
+                                                                    <br>
                                                                         <h5 style="font-size: 16px;">O'Level Result(2)</h5><br>
                                                                         <p><strong> Examination Number: {{index.examination_number2}} </strong></p>
                                                                         <p><strong> Examination Type:  {{index.examination_type2}} </strong> </p>
@@ -411,7 +454,7 @@
                                                                             {% endif %}
                                                             
                                                               <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                <button type="button" class="btn btn-default" onclick="$('#gradeDisplay{{index.id}}').modal('hide');">Close</button>
                                                               </div>
                                                             </div>
 
@@ -438,7 +481,7 @@
                                                                 {% endif %}
                                                              </div>
                                                               <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                <button type="button" class="btn btn-default"  onclick="$('#imgModal').modal('hide');">Close</button>
                                                               </div>
                                                             </div>
 
@@ -467,10 +510,10 @@
 
         </div>
         </td>
-        {% if request.path == '/school/current_index' %}
+        {% if '/school/current_index'  in request.path %}
 
             <td>
-                <ul>
+                <ul>   
                     <li class="dropdown" style="list-style:none;">
                         <a href="javascript:void(0);" class="dropdown-toggle"style="padding-left:-10px" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_vert</i>
@@ -478,6 +521,7 @@
                         <ul class="dropdown-menu pull-right">
 
                             <li><a href="{% url 'schoolPortal:delete_record' index.id %} ">Delete</a></li>
+
                             <li><a href="{% url 'schoolPortal:update_indexing' index.id  %}">Edit</a></li>
                         </ul>
                     </li>
@@ -491,8 +535,7 @@
         {% endif %}
         </tbody>
         </table>
-
-
+        
         <!-- Indexing Paginator -->
         {% if indexed.has_other_pages %}
             <nav aria-label="Indexed Pagination" class="mb-4">
@@ -533,13 +576,14 @@
                     {% endif %}
                 </ul>
             </nav>
+            
         {% endif %}
         </div>
         </div>
                             <!-- #END# Exportable Table -->
     </section>
 
-    {% if request.path == '/school/current_index' %}
+    {% if '/school/current_index' in request.path %}
     <form action="{% url 'schoolPortal:submit_all_index' %}" method="POST">
         {% csrf_token %}
         <section class="content">
@@ -562,6 +606,32 @@
             document.getElementById('pic2').style.display='block';
         }
     </script>
+
+    <script>
+        var modal_1 = document.getElementById('modal1');
+        var modal_2 = document.getElementById('modal2');
+        var modal_3 = document.getElementById('modal3');
+
+// When the user clicks anywhere outside of the modal, close it
+modal_1.onclick = function() {
+    console.log("Checking")
+    document.getElementById('olevel1Modal').style.display='none';
+    $('.modal-backdrop').remove();
+}
+
+modal_2.onclick = function() {
+    console.log("Checking")
+    document.getElementById('0level2Modal').style.display='none';
+    $('.modal-backdrop').remove();
+}
+// modal_3.onclick = function() {
+//     console.log("Checking")
+    
+//     document.getElementById('gradeDisplay{{index.id}}').style.display='none';
+//     $('.modal-backdrop').remove();
+// }
+    </script>
 {% endif %}
         {% endblock %}
 
+      

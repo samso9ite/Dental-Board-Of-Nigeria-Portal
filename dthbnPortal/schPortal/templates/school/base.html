@@ -15,6 +15,9 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap.min.css" integrity="sha512-BMbq2It2D3J17/C7aRklzOODG1IQ3+MHw3ifzBHMBwGO/0yUqYmsStgBjI0z5EYlaDEFnvYV7gNYdD3vFLRKsA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.jqueryui.min.css" integrity="sha512-x2AeaPQ8YOMtmWeicVYULhggwMf73vuodGL7GwzRyrPDjOUSABKU7Rw9c3WNFRua9/BvX/ED1IK3VTSsISF6TQ==" crossorigin="anonymous" />
+
 
     <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
@@ -119,108 +122,218 @@
             <div class="menu">
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="active">
+                    
+                    <li class="">
                         <a href="{% url 'schoolPortal:dashboard' %}" >
                             <i class="material-icons">home</i>
                             <span>Home</span>
                         </a>
                     </li>
+                    {% if 'create_ticket' in request.path or 'all_ticket' in request.path or 'answered_ticket' in request.path or 'closed_ticket' in request.path %}
+                    <li class="active">
+                    {% else %}
                     <li>
+                    {% endif %}
+                    
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">email</i>
                             <span> Ticket</span>
                         </a>
                         <ul class="ml-menu">
+                            {% if 'create_ticket' in request.path %}
+                            <li class="active">
+                            {% else %}
                             <li>
+                            {% endif %}
                                 <a href="{% url 'schoolPortal:create_ticket' %}">
                                     <span>Open Ticket</span>
                                 </a>
+                            </li>
+                            {% if 'all_ticket' in request.path %}
+                            <li class="active">
+                            {% else %}
+                            <li>
+                            {% endif %}
                                 <a href="{% url 'schoolPortal:all_ticket' %}">
                                     <span>All Ticket</span>
                                 </a>
+                            </li>
+                            {% if 'answered_ticket' in request.path %}
+                            <li class="active">
+                            {% else %}
+                            <li>
+                            {% endif %}
                                 <a href="{% url 'schoolPortal:answered_ticket' %}">
                                     <span> Answered Ticket</span>
                                 </a>
+                            </li>
+                            {% if 'closed_ticket' in request.path %}
+                            <li class="active">
+                            {% else %}
+                            <li>
+                            {% endif %}
                                 <a href="{% url 'schoolPortal:closed_ticket' %}">
                                     <span>Closed Ticket</span>
                                 </a>
                             </li>
+                            
                         </ul>
                     </li>
 
+                    {% if 'current_index' in request.path or 'new_indexing' in request.path or 'indexed_record' in request.path or 'approved_student' in request.path  or 'unaproved_student' in request.path %}
+                    <li class="active">
+                    {% else %}
+                    <li>
+                    {% endif %}
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">email</i>
+                            <span> Indexing</span>
+                        </a>
+                        <ul class="ml-menu">
+                            {% if 'new_indexing' in request.path %}
+                                <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                                {% if index_access.close_index_reg is False %}
+                                <a href="{% url 'schoolPortal:new_indexing' %}">
+                                    <i class="material-icons">create_new_folder</i>
+                                    <span>New Indexing</span>
+                                </a>
+                              {% else %}
+                                <a href="" id="closed" onclick="closed_alert()">
+                                    <i class="material-icons">create_new_folder</i>
+                                    <span>New Indexing</span>
+                                </a>
+                               {% endif %}
+                            </li>
+
+                            {% if 'current_index' in request.path %}
+                                <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                                <a href="{% url 'schoolPortal:currentIndex' year='2021-2022' %}">
+                                    <i class="material-icons">folder_open</i>
+                                    <span>Current Indexing</span>
+                                </a>
+        
+                            </li>
+                            
+                            {% if 'indexed_record' in request.path %}
+                                <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                                <a href="{% url 'schoolPortal:indexed_record' year='2021-2022' %}">
+                                    <i class="material-icons">folder</i>
+                                    <span>Submitted Index Record</span>
+                                </a>
+        
+                            </li>
+                           
+                            {% if 'approved_student' in request.path %}
+                                <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                                    <a href="{% url 'schoolPortal:approved_student' year='2021-2022' %} ">
+                                        <i class="material-icons">offline_pin</i>
+                                        <span>Approved Index Record</span>
+                                    </a>
+            
+                                </li>
+                            {% if 'unaproved_student' in request.path %}
+                            <li class="active">
+                            {% else %}
+                            <li>
+                            {% endif %}
+                                <a href="{% url 'schoolPortal:unapproved_student' year='2021-2022' %} ">
+                                    <i class="material-icons">cancel</i>
+                                    <span>Declined Index  Record</span>
+                                </a>
+        
+                            </li>
+                        </ul>
+                           
+                    </li>
+                   
+                    {% if 'current_exam_record' in request.path or 'submitted_exam_record' in request.path or 'approved_exam_record' in request.path or 'declined_exam_record' in request.path  or 'exam_reg' in request.path %}
+                    <li class="active">
+                    {% else %}
+                    <li>
+                    {% endif %}
                     
-                    <li>
-                        <a href="{% url 'schoolPortal:new_indexing' %}">
-                            <i class="material-icons">create_new_folder</i>
-                            <span>New Indexing</span>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">create_new_folder </i>
+                            <span> Examination</span>
                         </a>
-
-                    </li>
-    
-                    <li>
-                        <a href="{% url 'schoolPortal:currentIndex' %}">
-                            <i class="material-icons">folder_open</i>
-                            <span>Current Indexing</span>
-                        </a>
-
-                    </li>
-                    
-
-                    <li>
-                        <a href="{% url 'schoolPortal:indexed_record' %}">
-                            <i class="material-icons">folder</i>
-                            <span>Submitted Index Record</span>
-                        </a>
-
-                    </li>
-                    
-                    <li>
-                        <a href="{% url 'schoolPortal:approved_student' %} ">
-                            <i class="material-icons">offline_pin</i>
-                            <span>Approved Index Record</span>
-                        </a>
-
-                    </li>
-
-                    <li>
-                        <a href="{% url 'schoolPortal:unapproved_student' %} ">
-                            <i class="material-icons">cancel</i>
-                            <span>Declined Index  Record</span>
-                        </a>
-
-                    </li>
-                    
-                    <li>
-                        <a href="{% url 'schoolPortal:exam_reg' %}">
-                            <i class="material-icons">create_new_folder</i>
-                            <span>New Exam Registration </span>
-                        </a>
-
-                    </li>
-                    <li>
-                        <a href="{% url 'schoolPortal:current_exam_record' %} ">
-                            <i class="material-icons">folder_open</i>
-                            <span>Exam Record (Current)</span>
-                        </a>
-                    </li>
-                      <li>
-                        <a href="{% url 'schoolPortal:submitted_exam_record' %}">
-                            <i class="material-icons">folder</i>
-                            <span>Exam Record (Submitted)</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'schoolPortal:approved_exam_record' %} ">
-                            <i class="material-icons">offline_pin</i>
-                            <span>Exam Record (Approved)</span>
-                        </a>
-                    </li>
-                      <li>
-                        <a href="{% url 'schoolPortal:declined_exam_record' %}">
-                            <i class="material-icons">cancel</i>
-                            <span>Exam Record (Declined)</span>
-                        </a>
-                    </li>
+                      
+                        <ul class="ml-menu">
+                            {% if 'exam_reg' in request.path %}
+                                <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                                {% if index_access.close_exam_reg is False %}
+                                    <a href="{% url 'schoolPortal:exam_reg' %}">
+                                        <i class="material-icons">create_new_folder</i>
+                                        <span>New Exam Reg </span>
+                                    </a>
+                                {% else %}
+                                    <a href="" id="closed" onclick="closed_alert()">
+                                        <i class="material-icons">create_new_folder</i>
+                                        <span>New Exam Registration</span>
+                                    </a>
+                               {% endif %}
+        
+                            </li>
+                            {% if 'current_exam_record' in request.path %}
+                                <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                                    <a href="{% url 'schoolPortal:current_exam_record' year='2020-2021' %} ">
+                                        <i class="material-icons">folder_open</i>
+                                        <span>Exam Record (Current)</span>
+                                    </a>
+                                  
+                                </li>
+                              
+                            {% if 'submitted_exam_record' in request.path %}
+                            <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                                <a href="{% url 'schoolPortal:submitted_exam_record' year='2020-2021' %}">
+                                    <i class="material-icons">folder</i>
+                                    <span>Exam Record (Submitted)</span>
+                                </a>
+                            </li>
+                            
+                            {% if 'approved_exam_record' in request.path %}
+                            <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                                <a href="{% url 'schoolPortal:approved_exam_record' year='2020-2021' %} ">
+                                    <i class="material-icons">offline_pin</i>
+                                    <span>Exam Record (Approved)</span>
+                                </a>
+                            </li>
+                            
+                            {% if 'declined_exam_record' in request.path %}
+                            <li class="active">
+                            {% else %}
+                                <li>
+                            {% endif %}
+                                <a href="{% url 'schoolPortal:declined_exam_record' year='2020-2021' %}">
+                                    <i class="material-icons">cancel</i>
+                                    <span>Exam Record (Declined)</span>
+                                </a>
+                            </li>
+                        </ul>
+                   
 
 
                     <li>
@@ -235,7 +348,7 @@
             <!-- Footer -->
             <div class="legal">
                 <div class="copyright">
-                    &copy; 2020 <a href="javascript:void(0);">Dental Therapists' Registration Board Of Nigeria</a>.
+                    &copy; {{current_year}} <a href="javascript:void(0);"> Dental Therapists' Registration Board Of Nigeria</a>.
                 </div>
                 <!-- <div class="version">
                     <b>Version: </b> 1.0.5
@@ -259,7 +372,7 @@
     <script src="{% static 'general/plugins/bootstrap/js/bootstrap.js' %}"></script>
 
     <!-- Select Plugin Js -->
-    <script src="{% static 'general/plugins/bootstrap-select/js/bootstrap-select.js' %}"></script>
+    <script src="{% static 'general/plugins/bootstrap-select/js/bootstrap-select.js' %x}"></script>
 
     <!-- Slimscroll Plugin Js -->
     <script src="{% static 'general/plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
@@ -294,34 +407,167 @@
     <!-- Demo Js -->
     <script src="{% static 'general/js/demo.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js" integrity="sha256-2RS1U6UNZdLS0Bc9z2vsvV4yLIbJNKxyA4mrx5uossk=" crossorigin="anonymous"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous"></script>
+    
 
     <script>
+        var table = $('table').DataTable({
+         
+        });
+    </script>
+
+    <script>  
+      function closed_alert(){
+          alert("Sorry! Indexing Has Been Closed")
+        //   location.reload();
+      }
+        $("#id_residential_country").change(function (){
+            var url = $("#reg_form").attr("data-cities-url");
+            var countryId = $(this).val();
+            console.log(countryId)
+
+            $.ajax({
+                
+                url: url,
+                data: {
+                    'residential_country':countryId
+                },
+               
+                success: function (data) {
+                    $("#id_residential_state").html(data);
+                }
+                
+            });
+        });
+
+
+        $("#id_office_country").change(function (){
+            var url = $("#reg_form").attr("data-office-url");
+            var countryId = $(this).val();
+            console.log(countryId)
+
+            $.ajax({
+                
+                url: url,
+                data: {
+                    'office_country':countryId
+                },
+               
+                success: function (data) {
+                    $("#id_office_state").html(data);
+                }
+                
+            });
+        });
+
+
         
-        $("#country").change(function () {
-            $.get("http://127.0.0.1:8000/school/ajax/load-lga/", function(data, status){
-           
-        var resObj = JSON.parse(data)
-        var htmlDesign = ""
-     
-        resObj.map((value,index)=>{
-               console.log(value.fields.name)
-               htmlDesign+= '<option value="'+value.model.pk+'">'+value.fields.name+'</option>'
-           })
+ $("#id_residential_state").change(function (){
+            var url = $("#reg_form").attr("data-lga-url");
+            var regionId = $(this).val();
+            console.log(regionId)
 
-           $("#state").html(htmlDesign)
+            $.ajax({
+                
+                url: url,
+                data: {
+                    'residential_state':regionId
+                },
+               
+                success: function (data) {
+                    $("#id_residential_lga").html(data);
+                }
+                
+            });
+        });
 
 
-     });
-        })
-     </script>
+        $("#id_office_state").change(function (){
+            var url = $("#reg_form").attr("data-officelga-url");
+            var regionId = $(this).val();
+            console.log(regionId)
 
+            $.ajax({
+                
+                url: url,
+                data: {
+                    'office_state':regionId
+                },
+               
+                success: function (data) {
+                    $("#id_office_lga").html(data);
+                }
+                
+            });
+        });
+
+
+        $("#id_state_of_origin").change(function (){
+            var url = $("#reg_form").attr("data-state-url");
+            var regionId = $(this).val();
+            console.log(regionId)
+
+            $.ajax({
+                
+                url: url,
+                data: {
+                    'state_of_origin':regionId
+                },
+               
+                success: function (data) {
+                    $("#id_lga_state").html(data);
+                }
+                
+            });
+        });
+
+        $("#id_state_of_birth").change(function (){
+            var url = $("#reg_form").attr("data-origin-url");
+            var regionId = $(this).val();
+            console.log(regionId)
+
+            $.ajax({
+                
+                url: url,
+                data: {
+                    'state_of_birth':regionId
+                },
+               
+                success: function (data) {
+                    $("#id_lga_of_birth").html(data);
+                }
+                
+            });
+        });
+
+
+        
+
+    </script>
+
+
+    <!-- <script>
+    $("#id_office_country").change(function (){
+            var url = $("#reg_form").attr("data-office-url");
+            var regionId = $(this).val();
+            console.log(regionId)
+
+            $.ajax({
+                
+                url: url,
+                data: {
+                    'office_country':regionId
+                },
+               
+                success: function (data) {
+                    $("#id_office_state").html(data);
+                }
+                
+            });
+    </script> -->
 
     {% load sweetify %}
     {% sweetify %}
 </body>
 
 </html>
-
-
-

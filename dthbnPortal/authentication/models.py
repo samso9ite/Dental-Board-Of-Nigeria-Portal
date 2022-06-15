@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 # from authentication.choices import *
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+# from profPortal.models import Professional
+from django.core.mail import send_mail
 
 # Create your models here.
 
@@ -25,7 +27,17 @@ class User(AbstractUser):
     profile_update = models.BooleanField(default=False, blank=True)
     block = models.BooleanField(default=False)
     suspend = models.BooleanField(default=False)
-   
+    is_indexing_staff = models.BooleanField(default=False)
+    is_exam_staff = models.BooleanField(default=False)
+    # professional = models.ForeignKey(Professional, on_delete=models.CASCADE, null=True )
+    def email_user(self, *args, **kwargs):
+        send_mail(
+           '{}'.format(args[0]),
+           '{}'.format(args[1]),
+           'info@dthbn.gov.ng',
+           [self.email],
+           fail_silently=False,
+           html_message=args[1]   )
 
 class Professional(models.Model):
     User = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -64,6 +76,7 @@ class Ticket(models.Model):
     first_created = models.BooleanField(default=False)
     read = models.BooleanField(default=False)
     notification = models.BooleanField(default=False)
+    closed = models.BooleanField(default=False)
 
 
 class SubTicket(models.Model):

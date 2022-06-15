@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls import url
+from django.urls import re_path as url
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('authentication.urls')),
     path('school/', include('schPortal.urls')),
-    url('^/', include('django.contrib.auth.urls')),
+    url('/', include('django.contrib.auth.urls')),
     path('professional/', include('profPortal.urls')),
     path('admin/', include('adminPortal.urls')),
-   ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

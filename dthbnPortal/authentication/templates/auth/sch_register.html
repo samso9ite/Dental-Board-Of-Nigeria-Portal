@@ -5,10 +5,12 @@
 {% load sweetify %}
 {% sweetify %}
 <div class="section-full content-inner-1">
+   
         <div class="login-form style-2">
             	<div class="tab-content bg-gray nav">
 
                     <div id="login" class="tab-pane active text-center">
+                    
                         {% if form.errors %}
                                 <!-- Error messaging -->
                                 <div id="errors">
@@ -48,27 +50,20 @@
                             </div>
                             <!-- /Error messaging -->
                         {% endif %}
-                       <!-- {% if messages %}
+                       {% if messages %}
                         <ul class="messages">
                             {% for message in messages %}
                                 <li {% if message.tags %}  class="{{message.tags}}"{% endif %}>
-                                    {{message}}
+                                    <!-- {{message}} -->
+                                    <div class="alert alert-danger">
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                         <strong>{{ message }}</strong> </div>
                                 </li>
                             {% endfor %}
                         </ul>
-                    {% endif %} -->
+                    {% endif %}
+                    
 
-                        <!-- {% if messages %}
-                            <ul>
-                                {% for message in messages %}
-                                <li>
-                                    <div class="alert alert-success">
-                                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                          <strong>{{ message.tags }}</strong>  {{message}}</div>
-                                <li>
-                                 {% endfor %}
-                            </ul>
-                        {% endif %} -->
 
                          <form class="p-a30 dez-form"  method="POST">
                              {% csrf_token %}

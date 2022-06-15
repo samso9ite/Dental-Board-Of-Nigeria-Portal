@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, ListView, View
 from schPortal.models import *
 from schPortal.forms import *
 from authentication.forms import *
 from authentication.models import Ticket, SubTicket
-from cities_light.models import Region
-from cities_light.models import Country
+from cities_light.models import Region, Country
 from django.urls import reverse_lazy, reverse
 from authentication.models import User
 from django.contrib.auth.decorators import login_required
@@ -15,15 +14,30 @@ from django.utils import timezone
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.defaulttags import register
-import sweetify
-import xlwt
-import random
+from adminPortal.models import *
+import xlwt, random, sweetify
 from django.template.defaulttags import register
-from django.http import JsonResponse
-from django.core import serializers
+# from adminPortal.render import Render
+from django_xhtml2pdf.utils import generate_pdf
+from django_xhtml2pdf.views import PdfMixin
 
 
-# Create your views here.
+class Pdf(View):
+    def get(self, request, *args, **kwargs):
+        slug=self.kwargs['slug']
+        if '/school/indexing/pdf' in request.path:
+            record = Indexing.objects.get(institution_id=request.user, id=slug)
+        elif '/school/exam/pdf' in request.path:
+           record = ExamReg.objects.get(institute_id=request.user, id=slug)
+        context_dict = {
+            'record': record,
+            'request': request
+        }
+        if '/school/indexing/pdf' in request.path:
+            return Render.render('school/indexing_pdf.html', context_dict)
+        elif '/school/exam/pdf' in request.path:
+            return Render.render('school/exam_pdf.html', context_dict)
+
 
 class SchoolProfile(LoginRequiredMixin,CreateView):
     model = School
@@ -38,26 +52,43 @@ class SchoolProfile(LoginRequiredMixin,CreateView):
             user = User.objects.get(id=user.id)
             user.profile_update = True
             user.save()
-            sweetify.success(request, 'Profile Updated Successfully', button='Great!')
+            sweetify.success(self.request, 'Profile Updated Successfully', button='Great!')
         except user.DoesNotExist:
-            sweetify.error(request, 'User Doesn\'t Exist', button='Great!')
+            sweetify.error(self.request, 'User Doesn\'t Exist', button='Great!')
         return super().form_valid(form)
        
-
-
-# def load_cities(request):
-#     country_id = request.Get.get('country')
-#     print(country_id)
-#     region = Region.objects.filter(country_id=country_id).order_by('name')
-#     return render(request, 'school/schools_account_update.html', {'region': region} )
-
+       
 def load_cities(request):
-    country_id = 1 #request.Get.get('country')
-    print(country_id)
+    country_id = request.GET.get('residential_country')
     region = Region.objects.filter(country_id=country_id).order_by('name')
-    response = serializers.serialize('json', region)
-    return JsonResponse(response, safe=False)
-    #return HttpResponse(response, content_type='application/json')
+    return render(request, 'school/dropdown_list.html', {'region': region} )
+
+def load_office_cities(request):
+    country_id = request.GET.get('office_country')
+    region = Region.objects.filter(country_id=country_id).order_by('name')
+    return render(request, 'school/office_cities.html', {'region': region} )
+
+def load_lga(request):
+    state_id = request.GET.get('residential_state')
+    lga = LGA.objects.filter(region_id=state_id)
+    return render(request, 'school/lga_dropdown.html', {'lga': lga} )
+
+def load_office_lga(request):
+    state_id = request.GET.get('office_state')
+    lga = LGA.objects.filter(region_id=state_id)
+    return render(request, 'school/office_lga.html', {'lga': lga} )
+
+
+def load_state(request):
+    state_id = request.GET.get('state_of_origin')
+    print(state_id)
+    lga = LGA.objects.filter(region_id=state_id)
+    return render(request, 'school/state_dropdown.html', {'lga': lga} )
+
+def load_state_origin(request):
+    state_id = request.GET.get('state_of_birth')
+    lga = LGA.objects.filter(region_id=state_id)
+    return render(request, 'school/origin.html', {'lga': lga} )
 
 
 @login_required
@@ -101,10 +132,6 @@ def AccountUpdate(request, User):
         return HttpResponseRedirect(reverse("Auth:Register"))     
 
 
-# @register.filter
-# def selected_labels(SignUp, programme):
-#     return [label for value, label in SignUp.fields[programme].choices if value in SignUp[programme].value()]
-
 class NewIndexingView(CreateView):
     model = Indexing
     template_name = "school/add_indexing.html"
@@ -113,20 +140,48 @@ class NewIndexingView(CreateView):
     success_url = reverse_lazy('schoolPortal:new_indexing')
 
     def form_valid(self, form) :
-        indexed = Indexing.objects.filter(institution=self.request.user.id).count()
-        assigned_quota = School.objects.values_list('index_quota_limit', flat=True).get(User_id=self.request.user.id)
-        try:
-            if indexed == assigned_quota:
-                sweetify.success(self.request, "Oops! Limit has been reached", persist='OK')
-                return HttpResponseRedirect(reverse("schoolPortal:currentIndex"))
+        school_instance = School.objects.get(User_id=self.request.user.id)
+        form.instance.year="2021-2022"
+        form.instance.institution_id = self.request.user.id
+        indexing_status = closeIndexing.objects.filter(id=1)    
+        for obj in indexing_status:
+           
+            indexing_state = obj.access
+            if indexing_state is False:
+                current_year = datetime.datetime.now().year
+                nxt_year = current_year + 1
+                # year = str(current_year) + "-" + str(nxt_year) 
+                year ="2021-2022"
+                indexed = Indexing.objects.filter(institution_id=self.request.user.id, year=year).count()
+                assigned= IndexLimit.objects.get(school=school_instance.id, year=year)
+                assigned_quota = assigned.assigned_limit  
+                try:
+                   
+                    if indexed is not 0:
+                        if assigned_quota:
+                            if indexed  == int(assigned_quota):
+                                sweetify.error(self.request, "Oops! Limit has been reached", persist='OK')
+                                return(HttpResponseRedirect(self.request.META['HTTP_REFERER']))
+                            else:
+                                form.instance.institution_id = self.request.user.id
+                                form.save()
+                                sweetify.success(self.request, 'Indexed Successful', button='Great!')
+                                return super().form_valid(form)
+                                
+                        else:
+                            sweetify.error(self.request, "Oops! Contact the board limit has not been set ", persist='OK')
+                            return(HttpResponseRedirect(self.request.META['HTTP_REFERER']))
+                    elif indexed is 0 and assigned_quota:
+                        form.instance.institution_id = self.request.user.id
+                        form.save()
+                        sweetify.success(self.request, 'Indexed Successful', button='Great!')
+                        return super().form_valid(form)
+                except:
+                    pass
             else:
-                form.instance.institution = self.request.user
-                sweetify.success(self.request, 'Indexed Successful', button='Great!')
-                return super().form_valid(form)
-        except:
-            pass
-      
-    
+                sweetify.error(self.request, "Indexing Closed", persist='OK')
+                return(HttpResponseRedirect(self.request.META['HTTP_REFERER']))
+        return HttpResponseRedirect(reverse_lazy('schoolPortal:new_indexing'))
    
 class ExamReg(CreateView, LoginRequiredMixin):
     model = ExamRegistration
@@ -136,9 +191,55 @@ class ExamReg(CreateView, LoginRequiredMixin):
     template_name = 'school/Exam_reg.html'
     
     def form_valid(self, form):
-        form.instance.school = self.request.user
-        return super().form_valid(form)
-    
+        exam_status = closeExamRegistration.objects.filter(id=1)
+        for obj in exam_status:
+            exam_state = obj.access
+            if exam_state is False:
+                current_year = datetime.datetime.now().year
+                nxt_year = current_year + 1
+                year = str(current_year) + "-" + str(nxt_year)
+                registered = ExamRegistration.objects.filter(institute_id=self.request.user.id, year=year).count()
+                assigned_quota = examLimit.objects.values_list('assigned_limit', flat=True).get(school=self.request.user.id, year=year)
+          
+                try:
+                    if registered is not 0:
+                        print(registered)
+                        if assigned_quota:
+                            if registered  == int(assigned_quota):
+                                sweetify.error(self.request, "Oops! Limit has been reached", persist='OK')
+                                return(HttpResponseRedirect(self.request.META['HTTP_REFERER']))
+                            else:
+                                form.instance.institute_id = self.request.user.id
+                                form.instance.year = year
+                                # form.save()
+                                sweetify.success(self.request, 'Indexed Successful', button='Great!')
+                                return super().form_valid(form)
+            
+                        else:
+                            sweetify.error(self.request, "Oops! Contact the board limit has not been set ", persist='OK')
+                            return(HttpResponseRedirect(self.request.META['HTTP_REFERER']))
+                    elif registered is 0 and assigned_quota:
+                        form.instance.institute_id = self.request.user.id
+                        form.instance.year = year
+                        sweetify.success(self.request, 'Indexed Successful', button='Great!')
+                        return super().form_valid(form)
+                    
+                except:
+                    pass
+            else:
+                sweetify.error(self.request, 'Exam Registraton Closed', button='Great!')
+                return(HttpResponseRedirect(self.request.META['HTTP_REFERER']))
+
+
+    def get_context_data(self, **kwargs):
+        country_data = Country.objects.all()
+        state_data = Region.objects.all()
+        lga_data = LGA.objects.all()
+        ctx =  super(ExamReg, self).get_context_data(**kwargs)
+        ctx['countries'] = country_data
+        ctx['state'] = state_data
+        ctx['lga'] = lga_data
+        return ctx
     
 
 class CurrentIndexing(TemplateView):
@@ -146,28 +247,32 @@ class CurrentIndexing(TemplateView):
 
 
 @login_required
-def IndexListView(request):
+def IndexListView(request, year):
     if request.user.is_authenticated and request.user.is_school:
-    
         queryset = ''
-        if request.path == '/school/current_index':
-            queryset = Indexing.objects.filter(institution=request.user).filter(submitted=False)
-            
-        elif request.path == '/school/indexed_record/':
-            queryset  = Indexing.objects.filter(institution=request.user).filter(submitted=True)
-
-        elif request.path == '/school/approved_student/':
-            queryset = Indexing.objects.filter(institution=request.user).filter(approved = True)
-
-        elif request.path == '/school/unapproved_student/':
-            queryset = Indexing.objects.filter(institution=request.user).filter(unapproved = True, submitted=True)
-
+        total_indexed = ''
+        total_unapproved = ''
+        total_approved = ''
+        currentIndex_total = ''
+        close_query = ''
+       
+        if '/school/current_index' in request.path:
+            queryset = Indexing.objects.filter(institution_id=request.user,submitted=False, year=year)
+            queryset.filter()
+            currentIndex_total =Indexing.objects.filter(institution=request.user.id,submitted=False, year=year).count()
+        elif '/school/indexed_record/' in request.path:
+            queryset  = Indexing.objects.filter(institution=request.user, submitted=True, year=year)
+            total_indexed = Indexing.objects.filter(institution=request.user, submitted=True, year=year).count()
+        elif '/school/approved_student/' in request.path:
+            queryset = Indexing.objects.filter(institution=request.user).filter(approved = True, year=year)
+            total_approved = Indexing.objects.filter(institution=request.user).filter(approved = True, year=year).count()
+        elif '/school/unapproved_student/' in request.path:
+            queryset = Indexing.objects.filter(institution=request.user).filter(unapproved = True, submitted=True, year=year)
+            total_unapproved = Indexing.objects.filter(institution=request.user).filter(unapproved = True, submitted=True, year=year).count()
         else :
             pass
-        
-    
         page = request.GET.get('page', 1)  
-        paginator = Paginator(queryset, 3)
+        paginator = Paginator(queryset, 10000)
 
         try:
             indexed = paginator.page(page)
@@ -175,31 +280,38 @@ def IndexListView(request):
             indexed = paginator.page(1)
         except EmptyPage:
             indexed = paginator.page(paginator.num_pages)
-
-        return render(request, 'school/indexing_list.html', {'indexed':indexed})
+        context = {'currentIndex_total': currentIndex_total, 'close_query':close_query, 'total_indexed': total_indexed, 'total_unapproved': total_unapproved
+                    ,'total_approved': total_approved, 'indexed': indexed, 'year':year,}
+                    
+        return render(request, 'school/indexing_list.html', context)
     
     elif request.user.is_authenticated and not request.user.is_school:
         return HttpResponseRedirect(reverse("Auth:Register")) 
 
-
 @login_required
-def ExamListView(request):
+def ExamListView(request, year):
     if request.user.is_authenticated and request.user.is_school:
-    
         queryset = ''
-        sch_id = School.objects.values_list('id', flat=True).get(User_id=request.user)
-            
-        if request.path == '/school/current_exam_record/':
-            queryset = ExamRegistration.objects.filter(institute=sch_id).filter(submitted=False)
-        
-        elif request.path == '/school/submitted_exam_record/':
-            queryset = ExamRegistration.objects.filter(institute=sch_id).filter(submitted=True)
+        currentExam_total = ''
+        total_exam_submitted = ''
+        total_exam_approved = ''
+        total_exam_declined = ''
+        close_query = ''
+             
+        if '/school/current_exam_record/' in request.path:
+            queryset = ExamRegistration.objects.filter(institute=request.user.id, year=year).filter(submitted=False)
+            currentExam_total = ExamRegistration.objects.filter(institute=request.user.id, year=year).filter(submitted=False).count()
+            close_query = School.objects.get(User_id=request.user)
+        elif '/school/submitted_exam_record/'  in request.path:
+            queryset = ExamRegistration.objects.filter(institute=request.user.id, year=year).filter(submitted=True)
+            total_exam_submitted =  ExamRegistration.objects.filter(institute=request.user.id, year=year).filter(submitted=True).count()
+        elif  '/school/approved_exam_record/'  in request.path:
+            queryset = ExamRegistration.objects.filter(institute=request.user.id, year=year).filter(approved=True)
+            total_exam_approved = ExamRegistration.objects.filter(institute=request.user.id, year=year).filter(approved=True).count()
 
-        elif request.path == '/school/approved_exam_record/':
-            queryset = ExamRegistration.objects.filter(institute=sch_id).filter(approved=True)
-
-        elif request.path == '/school/declined_exam_record/':
-            queryset = ExamRegistration.objects.filter(institute=sch_id).filter(declined=True)
+        elif '/school/declined_exam_record/'  in request.path:
+            queryset = ExamRegistration.objects.filter(institute=request.user.id, year=year).filter(declined=True)
+            total_exam_declined = ExamRegistration.objects.filter(institute=request.user.id, year=year).filter(declined=True).count()
         else:
             pass
 
@@ -212,64 +324,52 @@ def ExamListView(request):
             exam_records = paginator.page(1)
         except EmptyPage :
             exam_records = paginator.page(paginator.num_pages)
+        context = {'exam_records': exam_records, 'currentExam_total': currentExam_total, 'total_exam_submitted': total_exam_submitted
+            ,'total_exam_approved': total_exam_approved, 'total_exam_declined': total_exam_declined,
+            'close_query':close_query, 'year':year}
 
-
-        return render(request, 'school/exam_record_list.html', {'exam_records': exam_records})
+        return render(request, 'school/exam_record_list.html', context)
 
     elif request.user.is_authenticated and not request.user.is_school:
         return HttpResponseRedirect(reverse("Auth:Register")) 
 
-@login_required
-def edit_index(request, id):
-    if request.user.is_authenticated and request.user.is_school:
+class edit_index(UpdateView):
+    model = Indexing
+    form_class = IndexingForm
+    template_name = 'school/add_indexing.html'
+    success_url = reverse_lazy('schoolPortal:new_indexing')
 
-        index_update_data = Indexing.objects.get(id=id)
-        form = IndexingForm(request.POST or None, instance = index_update_data)
+    def form_valid(self, form):
+        form.save(commit=False)
+        form.instance.institution = self.request.user
+        form.instance.year="2021-2022"
+        form.save()
+        sweetify.success(self.request, 'Record updated succesffully', button='Great!')
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('schoolPortal:currentIndex', kwargs={"year":'2021-2022'})
 
-        if form.is_valid():
-            form.save(commit=False)
-            form.instance.institution = request.user
-            form.save()
-            sweetify.success(request, 'Record updated succesffully', button='Great!')
-            return render(request, 'school/add_indexing.html', {'form':form})
-
-    else:
-        return HttpResponseRedirect(reverse("Auth:Register")) 
-
-@login_required
-def update_exam_record(request, id):
-    if request.user.is_authenticated and request.user.is_school:
-
-        exam_record_data = ExamRegistration.objects.filter(id=id)
-        form = ExamRegForm(request.POST or None, instance=exam_record_data)
-
-        if form.is_valid() and user.is_school:
-            form.save(commit=False)
-            form.instance.school = request.user
-            form.save()
-            sweetify.success(request, 'Record updated succesffully', button='Great!')
-            return render(request, 'school/Exam_reg.html', {'form':form})
-
-    else:
-        return HttpResponseRedirect(reverse("Auth:Register")) 
-
-
+class update_exam_record(UpdateView):
+    model = ExamRegistration
+    form_class = ExamRegForm
+    template_name = 'school/Exam_reg.html'
+    success_url = reverse_lazy('profPortal:dashboard') 
 
 @login_required
 def delete_record(request, id):
     if '/school/delete_record/' in request.path :
         try :
-            record = Indexing.objects.get(id=id)
-           
+            record = Indexing.objects.get(id=id)  
         except Indexing.DoesNotExist:
             pass
         record.delete()
         sweetify.success(request, "Record has been deleted")
-        return HttpResponseRedirect(reverse("schoolPortal:currentIndex")) 
+        return(HttpResponseRedirect(request.META['HTTP_REFERER'])) 
 
     elif '/school/current_exam_record/' in request.path:
         try:
-            record = ExamRegistration.objects.get(id)
+            record = ExamRegistration.objects.get(id=id)
         except record.DoesNotExist:
             pass
         record.delete()
@@ -281,22 +381,31 @@ def submit_index_record(request):
     records = ''
     
     try :
-        records = Indexing.objects.filter(Q(submitted=False), 
-        institution_id=request.user.id).update(submitted=True) 
+        records = Indexing.objects.filter(submitted=False, institution_id=request.user.id)
+        if records :
+            records.update(submitted=True) 
+            sweetify.success(request, 'Record has been submitted' , button='Great!')
+        else:
+            sweetify.error(request, 'Record Empty' , button='Ok!')
+
     except Indexing.DoesNotExist:
         sweetify.error(request, 'Record Doesn\'t Exist' , button='Great!')
-    return render(request, 'school/indexing_list.html')
+    return(HttpResponseRedirect(request.META['HTTP_REFERER']))
 
 @login_required
 def submit_exam_record(request):
     records = ''
     try :
-        records = ExamRegistration.objects.filter(Q(submitted=False),
-         school_id=request.user.id).update(submitted=True)
+        records = ExamRegistration.objects.filter(submitted=False, school_id=request.user.id)
+        if records :
+            records.update(submitted=True) 
+            sweetify.success(request, 'Record has been submitted' , button='Great!')
+        else:
+            sweetify.error(request, 'Record Empty' , button='Ok!')
+        
     except ExamRegistration.DoesNotExist():
         sweetify.error(request, 'Record Doesn\'t Exist' , button='Great!')
-    return render(request, 'school/exam_record_list.html')
-
+    return(HttpResponseRedirect(request.META['HTTP_REFERER']))
 
 class ViewTicket(TemplateView):
     template_name = 'school/view_ticket.html'
@@ -304,7 +413,7 @@ class ViewTicket(TemplateView):
 class CreateTicket(CreateView, LoginRequiredMixin):
     model = Ticket
     form_class = TicketForm
-    success_url = reverse_lazy("schoolPortal:ticket")
+    success_url = reverse_lazy("schoolPortal:all_ticket")
     template_name = "school/ticket.html"
 
     def form_valid(self, form):
@@ -316,18 +425,6 @@ class CreateTicket(CreateView, LoginRequiredMixin):
         form.instance.first_created = True
         sweetify.success(self.request, 'Ticket Created', button='Great!')
         return super().form_valid(form)
-
-    # def get_query_set(self):
-    #     print("Jesus is great")
-    #     query = Ticket.objects.filter(user_id=self.request.user, first_created=True).order_by('_id')[:5]
-    #     all_answered = Ticket.objects.filter(user_id=self.request.user.id, ticket_status='Answered').count()
-    #     all_closed = Ticket.objects.filter(user_id=self.request.user.id, ticket_status='Closed').count()
-    #     all_opened = Ticket.objects.filter(user_id=self.request.user.id, ticket_status='Open').count()
-    #     print(query)
-    #     print(all_opened)
-    #     context = {'query': query, 'all_answered':all_answered, 'all_closed': all_closed, 'all_opened': all_opened }
-    #     return  query
-
 
 @login_required
 def ticket_list(request):
@@ -413,9 +510,9 @@ def view_a_ticket(request, id):
             return HttpResponseRedirect(reverse('adminPortal:view_ticket', kwargs={'id':id}))
         else:
             sweetify.error(request, "Ticket Status is Closed ")
-        
-        
+  
     return render(request, 'school/view_ticket.html', {'record': record, 'all_records': all_records})
+
 
 @login_required
 def export_indexed_stu(request):
@@ -484,8 +581,7 @@ def export_exam_record(request):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True   
     if '/school/export_submitted_exam_record/xls/' or '/school/export_current_exam_record/xls/' or '/school/export_approved_exam_record/xls/' in request.path: 
-        sch_id = School.objects.values_list('id', flat=True).get(User_id=request.user.id)
-        print(sch_id)
+        request.user.id = School.objects.values_list('id', flat=True).get(User_id=request.user.id)
         response = HttpResponse(content_type='applicaton/mx-excel')
         if '/school/export_submitted_exam_record/xls/' in request.path:
             response['Content-Disposition'] = 'attachment; filename=  "Submitted Record for Exam.xls"'
@@ -509,21 +605,21 @@ def export_exam_record(request):
 
         if '/school/export_submitted_exam_record/xls/' in request.path:
         
-            rows = ExamRegistration.objects.filter(institute_id=sch_id, submitted=True).values_list('title', 'first_name', 'middle_name', 'surname', 'cadre', 'residential_address', 'telephone', 'email', 
+            rows = ExamRegistration.objects.filter(institute_id=request.user.id, submitted=True).values_list('title', 'first_name', 'middle_name', 'surname', 'cadre', 'residential_address', 'telephone', 'email', 
                  'date_of_birth', 'state_of_origin', 'religion', 'marital_status', 'maiden_name', 'senatorial_district', 'qualification1', 'qualification2', 'qualification3', 'qualification4', 'prof_qualification1',
                   'prof_qualification2', 'prof_qualification3', 'prof_qualification4', 'institution_attended1', 'institution_attended2', 'institution_attended3', 'institution_attended4', 'hod_name', 'hod_phone', 'hod_email',
                   'employment_status', 'office_name', 'office_address', 'office_country', 'office_lga', 'office_phone', 'office_email', 'sector', 'present_position', 'department' )
     
         elif '/school/export_current_exam_record/xls/' in request.path:
             
-            rows = ExamRegistration.objects.filter(institute_id=sch_id, submitted=False).values_list('title', 'first_name', 'middle_name', 'surname', 'cadre', 'residential_address', 'telephone', 'email', 
+            rows = ExamRegistration.objects.filter(institute_id=request.user.id, submitted=False).values_list('title', 'first_name', 'middle_name', 'surname', 'cadre', 'residential_address', 'telephone', 'email', 
                  'date_of_birth', 'state_of_origin', 'religion', 'marital_status', 'maiden_name', 'senatorial_district', 'qualification1', 'qualification2', 'qualification3', 'qualification4', 'prof_qualification1',
                   'prof_qualification2', 'prof_qualification3', 'prof_qualification4', 'institution_attended1', 'institution_attended2', 'institution_attended3', 'institution_attended4', 'hod_name', 'hod_phone', 'hod_email',
                   'employment_status', 'office_name', 'office_address', 'office_country', 'office_lga', 'office_phone', 'office_email', 'sector', 'present_position', 'department' )
 
         elif '/school/export_approved_exam_record/xls/' in request.path:
             
-            rows = ExamRegistration.objects.filter(institute_id=sch_id, approved=True).values_list('title', 'first_name', 'middle_name', 'surname', 'cadre', 'residential_address', 'telephone', 'email', 
+            rows = ExamRegistration.objects.filter(institute_id=request.user.id, approved=True).values_list('title', 'first_name', 'middle_name', 'surname', 'cadre', 'residential_address', 'telephone', 'email', 
                  'date_of_birth', 'state_of_origin', 'religion', 'marital_status', 'maiden_name', 'senatorial_district', 'qualification1', 'qualification2', 'qualification3', 'qualification4', 'prof_qualification1',
                   'prof_qualification2', 'prof_qualification3', 'prof_qualification4', 'institution_attended1', 'institution_attended2', 'institution_attended3', 'institution_attended4', 'hod_name', 'hod_phone', 'hod_email',
                   'employment_status', 'office_name', 'office_address', 'office_country', 'office_lga', 'office_phone', 'office_email', 'sector', 'present_position', 'department' )

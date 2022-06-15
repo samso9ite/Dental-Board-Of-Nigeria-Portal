@@ -3,8 +3,8 @@ from authentication.models import User
 from cities_light.models import Region
 from cities_light.models import Country
 from django.utils import timezone
+import datetime
 # Create your models here.
-
 
 class LGA(models.Model):
     local_gov_area = models.CharField(max_length=100)
@@ -16,11 +16,9 @@ class LGA(models.Model):
 class School(models.Model):
     User = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
     sch_logo = models.FileField(upload_to='images/school/sch_logo', null=True)
-    # sch_name = models.CharField(max_length=300, blank=True)
     postal_number = models.IntegerField(blank=True, null=True)
-    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
-    lga_num = models.ForeignKey(LGA, on_delete=models.SET_NULL, null=True, related_name='lga_num')
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
+    state = models.CharField(max_length=200, blank=True,  null=True)
+    region = models.CharField(max_length=200, blank=True)
     hod_name = models.CharField(max_length=200, blank=True)
     hod_phone = models.CharField(max_length=20, blank=True)
     hod_email = models.CharField(max_length=100, blank=True)
@@ -32,21 +30,26 @@ class School(models.Model):
     updated = models.BooleanField(default=False)
     updated_at = models.DateTimeField(blank=True, auto_now=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
+    close_exam_reg = models.BooleanField(default=False)
+    closed_exam_date = models.DateTimeField(blank=True, null=True)
+    close_index_reg = models.BooleanField(default=False)
+    closed_index_date = models.DateTimeField(blank=True, null=True)
 
 
 class Indexing(models.Model):
-    profile_image = models.ImageField(upload_to='images/indexing/index_profile_img', null=True, blank=True)
+    profile_image = models.ImageField(upload_to='images/indexing/profile_img', null=True, blank=True)
     institution = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name='institution')
-    # school_add = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, nuk related_name='index_school')
+    # school_add = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, related_name='index_school')
     cadre = models.CharField(max_length=200, blank=True, null=True)
     year = models.CharField(max_length=10, blank=True, null=True)    
     first_name = models.CharField(max_length=200, blank=True, null=True)
     surname = models.CharField(max_length=200, blank=True, null=True)
     middle_name = models.CharField(max_length=200, blank=True, null=True)
+    sex = models.CharField(max_length=10, blank=True, null=True)
     age = models.CharField(max_length=200, blank=True, null=True)
     telephone = models.CharField(max_length=200, blank=True, null=True)
     email = models.EmailField(max_length=200, blank=True, null=True)
-    state = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
+    state = models.CharField(max_length=200, blank=True, null=True)
     religion = models.CharField(max_length=200, blank=True, null=True)
     nationality = models.CharField(max_length=200, blank=True, null=True)
     marital_status = models.CharField(max_length=200, blank=True, null=True)
@@ -109,14 +112,17 @@ class Indexing(models.Model):
     unapproved = models.BooleanField(default=False)
     comment = models.CharField(max_length=500, blank=True, null=True)
     exam_sitting = models.CharField(max_length=5, null=False, blank=True)
+    verified = models.BooleanField(default=False)
+    closed = models.BooleanField(default=False)   
+    grade3_2 = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
         return self.first_name
 
 class ExamRegistration(models.Model):
     profile_image = models.ImageField(upload_to='images/exam/exam_profile_img', null=True, blank=True)
-    institute = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True, related_name='school')
-    
+    institute = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='school')
+    verified = models.BooleanField(default=False)
     title = models.CharField(max_length=200, blank=True, null=True)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     surname = models.CharField(max_length=200, blank=True, null=True)
@@ -135,7 +141,7 @@ class ExamRegistration(models.Model):
     state_of_origin = models.ForeignKey(Region, on_delete=models.SET_NULL, blank=True, null=True, related_name='state_of_origin')
     lga_state = models.ForeignKey(LGA,on_delete=models.SET_NULL, blank=True, null=True, related_name='lga_state') 
     senatorial_district = models.CharField(max_length=200, blank=True, null=True)
-    date_of_birth = models.DateField(blank=True, null=True)
+    date_of_birth = models.CharField(max_length=20, blank=True, null=True)
     state_of_birth = models.ForeignKey(Region,on_delete=models.SET_NULL, blank=True, null=True, related_name='state_of_birth')
     lga_of_birth = models.ForeignKey(LGA,on_delete=models.SET_NULL, blank=True, null=True, related_name='lga_of_birth')
     qualification1 = models.CharField(max_length=200, blank=True, null=True)     
@@ -153,7 +159,7 @@ class ExamRegistration(models.Model):
     hod_name = models.CharField(max_length=200, blank=True, null=True)
     hod_phone = models.CharField(max_length=20, blank=True, null=True)
     hod_email = models.CharField(max_length=100, blank=True, null=True)
-    employment_status = models.BooleanField(null=True, blank=True)
+    employment_status = models.CharField(max_length=100, blank=True, null=True)
     present_position = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
     office_name = models.CharField(max_length=100, blank=True, null=True)
@@ -166,13 +172,13 @@ class ExamRegistration(models.Model):
     office_email = models.EmailField(blank=True, null=True)
     referee_name1 = models.CharField(max_length=200, blank=True, null=True) 
     referee_email1 = models.CharField(max_length=200, blank=True, null=True)  
-    referee_phone1 = models.CharField(max_length=200, blank=True, null=True)  
+    referee_phone1 = models.CharField(max_length=200, blank=True, null=True) 
+    referee_phone2 = models.CharField(max_length=200, blank=True, null=True)  
     referee_name2 = models.CharField(max_length=200, blank=True, null=True) 
     referee_email2 = models.CharField(max_length=200, blank=True, null=True) 
     state_of_origin =  models.ForeignKey(Region,on_delete=models.SET_NULL, blank=True, null=True, related_name='state_of_origin')
     lga_of_origin = models.ForeignKey(LGA, on_delete=models.SET_NULL, blank=True, null=True, related_name='lga_of_origin')
-   
-    
+    year = models.CharField(max_length=10, null=True, blank=True)
     mode_of_payment = models.CharField(max_length=200, blank=True, null=True)
     cadre = models.CharField(max_length=200, blank=True, null=True)
     waec_result = models.ImageField(upload_to='images/exam_sector/waec_result', blank=True, null=True)
@@ -183,6 +189,7 @@ class ExamRegistration(models.Model):
     approved = models.BooleanField(default=False, blank=True)
     declined = models.BooleanField(default=False, blank=True)
     comment = models.CharField(max_length=500, blank=True, null=True)
+ 
 
 
 
