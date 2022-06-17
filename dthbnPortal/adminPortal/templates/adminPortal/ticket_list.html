@@ -56,22 +56,56 @@
                                    
                                         
                                         <td>{{each_sch.sch_details.username}}</td>
+                                        {% if request.user.is_admin %}
                                          <td>
                                              <a href="{% url 'adminPortal:sch_reply_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" style="background-color: #ccbd0d; color:white" class="btn  btn-block waves-effect" >{{each_sch.sch_replies}} </button>    </a>                    
                                         </td> 
-                                            
                                         <td>
                                             <a href="{% url 'adminPortal:answered_ticket_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-green btn-block waves-effect" >{{each_sch.answered_ticket}} </button></a>                    
                                         </td> 
-                                               
                                         <td>
                                             <a href="{% url 'adminPortal:opened_ticket_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-black btn-block waves-effect" > {{each_sch.open_ticket}}  </button>    </a>  
  
                                        </td> 
-                                           
-                                        <td>
+                                       <td>
                                             <a href="{% url 'adminPortal:closed_ticket_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-red btn-block waves-effect" >{{each_sch.closed_ticket}} </button>    </a>                    
-                                        </td>                          
+                                        </td> 
+                                   
+                                        {% elif request.user.is_indexing_staff %}
+                                            <td>
+                                                <a href="{% url 'adminPortal:sch_reply_index_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" style="background-color: #ccbd0d; color:white" class="btn  btn-block waves-effect" >{{each_sch.sch_replies}} </button>    </a>                    
+                                            </td> 
+                                            <td>
+                                                <a href="{% url 'adminPortal:answered_ticket_index_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-green btn-block waves-effect" >{{each_sch.answered_ticket}} </button></a>                    
+                                            </td> 
+                                            <td>
+                                                <a href="{% url 'adminPortal:opened_ticket_index_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-black btn-block waves-effect" > {{each_sch.open_ticket}}  </button>    </a>  
+     
+                                           </td> 
+                                           <td>
+                                                <a href="{% url 'adminPortal:closed_ticket_index_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-red btn-block waves-effect" >{{each_sch.closed_ticket}} </button>    </a>                    
+                                            </td> 
+                                        {% else %}
+                                        <td>
+                                            <a href="{% url 'adminPortal:sch_reply_exam_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" style="background-color: #ccbd0d; color:white" class="btn  btn-block waves-effect" >{{each_sch.sch_replies}} </button>    </a>                    
+                                        </td> 
+                                        <td>
+                                            <a href="{% url 'adminPortal:answered_ticket_exam_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-green btn-block waves-effect" >{{each_sch.answered_ticket}} </button></a>                    
+                                        </td> 
+                                        <td>
+                                            <a href="{% url 'adminPortal:opened_ticket_exam_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-black btn-block waves-effect" > {{each_sch.open_ticket}}  </button>    </a>  
+ 
+                                       </td> 
+                                       <td>
+                                        <a href="{% url 'adminPortal:closed_ticket_exam_list' id=each_sch.sch_details.id %}" target="_blank"> <button type="button" class="btn bg-red btn-block waves-effect" >{{each_sch.closed_ticket}} </button>    </a>                    
+                                        </td> 
+                                         {% endif %}    
+
+                                       
+                                               
+                                        
+                                           
+                                                                
                                                               
                                  </tr>
                                                                       

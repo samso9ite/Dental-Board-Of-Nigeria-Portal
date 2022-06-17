@@ -10,6 +10,11 @@
                         <div class="header">
                             <h2>
                                 ACCREDITED SCHOOLS
+
+                                <span style="float: right;"><a href="{% url 'adminPortal:export_school_xls' %}">
+                                    <button type="submit" class="btn bg-red waves-effect" value="Export All School Details"
+                                     name="export">Export All Accredited Schools</button></a></span>
+    
                             </h2>
                         </div>
                   
@@ -18,13 +23,20 @@
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
-                    <div class="header">             
+                    <div class="header form-line form-group">             
                         <h2>
                             SCHOOLS RECORD
-                            <span style="float: right;"><a href="{% url 'adminPortal:export_school_xls' %}">
-                                <button type="submit" class="btn bg-red waves-effect" value="Export All School Details"
-                                 name="export">Export All Accredited Schools</button></a></span>
-
+                            <!-- <div class=" form-float">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" name="referee_address1" id="referee_address1" onkeyup='saveValue(this);'>
+                                   
+                                </div>
+                            </div> -->
+                        
+                            <!-- <span style="float: right;" >
+                                <input type="text" id="searcht"  onchange="handleSearch()" class=" form-control" name="search" placeholder="Search">
+                            </span>
+                         -->
                       </h2>
                     
                     </div>
@@ -36,12 +48,14 @@
                                         <th>Name</th>
                                         <th>Reg Number</th>
                         
-                                        <th>Office Address</th>
+                                        <th> Address</th>
                                         <th>Phone Number</th>
                                         <th>Email</th>
                                                
                                         <th>View</th>
+                                        {% if request.user.is_admin %}
                                         <th>Action</th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -49,17 +63,16 @@
                                             <!--<th>Select</th>-->
                                             <th>Name</th>
                                             <th>Reg Number</th>
-                                        
-                                         
-                                            <th>Office Address</th>
+                                            <th>Address</th>
                                             <th>Phone Number</th>
                                             <th>Email</th>
-                                                  
                                             <th>View</th>
+                                            {% if request.user.is_admin %}
                                             <th>Action</th>
+                                            {% endif %}
                                     </tr>
                                 </tfoot>
-                                <tbody>
+                                <tbody id="myTable">
                                    
                                     <tr>
                                         {% if accredited_schools_record %}
@@ -118,7 +131,7 @@
                                                                     
                                                                         <div class="body table-responsive">
                                                                             <table class="table table-striped">
-                                                                                <tbody>
+                                                                                <tbody id="myTable">
                                                                                     <tr>
                                                                                         <td><b>Name:</b> {{school.username|title}} </td>
                                                                                         <td><b>Address: </b> {{school.user.address|title}}</td>
@@ -158,6 +171,7 @@
                                                         
                                                                                         
                                                                                         </td>
+                                                                                        {% if request.user.is_admin %}
                                                                                         <td> 
                                                                                     <ul>
                                                                     <li class="dropdown" style="list-style:none;">
@@ -183,6 +197,7 @@
                                                                     </li>
                                                                 </ul>
                                                             </td>
+                                                            {% endif %}
                    
                                         <!--<td><?php echo $school->licence_due; ?></td>-->
                                     </tr>
@@ -234,8 +249,11 @@
             </nav>
         {% endif %}
                         </div>
+                     
                     </div>
+                    
                 </div>
+               
             </div>
         </div>
         

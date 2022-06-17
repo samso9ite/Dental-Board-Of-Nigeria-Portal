@@ -60,6 +60,7 @@
                                                             <th>Contact</th>
                                                             <th>Email</th>
                                                             <th>Status</th>
+                                                            
                                                             <th>View</th>
                                                           
                                                         </tr>
@@ -81,7 +82,7 @@
                                                          <tr>
                                                                 <td>{{student_record.surname|title}} {{student_record.first_name|title}}  </td>
                                                                     <td> {{student_record.cadre |title}} </td>
-                                                                    <td> {{student_record.permanent_address|title}}</td>
+                                                                    <td> {{student_record.contact_address|title}}</td>
                                                                     <td> {{student_record.telephone}}</td>
                                                                     <td> {{student_record.email|lower}}</td>
                                                                     <td>{% if student_record.approved is True and student_record.unapproved is False %}
@@ -93,7 +94,6 @@
                                                                             <button type="button"  class="btn btn-danger waves-effect">
                                                                             <i class="material-icons">clear</i>
                                                                             <span>Declined</span>
-
                                                                         {% elif student_record.approved == False and student_record.unapproved == False %}
                                                                             <button type="button" style="background-color: #ccbd0d; color: white;" class="btn waves-effect">
                                                                             <i class="material-icons">visibility</i>
@@ -106,7 +106,6 @@
                                                                                         <div class="modal-content">
                                                                                             <div class="modal-header">
                                                                                                 <div class="image" style="text-align: center">
-
                                                                                                     {% if student_record.profile_image %}
                                                                                                         <img src="{{student_record.profile_image.url}}" width="112" height="112" alt="User" style="border: 8px solid #efefef; border-radius: 100%"/>
                                                                                                     {% else %}
@@ -143,7 +142,7 @@
                                                                                                                         </tr>
                                 
                                                                                                                         <tr>
-                                                                                                                            <td><b>State Of Origin:</b> {{student_record.state|title}} </td>
+                                                                                                                            <td><b>State Of Origin:</b> {{student_record.state_of_origin|title}} </td>
                                                                                                                             <td><b>Age: </b> {{student_record.age|title}} </td>
                                                                                                                         </tr>
                                                                                                                         <tr>
@@ -185,6 +184,7 @@
                                                                                                                         <tr>
                                                                                                                               </td>
                                                                                                                         </tr>
+                                                                                                                        
                                                                                                                         <tr>
                                                                                                                             <td><b>Referee Name(1): </b> {{student_record.referee_name1|title}}</td>
                                                                                                                             <td><b>Referee Address(1): </b> {{student_record.referee_address1|title}} </td>
@@ -203,21 +203,25 @@
                                                                                                                         <tr>
                                                                                                                             <td> 
                                                                                                                                 <b>O'Level Certificate (1)</b>
-                                                                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
-                                                                                                                                <div id="imgModal" class="modal" role="dialog">
+                                                                                                                                <button type="button"  data-toggle="modal" data-target="#Cert1" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                                                                <div id="Cert1" class="modal" role="dialog">
                                                                                                                                 <div class="modal-dialog modal-md">
                                 
                                                                                                                                     <!-- Modal content-->
                                                                                                                                     <div class="modal-content">
                                                                                                                                       <div class="modal-header">
                                                                                                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                                                                                        <h4 class="modal-title">Marriage Certificate</h4>
+                                                                                                                                        <h4 class="modal-title">First O'Level Certificate </h4>
                                                                                                                                       </div>
                                                                                                                                       <div class="modal-body">
-                                                                                                                                        <img style="display:none;" class="img img-responsive" id="pic" src=" "  />
-                                                                                                                                      </div>
+                                                                                                                                      {% if student_record.o_level_cert1 %} 
+																	   <img style="" class="img img-responsive" id="pic" src="{{student_record.o_level_cert1.url}}"  />
+                                                                                                                                      {% else %}
+																	<img style="" src="" class="img img-responsive>
+																	{% endif %}
+																	</div>
                                                                                                                                       <div class="modal-footer">
-                                                                                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                                                        <button type="button" class="btn btn-default" id="modal1">Close</button>
                                                                                                                                       </div>
                                                                                                                                     </div>
                                                                                                                                 </div>
@@ -227,21 +231,26 @@
                                                                                                                             <td> 
                                                                                                                                 <b>O'Level Certificate (2)</b>
                                                                                                                             
-                                                                                                                                <button type="button"  data-toggle="modal" data-target="#imgModal" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
-                                                                                                                                <div id="imgModal" class="modal" role="dialog">
+                                                                                                                                <button type="button"  data-toggle="modal" data-target="#Cert2" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
+                                                                                                                                <div id="Cert2" class="modal" role="dialog">
                                                                                                                                 <div class="modal-dialog modal-md">
                                                                                                                                   
                                                                                                                                     <!-- Modal content-->
                                                                                                                                     <div class="modal-content">
                                                                                                                                       <div class="modal-header">
                                                                                                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                                                                                        <h4 class="modal-title">Marriage Certificate</h4>
+                                                                                                                                        <h4 class="modal-title">Second O'Level Certificate</h4>
                                                                                                                                       </div>
-                                                                                                                                      <div class="modal-body">
-                                                                                                                                        <img style="display:none;" class="img img-responsive" id="pic" src=" "  />
-                                                                                                                                      </div>
+                                                                                                                                      
+																<div class="modal-body">
+                                                                                                                        	{% if student_record.o_level_cert2 %}         
+															        <img style="" class="img img-responsive" id="pic" src="{{student_record.o_level_cert2.url|default_if_none:'#'}}"  />
+                                                                                                                                {% else %}
+		                                                                                                               <img style="" class="img img-responsive" id="pic" src=""  />
+																{% endif %} 
+																</div>
                                                                                                                                       <div class="modal-footer">
-                                                                                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                                                        <button type="button" class="btn btn-default" id="modal2">Close</button>
                                                                                                                                       </div>
                                                                                                                                     </div>
                                                                                                                                 </div>
@@ -253,7 +262,7 @@
                                                                                 <td>
                                                                                     <b>Display Grade</b>
                                                                                     <button type="button"  data-toggle="modal" data-target="#gradeDisplay{{student_record.id}}" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
-                                                                                    <div id="gradeDisplay{{student_record.id}}" class="modal" role="dialog">
+                                                                                    <div id="gradeDisplay{{student_record.id}}" class="modal gradeModal" role="dialog">
                                                                                         <div class="modal-dialog modal-md">
                                 
                                                                                             <!-- Modal content-->
@@ -263,9 +272,9 @@
                                                                                                 <h4 class="modal-title">O'Level Result(1)</h4>
                                                                                               </div>
                                                                                               <div class="modal-body">
-                                                                                                <p><strong> Examination Number: {{student_record.examination_number2}} </strong></p>
-                                                                                                <p><strong> Examination Type:  {{student_record.examination_type2}} </strong> </p>
-                                                                                                <p><strong> Examination Year:  {{ student_record.examination_year2}} </strong></h5>
+                                                                                                <p><strong> Examination Number: {{student_record.examination_number1}} </strong></p>
+                                                                                                <p><strong> Examination Type:  {{student_record.examination_type1}} </strong> </p>
+                                                                                                <p><strong> Examination Year:  {{ student_record.examination_year1}} </strong></h5>
                                                                                                 <!-- <h5 </h5> -->
                                                                                                     <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                                                                                         <thead>
@@ -326,14 +335,12 @@
                                                                                                                         <tr>
                                                                                                                             <th>Subjects</th>
                                                                                                                             <th>Grade</th>
-                                                                                                                            
                                                                                                                         </tr>
                                                                                                                         </thead>
                                                                                                                         <tfoot>
                                                                                                                         <tr>
                                                                                                                             <th>Subjects</th>
                                                                                                                             <th>Grade</th>
-                                                                                                                            
                                                                                                                         </tr>
                                                                                                                         </tfoot>
                                                                                                                         <tbody>
@@ -368,11 +375,12 @@
                                                                                                             
                                                                                                                         </tbody>
                                                                                                                         </table>
+                                                                                                                      
                                                                                                         {% endif %}
                                 
                                                                                             
                                                                                               <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                <button type="button" class="btn btn-default" id="modal3">Close</button>
                                                                                               </div>
                                                                                             </div>
                                 
@@ -382,20 +390,24 @@
                                                                                 <td>
                                                                                     <b>Marriage Certificate</b>
                                                                                     <button type="button"  data-toggle="modal" data-target="#imgModal{{student_record.id}}" onclick="document.getElementById('pic').style.display='block';" class="btn bg-blue-grey btn-block waves-effect">View</button>
-                                                                                    <div id="imgModal{{student_record.id}}" class="modal" role="dialog">
+                                                                                    <div id="imgModal{{student_record.id}}" class="modal marrModal" role="dialog">
                                                                                         <div class="modal-dialog modal-md">
                                 
                                                                                             <!-- Modal content-->
                                                                                             <div class="modal-content">
                                                                                               <div class="modal-header">
                                                                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                                                <h4 class="modal-title">Waec Certificate</h4>
+                                                                                                <h4 class="modal-title">Marriage Certificate</h4>
                                                                                               </div>
                                                                                               <div class="modal-body">
-                                                                                                <img style="display:none;" class="img img-responsive" id="pic" src=" "  />
-                                                                                              </div>
+                                                                                        	{% if student_record.marriage_cert %}   
+											     		<img style="" class="img img-responsive" id="pic" src="{{student_record.marriage_cert.url}}"  />
+                                                                                        	{% else %}
+													<img style="" class="img img-responsive" id="pic" src=""  />
+												{% endif %} 
+											 </div>
                                                                                               <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                                <button type="button" class="btn btn-default" id="modal4">Close</button>
                                                                                               </div>
                                                                                             </div>
                                 
@@ -516,6 +528,19 @@
                                                                            {% endfor %}
                                                                  </tbody>
                                                                 </table>
+                                                               {% if request.user.username == 'HOD INDEXING DEPARTMENT' %}
+                                                                <div class="" style=" margin-left: 10px">
+                                                                    <div class="col-lg-12" >
+                                                                    
+                                                                        <a href="{% url 'adminPortal:submit_verified' id=sch_id %}">
+                                                                            <button class="btn btn-block btn-lg btn-success waves-effect " name="approved">
+                                                                                <h5>SUBMIT INDEXED RECORD</h5>
+                                                                            </button>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                {% endif %}
+
                                                                 {% if all_sch_records.has_other_pages %}
                                                                 <nav aria-label="all_sch_records Pagination" class="mb-4">
                                                                     <ul class="pagination">
@@ -557,7 +582,20 @@
                                                                 </nav>
                                                             {% endif %}
                                                             </div>
+                                                            
                                                         </div>
+                                                       
+                                                            <p><strong> Total Record = 
+                                                                {% if "/admin/approved_indexed_list/" in request.path %}
+                                                                    {{approvedCount}} 
+                                                                {% elif "/admin/declined_indexed_list/" in request.path %}
+                                                                    {{declinedCount}}
+                                                                {% else %}
+                                                                    {{indexedCount}}
+                                                                {% endif %}
+                                                            </strong></p>
+
+                   
                                                      </div>
                                                     </div>
                           
@@ -571,5 +609,37 @@
         
         <!-- #END# Exportable Table -->
     </section>
+    <script>
+        var modal_1 = document.getElementById('modal1');
+        var modal_2 = document.getElementById('modal2');
+        var modal_3 = document.getElementById('modal3');
+        var modal_4 = document.getElementById('modal4');
+
+// When the user clicks anywhere outside of the modal, close it
+modal_1.onclick = function() {
+    console.log("Checking")
+    document.getElementById('Cert1').style.display='none';
+    $('.modal-backdrop').remove();
+}
+
+modal_2.onclick = function() {
+    console.log("Checking")
+    document.getElementById('Cert2').style.display='none';
+    $('.modal-backdrop').remove();
+}
+
+modal_3.onclick = function() {
+    // document.getElementById('gradeDisplay{{student_record.id}}').style.display='none';
+    $('.gradeModal').remove();
+    $('.modal-backdrop').remove();
+}
+
+modal_4.onclick = function() {
+    // document.getElementById('gradeDisplay{{student_record.id}}').style.display='none';
+    $('.marrModal').remove();
+    $('.modal-backdrop').remove();
+}
+
+    </script>
 
    {% endblock %}

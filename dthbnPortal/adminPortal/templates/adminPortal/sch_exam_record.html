@@ -426,6 +426,20 @@
                                 {% endif %}
                                     </tbody>
                                     </table>
+                                    {% if 'admin/sch_exam_rec' in request.path %}
+                                    {% if request.user.username == 'HOD EXAMINATION DEPARTMENT' %}
+                                    <div class="" style="">
+                                        <div class="col-lg-12" >
+                                        
+                                            <a href="{% url 'adminPortal:submit_exam_verified' id=sch_id %}">
+                                                <button class="btn btn-block btn-lg btn-success waves-effect " name="approved">
+                                                    <h5>SUBMIT EXAMINATION RECORD</h5>
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% endif %}
                                     
                                     <!-- Paginator Rendering -->
                                     {% if all_exam_records.has_other_pages %}
@@ -469,6 +483,15 @@
                                         </nav>
                                         {% endif %}
                                 </div>
+                                <p><strong> Total Record = 
+                                    {% if "/admin/approved_exam_rec/4" in request.path %}
+                                        {{approvedCount}} 
+                                    {% elif "/admin/declined_exam_rec/" in request.path %}
+                                        {{declinedCount}}
+                                    {% else %}
+                                        {{indexedCount}}
+                                    {% endif %}
+                                </strong></p>
                             </div>
 
                             <!-- #END# Exportable Table -->

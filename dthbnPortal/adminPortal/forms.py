@@ -1,16 +1,22 @@
 from django import forms
 from schPortal.models import *
+from adminPortal.models import IndexLimit, examLimit
 
 class setLimit(forms.ModelForm):
     class Meta:
         model = School
         fields = ('index_quota_limit',)
 
+class createLimit(forms.ModelForm):
+    class Meta:
+        model = IndexLimit
+        fields = ('assigned_limit', )
+
 
 class setExamLimit(forms.ModelForm):
     class Meta:
-        model = School
-        fields = ('exam_quota_limit',)
+        model = examLimit
+        fields = ('assigned_limit',)
 
 class UpdateIndexStatus(forms.ModelForm):
     class Meta:

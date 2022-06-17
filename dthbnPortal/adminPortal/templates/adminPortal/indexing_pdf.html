@@ -1,0 +1,127 @@
+{% extends 'adminPortal/base.html' %}
+{% load static %}
+{% block body %}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h4 style="align:center;">
+                    <b> STUDENT DETAILS </b>
+                </h4>
+
+                
+            </div>
+
+            <div class="body table-responsive">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td><b>First Name: </b>{{exam_record.first_name|title}} </td>
+                        <td><b>Middle Name: </b>{{exam_record.middle_name|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Surname: </b>{{exam_record.surname|title}} </td>
+                        <td><b>Gender: </b>{{exam_record.gender|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>State Of Birth: </b> {{exam_record.state_of_birth|title}}</td>
+                        <td><b>Age: </b>{{exam_record.date_of_birth|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Telephone: </b>{{exam_record.telephone|title}} </td>
+                        <td><b>Email: </b> {{exam_record.email|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Title: </b> {{exam_record.title|title}}</td>
+                        <td><b>Postal Address: </b> {{exam_record.postal_address|title}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Marital Status: </b> {{exam_record.marital_status|title}}</td>
+                        <td><b>Residential Country: </b>{{exam_record.residential_country|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Residential State: </b>{{exam_record.residential_state|title}} </td>
+                        <td><b>Residential Address: </b> {{exam_record.residential_address|title}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Residential LGA: </b> {{exam_record.residential_lga|title}}</td>
+                        <td><b>State Of Origin: </b> {{exam_record.state_of_origin|title}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>LGA: </b> {{exam_record.lga_of_birth|title}}</td>
+                        <td><b>Senatorial District: </b> {{exam_record.senatorial_district|title}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>School Attended with Date (1): </b> {{exam_record.institution_attended1|title}}  </td>
+                        <td><b>School Attended with Date (2): </b> {{exam_record.institution_attended2|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>School Attended with Date (3): </b> {{exam_record.institution_attended3|title}}</td>
+                        <td><b>School Attended with Date (4): </b> {{exam_record.institution_attended4|title}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Educational Qualification (1): </b>{{exam_record.qualification1|title}} </td>
+                        <td><b>Educational Qualification (2): </b>{{exam_record.qualification2|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Educational Qualification (3): </b>{{exam_record.qualification3|title}} </td>
+                        <td><b>Educational Qualification (4): </b>{{exam_record.qualification4|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Professional Qualification (1): </b>{{exam_record.prof_qualification1|title}} </td>
+                        <td><b>Professional Qualification (2): </b>{{exam_record.prof_qualification2|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Professional Qualification (3): </b>{{exam_record.prof_qualification3|title}} </td>
+                        <td><b>Professional Qualification (4): </b>{{exam_record.prof_qualification4|title}} </td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td><b>Employment Status: </b> {{exam_record.employment_status|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Present Position: </b> {{exam_record.present_position|title}}</td>
+                        <td><b>Department: </b> </td>
+                    </tr>
+                    <tr>
+                        <td><b>Office Name: </b>{{exam_record.office_name|title}}  </td>
+                        <td><b>Office Address: </b>{{exam_record.office_address|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Sector: </b>  {{exam_record.sector|title}}</td>
+                        <td><b>Office Country: </b> {{exam_record..office_country|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Office State: </b> {{exam_record.office_state|title}} </td>
+                        <td><b>Office LGA: </b>{{exam_record.office_lga|title}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Office Phone Number:</b> {{exam_record.Office_phone}}   </td>
+                        <td><b>Office Email:</b> {{exam_record.office_email|title}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Referee (1): </b>{{exam_record.referee_name1|title}} </td>
+                        <td><b>Email: </b> {{exam_record.referee_email1|title}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Referee (2): </b> {{exam_record.referee_name2|title}} </td>
+                        <td><b>Email: </b> {{exam_record.referee_email2|title}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Referee Phone Number (1): </b>{{exam_record.referee_phone1|title}}  </td>
+                        <td><b>Referee Phone Number (2): </b> </td>
+                    </tr>
+                  
+                    <tr>
+                        <td><b>Mode Of Payment: </b>{{exam_record.mode_of_payment|title}}  </td>
+                       
+                    </tr>
+                   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

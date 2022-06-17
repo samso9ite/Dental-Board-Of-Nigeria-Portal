@@ -22,26 +22,31 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             {% if '/school/current_index/' in request.path %}
-                                            <li> <a href="{% url 'schoolPortal:currentIndex' year='2019-2020' %}">  2019 / 2020</a>
-                                            </li>
-                                            <li> <a href="{% url 'schoolPortal:currentIndex' year='2020-2021' %}">  2020 / 2021</a>
-                                            </li>
+                                            <li> <a href="{% url 'schoolPortal:currentIndex' year='2019-2020' %}">  2019 / 2020</a></li>
+                                            <li> <a href="{% url 'schoolPortal:currentIndex' year='2020-2021' %}">  2020 / 2021</a> </li>
+                                            <li> <a href="{% url 'schoolPortal:currentIndex' year='2020-2021' %}">  2021 / 2022</a> </li>
                                             {% elif '/school/indexed_record/' in request.path %}
                                             <li> <a href="{% url 'schoolPortal:indexed_record' year='2019-2020' %}">  2019 / 2020</a>
                                             </li>
                                             <li> <a href="{% url 'schoolPortal:indexed_record' year='2020-2021' %}">  2020 / 2021</a>
                                             </li>
+                                            <li> <a href="{% url 'schoolPortal:indexed_record' year='2021-2022' %}">  2021 / 2022</a>
+                                            </li>
+                                            
                                             {% elif '/school/approved_student/' in request.path %}
                                             <li> <a href="{% url 'schoolPortal:approved_student' year='2019-2020' %}">  2019 / 2020</a>
                                             </li>
                                             <li> <a href="{% url 'schoolPortal:approved_student' year='2020-2021' %}">  2020 / 2021</a>
+                                            </li>
+                                            <li> <a href="{% url 'schoolPortal:approved_student' year='2021-2022' %}">  2021 / 2022</a>
                                             </li>
                                             {% elif '/school/unapproved_student/' in request.path %}
                                             <li> <a href="{% url 'schoolPortal:unapproved_student' year='2019-2020' %}">  2019 / 2020</a>
                                             </li>
                                             <li> <a href="{% url 'schoolPortal:unapproved_student' year='2020-2021' %}">  2020 / 2021</a>
                                             </li>
-
+                                            <li> <a href="{% url 'schoolPortal:unapproved_student' year='2021-2022' %}">  2021 / 2022</a>
+                                            </li>
                                             {% endif %}
                                         </ul>
                                     </div>

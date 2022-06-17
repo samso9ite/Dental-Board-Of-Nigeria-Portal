@@ -19,7 +19,7 @@
                         </div>
                         <div class="content">
                             <div class="text"> <b>SCHOOLS</b></div>
-                            <div class="number count-to" data-from="0" data-to="{{total_sch_num}}" data-speed="1900" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="{{total_sch_num}}" data-speed="1900" data-fresh-interval="20">{{total_sch_num}}</div>
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                         </div>
                         <div class="content">
                             <div class="text"><b>PROFESSIONALS</b></div>
-                          <div class="number count-to" data-from="0" data-to="{{total_prof_num}}" data-speed="1500" data-fresh-interval="20"></div>
+                          <div class="number count-to" data-from="0" data-to="{{total_prof_num}}" data-speed="1500" data-fresh-interval="20">{{total_prof_num}}</div>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                         </div>
                         <div class="content">
                             <div class="text"><b>INDEXED</b></div>
-                            <div class="number count-to" data-from="0" data-to="{{total_submited_index}}" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="{{total_submited_index}}" data-speed="1000" data-fresh-interval="20">{{total_submited_index}}</div>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,13 @@
                         </div>
                         <div class="content">
                             <div class="text"><b>NOTIFICATIONS</b></div>
-                            <div class="number count-to" data-from="0" data-to="{{notification}}" data-speed="1000" data-fresh-interval="20"></div>
+                            {% if request.user.is_admin %}
+                                <div class="number count-to" data-from="0" data-to="{{technical_notification}}" data-speed="1000" data-fresh-interval="20">{{technical_notification}}</div>
+                            {% elif request.user.is_indexing_staff %}
+                                <div class="number count-to" data-from="0" data-to="{{indexing_notification}}" data-speed="1000" data-fresh-interval="20">{{indexing_notification}}</div>
+                            {% elif request.user.is_exam_staff %}
+                                <div class="number count-to" data-from="0" data-to="{{examination_notification}}" data-speed="1000" data-fresh-interval="20">{{examination_notification}}</div>
+                            {% endif %}
                         </div>
                     </div>
                     </a>

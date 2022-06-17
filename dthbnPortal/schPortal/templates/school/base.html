@@ -293,7 +293,7 @@
                             {% else %}
                                 <li>
                             {% endif %}
-                                    <a href="{% url 'schoolPortal:current_exam_record' year='2020-2021' %} ">
+                                    <a href="{% url 'schoolPortal:current_exam_record' year='2021-2022' %} ">
                                         <i class="material-icons">folder_open</i>
                                         <span>Exam Record (Current)</span>
                                     </a>
@@ -305,7 +305,7 @@
                             {% else %}
                                 <li>
                             {% endif %}
-                                <a href="{% url 'schoolPortal:submitted_exam_record' year='2020-2021' %}">
+                                <a href="{% url 'schoolPortal:submitted_exam_record' year='2021-2022' %}">
                                     <i class="material-icons">folder</i>
                                     <span>Exam Record (Submitted)</span>
                                 </a>
@@ -316,7 +316,7 @@
                             {% else %}
                                 <li>
                             {% endif %}
-                                <a href="{% url 'schoolPortal:approved_exam_record' year='2020-2021' %} ">
+                                <a href="{% url 'schoolPortal:approved_exam_record' year='2021-2022' %} ">
                                     <i class="material-icons">offline_pin</i>
                                     <span>Exam Record (Approved)</span>
                                 </a>
@@ -327,7 +327,7 @@
                             {% else %}
                                 <li>
                             {% endif %}
-                                <a href="{% url 'schoolPortal:declined_exam_record' year='2020-2021' %}">
+                                <a href="{% url 'schoolPortal:declined_exam_record' year='2021-2022' %}">
                                     <i class="material-icons">cancel</i>
                                     <span>Exam Record (Declined)</span>
                                 </a>
@@ -418,7 +418,7 @@
 
     <script>  
       function closed_alert(){
-          alert("Sorry! Indexing Has Been Closed")
+          alert("Sorry! Exam Registeration Has Been Closed")
         //   location.reload();
       }
         $("#id_residential_country").change(function (){
@@ -524,8 +524,6 @@
         $("#id_state_of_birth").change(function (){
             var url = $("#reg_form").attr("data-origin-url");
             var regionId = $(this).val();
-            console.log(regionId)
-
             $.ajax({
                 
                 url: url,
@@ -544,27 +542,6 @@
         
 
     </script>
-
-
-    <!-- <script>
-    $("#id_office_country").change(function (){
-            var url = $("#reg_form").attr("data-office-url");
-            var regionId = $(this).val();
-            console.log(regionId)
-
-            $.ajax({
-                
-                url: url,
-                data: {
-                    'office_country':regionId
-                },
-               
-                success: function (data) {
-                    $("#id_office_state").html(data);
-                }
-                
-            });
-    </script> -->
 
     {% load sweetify %}
     {% sweetify %}
