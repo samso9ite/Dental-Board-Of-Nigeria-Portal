@@ -233,9 +233,9 @@ def exam_record(request, year):
     all_schools = School.objects.all()
     exam_status = closeExamRegistration.objects.get(id=1)
     for each_school in all_schools:
-        total_exam_record = ExamRegistration.objects.filter(institute=each_school.id, year=year).count()
-        approved_exam_record = ExamRegistration.objects.filter(institute=each_school.id, approved=True, year=year).count()
-        declined_exam_record = ExamRegistration.objects.filter(institute=each_school.id, declined=True, year=year).count()
+        total_exam_record = ExamRegistration.objects.filter(institute=each_school.User_id, year=year).count()
+        approved_exam_record = ExamRegistration.objects.filter(institute=each_school.User_id, approved=True, year=year).count()
+        declined_exam_record = ExamRegistration.objects.filter(institute=each_school.User_id, declined=True, year=year).count()
         all_records.append({each_school.id:total_exam_record})
         approved_records.append({each_school.id:approved_exam_record})
         declined_records.append({each_school.id:declined_exam_record})
@@ -302,7 +302,6 @@ def create_limit(request, id, year):
 
 @login_required
 def reset_limit(request, id, year):
-    print(id)
     school_instance = School.objects.get(id=id)
     sch_data = IndexLimit.objects.filter(school=school_instance.id, year=year).first()
     if sch_data:
@@ -503,7 +502,7 @@ def exam_rec(request, id, year):
         declinedCount = record.count()
        
 
-    sch_name = School.objects.get(id=id)
+    sch_name = School.objects.get(User_id=id)
     
     page = request.GET.get('page', 1)
     paginator = Paginator(record, 10)

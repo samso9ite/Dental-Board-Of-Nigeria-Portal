@@ -96,12 +96,12 @@ class ExamRegForm(forms.ModelForm):
     residential_country = forms.ModelChoiceField(queryset=Country.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
     residential_state = forms.ModelChoiceField(queryset=Region.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
     residential_lga = forms.ModelChoiceField(queryset=LGA.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
-    state_of_origin = forms.ModelChoiceField(queryset=Region.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
-    lga_state = forms.ModelChoiceField(queryset=Region.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
-    state_of_birth = forms.ModelChoiceField(queryset=Region.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
+    state_of_origin = forms.CharField(required=False, widget=forms.TextInput(attrs={'class':'form-control', 'required':'False'}))
+    lga_state = forms.CharField(required=False, widget=forms.TextInput(attrs={'class':'form-control', 'required':'False'}))
+    state_of_birth = forms.CharField(required=False, widget=forms.TextInput(attrs={'class':'form-control', 'required':'False'}))
+    lga_of_birth = forms.CharField(required=False, widget=forms.TextInput(attrs={'class':'form-control', 'required':'False'}))
     office_country = forms.ModelChoiceField(queryset=Country.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
     office_lga = forms.ModelChoiceField(queryset=Country.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
-    lga_of_birth = forms.ModelChoiceField(queryset=LGA.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
     office_state = forms.ModelChoiceField(queryset=Region.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control', 'required':'False'}))
     residential_address = forms.CharField(required=False, widget=forms.TextInput(attrs={'class':'form-control', 'required':'False'}))
     date_of_birth = forms.CharField(required=False, widget=forms.TextInput(attrs={'class':'form-control', 'required':'False'}))
@@ -143,7 +143,7 @@ class ExamRegForm(forms.ModelForm):
 
     class Meta:
         model = ExamRegistration
-        fields = "__all__"
+        exclude = ('year, institute_id',)
 
 class TicketForm(forms.ModelForm):
     class Meta:

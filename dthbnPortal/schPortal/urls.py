@@ -14,6 +14,7 @@ urlpatterns = [
     path('ajax/load-lga/', views.load_cities, name='ajax_load_region'),
     path('new_indexing/', views.NewIndexingView.as_view(), name='new_indexing'),
     path('exam_reg/', views.ExamReg.as_view(), name="exam_reg"),
+    path('exam_regis/', views.create_exam_record, name="new_exam"),
     path('indexed_record/<str:year>', views.IndexListView, name='indexed_record'),
     path('current_index/<str:year>', views.IndexListView, name='currentIndex'),
     path('approved_student/<str:year>', views.IndexListView, name='approved_student'),

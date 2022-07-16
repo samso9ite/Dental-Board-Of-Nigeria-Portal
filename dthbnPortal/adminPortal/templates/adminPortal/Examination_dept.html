@@ -192,7 +192,7 @@
                                             <td> {{all_sch.User|title}} </td>
                                             <td> {{limit|get_item:all_sch.id}}</td>
                                             <td>
-                                                <a href="{% url 'adminPortal:sch_exam_rec' id=all_sch.id year=year %}"
+                                                <a href="{% url 'adminPortal:sch_exam_rec' id=all_sch.User_id year=year %}"
                                                     target="_blank"> <button type="button"
                                                         style="background-color: #ccbd0d; color:white"
                                                         class="btn btn-block waves-effect">
@@ -200,13 +200,13 @@
                                             </td>
 
                                             <td>
-                                                <a href="{% url 'adminPortal:approved_exam_rec' id=all_sch.id year=year %}"
+                                                <a href="{% url 'adminPortal:approved_exam_rec' id=all_sch.User_id year=year %}"
                                                     target="_blank"> <button type="button"
                                                         class="btn bg-green btn-block waves-effect">
                                                         {{approved_records|get_item:all_sch.id}}</button>
                                             </td>
                                             <td>
-                                                <a href="{% url 'adminPortal:declined_exam_rec' id=all_sch.id year=year %}"
+                                                <a href="{% url 'adminPortal:declined_exam_rec' id=all_sch.User_id year=year %}"
                                                     target="_blank"> <button type="button"
                                                         class="btn bg-red btn-block waves-effect">
                                                         {{declined_records|get_item:all_sch.id}}</button>

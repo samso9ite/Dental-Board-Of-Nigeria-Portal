@@ -1,3 +1,4 @@
+from cmath import log
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, ListView, View
 from schPortal.models import *
@@ -182,6 +183,76 @@ class NewIndexingView(CreateView):
                 sweetify.error(self.request, "Indexing Closed", persist='OK')
                 return(HttpResponseRedirect(self.request.META['HTTP_REFERER']))
         return HttpResponseRedirect(reverse_lazy('schoolPortal:new_indexing'))
+
+
+@login_required
+def create_exam_record(request):
+    if request.user.is_authenticated and request.user.is_school:
+        school_instance = School.objects.get(User_id=request.user.id)
+        exam_status = closeExamRegistration.objects.filter(id=1)
+        # if request.method == "POST":
+        for obj in exam_status:
+            exam_state = obj.access
+            if exam_state is False:
+                current_year = datetime.datetime.now().year
+                nxt_year = current_year + 1
+                last_year = current_year - 1 
+                year = str(last_year) + "-" + str(current_year)
+                print(year)
+                print(request.user.id)
+                print(school_instance)
+                registered = ExamRegistration.objects.filter(institute_id=request.user.id, year=year).count()
+                assigned_quota = examLimit.objects.values_list('assigned_limit', flat=True).get(school=school_instance.id, year=year)
+                print(assigned_quota)
+                if request.method == "POST":
+                    form = ExamRegForm(request.POST or None)
+                    try:
+                        if registered != 0:
+                            if assigned_quota:
+                                if registered  == int(assigned_quota):
+                                    sweetify.error(request, "Oops! Limit has been reached", persist='OK')
+                                    return(HttpResponseRedirect(request.META['HTTP_REFERER']))
+                                else:
+                                    if form.is_valid():
+                                        form.save(commit=False)
+                                        form.instance.institute_id = request.user.id
+                                        print(form.instance.institute_id)
+                                        form.instance.year = year
+                                        print(form.instance.year)
+                                        form.save()
+                                        sweetify.success(request, 'Exam registration Successful', button='Great!')
+                                        # return(HttpResponseRedirect(request.META['HTTP_REFERER']))
+                                        return render(request, "school/Exam_reg.html") 
+                
+                            else:
+                                sweetify.error(request, "Oops! Contact the board limit has not been set ", persist='OK')
+                                return(HttpResponseRedirect(request.META['HTTP_REFERER']))
+                        elif registered == 0 and assigned_quota:
+                            if form.is_valid():
+                                form.save(commit=False)
+                                form.instance.institute_id = request.user.id
+                                form.instance.year = year
+                                form.save(commit=True)
+                                print(form)
+                                sweetify.success(request, 'Registration Successful', button='Great!')
+                                return render(request, "school/Exam_reg.html")
+                        
+                    except:
+                        pass
+            else:
+                sweetify.error(request, 'Exam Registraton Closed', button='Great!')
+                return(HttpResponseRedirect(request.META['HTTP_REFERER']))
+        return HttpResponseRedirect(reverse_lazy('schoolPortal:new_exam'))
+    def get_context_data(self, **kwargs):
+        country_data = Country.objects.all()
+        state_data = Region.objects.all()
+        lga_data = LGA.objects.all()
+        ctx =  super(ExamReg, self).get_context_data(**kwargs)
+        ctx['countries'] = country_data
+        ctx['state'] = state_data
+        ctx['lga'] = lga_data
+        return ctx
+        
    
 class ExamReg(CreateView, LoginRequiredMixin):
     model = ExamRegistration
@@ -189,21 +260,22 @@ class ExamReg(CreateView, LoginRequiredMixin):
     redirect_field_name = reverse_lazy("Auth:Register")
     success_url = reverse_lazy('schoolPortal:exam_reg')
     template_name = 'school/Exam_reg.html'
-    
+ 
     def form_valid(self, form):
+        # print(form)
+        school_instance = School.objects.get(User_id=self.request.user.id)
         exam_status = closeExamRegistration.objects.filter(id=1)
         for obj in exam_status:
             exam_state = obj.access
             if exam_state is False:
                 current_year = datetime.datetime.now().year
                 nxt_year = current_year + 1
-                year = str(current_year) + "-" + str(nxt_year)
+                last_year = current_year - 1 
+                year = str(last_year) + "-" + str(current_year)
                 registered = ExamRegistration.objects.filter(institute_id=self.request.user.id, year=year).count()
-                assigned_quota = examLimit.objects.values_list('assigned_limit', flat=True).get(school=self.request.user.id, year=year)
-          
+                assigned_quota = examLimit.objects.values_list('assigned_limit', flat=True).get(school=school_instance.id, year=year)
                 try:
-                    if registered is not 0:
-                        print(registered)
+                    if registered != 0:
                         if assigned_quota:
                             if registered  == int(assigned_quota):
                                 sweetify.error(self.request, "Oops! Limit has been reached", persist='OK')
@@ -211,17 +283,16 @@ class ExamReg(CreateView, LoginRequiredMixin):
                             else:
                                 form.instance.institute_id = self.request.user.id
                                 form.instance.year = year
-                                # form.save()
-                                sweetify.success(self.request, 'Indexed Successful', button='Great!')
+                                sweetify.success(self.request, 'Exam registration Successful', button='Great!')
                                 return super().form_valid(form)
             
                         else:
                             sweetify.error(self.request, "Oops! Contact the board limit has not been set ", persist='OK')
                             return(HttpResponseRedirect(self.request.META['HTTP_REFERER']))
-                    elif registered is 0 and assigned_quota:
+                    elif registered == 0 and assigned_quota:
                         form.instance.institute_id = self.request.user.id
                         form.instance.year = year
-                        sweetify.success(self.request, 'Indexed Successful', button='Great!')
+                        sweetify.success(self.request, 'Registration Successful', button='Great!')
                         return super().form_valid(form)
                     
                 except:
@@ -229,6 +300,7 @@ class ExamReg(CreateView, LoginRequiredMixin):
             else:
                 sweetify.error(self.request, 'Exam Registraton Closed', button='Great!')
                 return(HttpResponseRedirect(self.request.META['HTTP_REFERER']))
+        return HttpResponseRedirect(reverse_lazy('schoolPortal:exam_reg'))
 
 
     def get_context_data(self, **kwargs):
@@ -316,7 +388,7 @@ def ExamListView(request, year):
             pass
 
         page = request.GET.get('page', 1)
-        paginator = Paginator(queryset, 1)
+        paginator = Paginator(queryset, 30)
 
         try:
             exam_records = paginator.page(page)
@@ -396,14 +468,16 @@ def submit_index_record(request):
 def submit_exam_record(request):
     records = ''
     try :
-        records = ExamRegistration.objects.filter(submitted=False, school_id=request.user.id)
+        print("Exam Submit Section")
+        records = ExamRegistration.objects.filter(submitted=False, institute_id=request.user.id)
+        print(records)
         if records :
             records.update(submitted=True) 
             sweetify.success(request, 'Record has been submitted' , button='Great!')
         else:
             sweetify.error(request, 'Record Empty' , button='Ok!')
         
-    except ExamRegistration.DoesNotExist():
+    except ExamRegistration.DoesNotExist:
         sweetify.error(request, 'Record Doesn\'t Exist' , button='Great!')
     return(HttpResponseRedirect(request.META['HTTP_REFERER']))
 
